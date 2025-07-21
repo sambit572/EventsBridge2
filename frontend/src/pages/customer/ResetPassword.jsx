@@ -43,7 +43,7 @@ const ResetPassword = () => {
       <form onSubmit={handleResetPassword} className="formpart">
         <h2 className="subhead">New Password</h2>
         <p className="subheadingRP">
-          Please create a new password that you do not use on any other website.
+          Please create a new password.
         </p>
         <input
           type="password"
