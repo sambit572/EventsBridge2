@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
-import AboutUs_1 from "../../assets/aboutus/about-image.png";
-import Aboutus_2 from "../../assets/aboutus/Aboutus_2.png";
+import AboutUs_1 from "../../assets/aboutus/about-image.webp";
 import Design from "../../components/common/aboutus/Design";
 import ServiceFeature from "./ServiceFeature";
-import frame from "../../assets/home/categoriesImages/pandit.png";
 import { Seo } from "../../seo/seo.js";
+import frame from "../../assets/home/categoriesImages/pandit.webp";
 
 const Card = ({ title, description, image }) => {
   const [open, setOpen] = useState(false);
@@ -18,6 +17,7 @@ const Card = ({ title, description, image }) => {
         onClick={() => setOpen(!open)}
       >
         <img
+          decoding="async"
           src={image}
           alt={title}
           className="w-16 h-16 object-cover rounded-md"
@@ -61,6 +61,7 @@ const AboutUs = () => {
           {/* Left - Image Section */}
           <div className="w-full -mt-11">
             <img
+              decoding="async"
               src={AboutUs_1}
               alt="About Eventsbridge Platform"
               className="w-full h-auto  max-h-[550px] object-fill mt-5 rounded-xl border border-gray-200 shadow-lg"

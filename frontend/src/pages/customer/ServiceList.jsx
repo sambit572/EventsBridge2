@@ -9,26 +9,25 @@ import { setCategoryServices } from "../../redux/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FaArrowLeft, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import djBanner from "../../assets/serviceListBanner/dj (1).png";
-import musicBanner from "../../assets/serviceListBanner/music-ban.jpg";
-import decorBanner from "../../assets/serviceListBanner/tent-ban.jpeg";
-import photoBanner from "../../assets/serviceListBanner/photo-ban.png";
-import foodBanner from "../../assets/serviceListBanner/catering-banner.jpeg";
-import banquetBanner from "../../assets/serviceListBanner/banquet-banner.jpeg";
-import danceBanner from "../../assets/serviceListBanner/classical-ban.png";
-import islamicBanner from "../../assets/serviceListBanner/moulib-ban (2).png";
-import christianBanner from "../../assets/serviceListBanner/christian-ban.png";
-import panditBanner from "../../assets/home/categoriesImages/pandit.png";
-import makeupBanner from "../../assets/serviceListBanner/beauty-ban.png";
-import floralBanner from "../../assets/serviceListBanner/flower-ban.jpeg";
-import carBanner from "../../assets/serviceListBanner/car-ban.png";
-import fireworksBanner from "../../assets/home/categoriesImages/fireworks.png";
-import cardBanner from "../../assets/home/categoriesImages/marriage-card.png";
-import magicBanner from "../../assets/home/categoriesImages/magician.png";
-import stageBanner from "../../assets/home/categoriesImages/stage_decor.png";
-import eventBanner from "../../assets/home/categoriesImages/event_company.png";
+import djBanner from "../../assets/serviceListBanner/dj (1).webp";
+import musicBanner from "../../assets/serviceListBanner/music-ban.webp";
+import decorBanner from "../../assets/serviceListBanner/tent-ban.webp";
+import photoBanner from "../../assets/serviceListBanner/photo-ban.webp";
+import foodBanner from "../../assets/serviceListBanner/catering-banner.webp";
+import banquetBanner from "../../assets/serviceListBanner/banquet-banner.webp";
+import danceBanner from "../../assets/serviceListBanner/classical-ban.webp";
+import islamicBanner from "../../assets/serviceListBanner/moulib-ban (2).webp";
+import christianBanner from "../../assets/serviceListBanner/christian-ban.webp";
+import panditBanner from "../../assets/home/categoriesImages/pandit.webp";
+import makeupBanner from "../../assets/serviceListBanner/beauty-ban.webp";
+import floralBanner from "../../assets/serviceListBanner/flower-ban.webp";
+import carBanner from "../../assets/serviceListBanner/car-ban.webp";
+import fireworksBanner from "../../assets/home/categoriesImages/fireworks.webp";
+import cardBanner from "../../assets/home/categoriesImages/marriage-card.webp";
+import magicBanner from "../../assets/home/categoriesImages/magician.webp";
+import stageBanner from "../../assets/home/categoriesImages/stage_decor.webp";
+import eventBanner from "../../assets/home/categoriesImages/event_company.webp";
 import balloonBanner from "../../assets/serviceListBanner/balloon banner.webp";
-import { motion } from "framer-motion";
 
 const ServiceCardSkeleton = () => (
   <div className="serviceCardSkeleton">
@@ -79,7 +78,7 @@ const ServiceList = ({ onSwitchToLogin }) => {
     "Card Design & Printing": cardBanner,
     "Magic Shows": magicBanner,
     "Stage Decor": stageBanner,
-    "Event Company": eventBanner,
+    "Event Management Company": eventBanner,
     "Balloon Decor": balloonBanner,
   };
 
@@ -405,6 +404,7 @@ const ServiceList = ({ onSwitchToLogin }) => {
           {/* Banner Header */}
           <div className="categoryHero">
             <img
+              decoding="async"
               // src={bannerMap[categoryData.title] || carBanner}
               src={bannerMap[categoryData.title] || djBanner}
               alt={categoryData.title}
@@ -420,19 +420,13 @@ const ServiceList = ({ onSwitchToLogin }) => {
 
           {/* Sticky Header → only shows after scroll */}
           {showSticky && (
-            <motion.div
-              className={`stickyHeader ${showSticky ? "show" : ""}`}
-              initial={{ y: -60, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -60, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
+            <div className={`stickyHeader ${showSticky ? "show" : ""}`}>
               <FaArrowLeft
                 className="backArrowSticky"
                 onClick={() => window.history.back()}
               />
               <h2>{categoryData.title}</h2>
-            </motion.div>
+            </div>
           )}
         </>
       )}
@@ -450,19 +444,15 @@ const ServiceList = ({ onSwitchToLogin }) => {
 
           <div className="subcategory-tabs" ref={scrollRef}>
             {subcategoryMap[currentCategory].map((sub) => (
-              <motion.button
+              <button
                 key={sub}
                 className={`subcategory-tab ${
                   selectedSubcategory === sub ? "active" : ""
                 }`}
                 onClick={() => setSelectedSubcategory(sub)}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3 }}
               >
                 {sub}
-              </motion.button>
+              </button>
             ))}
           </div>
 
@@ -478,19 +468,7 @@ const ServiceList = ({ onSwitchToLogin }) => {
       )}
       <div className="serviceList">
         <Filter onApply={handleApplyFilters} onCancel={handleCancelFilters} />
-        <motion.div
-          className={`serviceCardDetails ${showSticky ? "scrollable" : ""}`}
-          variants={{
-            show: {
-              transition: {
-                staggerChildren: 0.15, // time gap between child animations
-              },
-            },
-          }}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
-        >
+        <div className={`serviceCardDetails ${showSticky ? "scrollable" : ""}`}>
           {loading ? (
             // Show skeletons while loading
             Array.from({ length: 6 }).map((_, idx) => (
@@ -498,16 +476,7 @@ const ServiceList = ({ onSwitchToLogin }) => {
             ))
           ) : filteredServices?.length > 0 ? (
             filteredServices.map((service) => (
-              <motion.div
-                className="singleServiceCard"
-                key={service._id}
-                transition={{ duration: 0.45, ease: "easeOut" }}
-                whileHover={{ scale: 0.98 }}
-                whileTap={{ scale: 0.98 }}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                // viewport={{ once: true, amount: 0.3 }}
-              >
+              <div className="singleServiceCard" key={service._id}>
                 <Link
                   to={`/service/${categoryId}/${service._id}`}
                   style={{ textDecoration: "none", color: "inherit" }}
@@ -519,12 +488,12 @@ const ServiceList = ({ onSwitchToLogin }) => {
                     onSwitchToLogin={onSwitchToLogin}
                   />
                 </Suspense>
-              </motion.div>
+              </div>
             ))
           ) : (
             <p>No services found matching filters.</p>
           )}
-        </motion.div>
+        </div>
       </div>
     </>
   );

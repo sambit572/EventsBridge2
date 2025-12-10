@@ -1,13 +1,11 @@
-import bastar from "../../../assets/famousCultural/tajmahal2.jpg";
-import React, { useEffect, useState } from "react";
-// import { PiChartLineUpBold } from "react-icons/pi";
+import { useEffect } from "react";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { IoStarHalfOutline } from "react-icons/io5";
 import { VscStarFull } from "react-icons/vsc";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import heroimage from "../../../assets/home/herosection/heroimage1.jpeg";
-import heroimage2 from "../../../assets/home/herosection/heroimage2.jpeg";
-import heroimage3 from "../../../assets/home/herosection/heroimage3.png";
+import heroimage from "../../../assets/home/herosection/heroimage1.webp";
+import heroimage2 from "../../../assets/home/herosection/heroimage2.webp";
+import heroimage3 from "../../../assets/home/herosection/heroimage3.webp";
 
 export default function HeroSection() {
   const scrollY = useMotionValue(0);
@@ -152,7 +150,10 @@ export default function HeroSection() {
       lg:rounded-t-[20px] lg:border-[8px] lg:border-b-0"
               >
                 <motion.img
+                  decoding="async"
                   src={heroimage2}
+                  loading="eager"
+                  fetchpriority="high"
                   alt="Preview"
                   className="w-full h-full object-fill rounded-t-[15px]"
                   initial={{ opacity: 0 }}
@@ -188,8 +189,10 @@ sm-mid:left-4 sm-mid:w-24
   "
           >
             <img
+              decoding="async"
               src={heroimage3}
-              alt=""
+              loading="eager"
+              alt="Preview"
               className="w-full h-20 sm:h-36 md:h-40 lg:h-44 object-fill rounded-xl"
             />
 
@@ -334,8 +337,10 @@ sm-mid:right-2 sm-mid:w-28
   "
           >
             <img
+              decoding="async"
               src={heroimage}
-              alt=""
+              loading="eager"
+              alt="Preview"
               className="w-full h-20 sm:h-32 md:h-44 object-cover rounded-t-xl"
             />
 

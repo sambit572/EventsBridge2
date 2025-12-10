@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Chatbot.css";
-import chatIcon from "../../assets/serverLogo.png";
+import chatIcon from "../../assets/serverLogo.webp";
 
 const chatbotFAQs = [
   "What is EventsBridge?",
@@ -93,6 +93,7 @@ const Chatbot = () => {
       {!isOpen && <div className="chat-tooltip">Ask me!</div>}
 
       <img
+        decoding="async"
         src={chatIcon}
         alt="Chat Icon"
         className="chat-icon"
