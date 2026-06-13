@@ -540,7 +540,7 @@ function VendorService({ currentStep }) {
         formData.append("subCategory", sub);
       });
       selectedLocations.forEach((loc) => {
-        formData.append("locationOffered[]", loc);
+        formData.append("locationOffered", loc);
       });
 
       // selectedLocations.forEach((loc) => {
@@ -577,6 +577,8 @@ function VendorService({ currentStep }) {
       } else {
         // Keep non-catering logic as is
         formData.append("pricingType", "flat");
+        formData.append("minPrice", minPrice);
+        formData.append("maxPrice", maxPrice);
       }
 
       const response = await axios.post(

@@ -1,18 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../customer/serviceList/Filter.css";
-import { TiStarFullOutline } from "react-icons/ti";
-import locationData from "./LocationData"; // { "Maharashtra": ["Mumbai", "Pune"], ... }
-import { IoFilterOutline } from "react-icons/io5";
-import { FaFilter } from "react-icons/fa";
-import { FaWindowClose } from "react-icons/fa";
+import locationData from "./LocationData";
+import { FaSlidersH, FaTimes, FaCheck, FaUndo } from "react-icons/fa";
 
 const Filter = ({ onApply, onCancel }) => {
-  const ratingOptions = [4.9, 4, 3];
-  const STEP_MIN = 1000;
-  const STEP_MAX = 1000;
-  const priceCap = 200000;
-  const minGap = 1000;
-
   const defaultFilters = {
     minPrice: "",
     maxPrice: "",
@@ -24,240 +15,263 @@ const Filter = ({ onApply, onCancel }) => {
 
   const [filters, setFilters] = useState(defaultFilters);
   const [showFilter, setShowFilter] = useState(false);
-  const [sortBy, setSortBy] = useState("price"); // Add state for sortBy
-
+  const [sortBy, setSortBy] = useState("price");
   const [states] = useState(Object.keys(locationData));
   const [subdistricts, setSubdistricts] = useState([]);
-  // Already correct:
-  const handleRatingChange = (e) => {
-    setFilters({
-      ...filters,
-      rating: e.target.value ? Number(e.target.value) : "",
-    });
-  };
+  const [animateIn, setAnimateIn] = useState(false);
 
-  // Price change handlers (snap to step)
+  // Count active filters for the badge
+  const activeCount = [
+    filters.minPrice,
+    filters.maxPrice,
+    filters.rating,
+    filters.state,
+    filters.subdistrict,
+    filters.duration,
+    sortBy !== "price" ? sortBy : "",
+  ].filter(Boolean).length;
+
+  useEffect(() => {
+    if (showFilter) {
+      // slight delay so CSS transition fires after display:flex
+      requestAnimationFrame(() => setAnimateIn(true));
+      document.body.style.overflow = "hidden";
+    } else {
+      setAnimateIn(false);
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [showFilter]);
+
+  const handleRatingChange = (e) => {
+    setFilters({ ...filters, rating: e.target.value ? Number(e.target.value) : "" });
+  };
   const handleMinChange = (e) => {
     setFilters((prev) => ({ ...prev, minPrice: e.target.value }));
   };
-
   const handleMaxChange = (e) => {
     setFilters((prev) => ({ ...prev, maxPrice: e.target.value }));
   };
-
-  // State change → update subdistricts
   const handleStateChange = (e) => {
     const state = e.target.value;
     setFilters({ ...filters, state, subdistrict: "" });
     setSubdistricts(locationData[state] || []);
   };
-
-  // Subdistrict change
   const handleSubdistrictChange = (e) => {
     setFilters({ ...filters, subdistrict: e.target.value });
   };
 
-  // Apply filters
   const handleApply = () => {
-    const appliedFilters = { ...filters, sortBy }; // Update handleApply to include sortBy
-    onApply(appliedFilters);
-    setShowFilter(false);
+    onApply({ ...filters, sortBy });
+    closeDrawer();
   };
 
-  // Cancel filters
   const handleCancel = () => {
     setFilters(defaultFilters);
     setSubdistricts([]);
+    setSortBy("price");
     onCancel();
-    setShowFilter(false);
+    closeDrawer();
+  };
+
+  const closeDrawer = () => {
+    setAnimateIn(false);
+    setTimeout(() => setShowFilter(false), 320);
   };
 
   return (
     <>
-      {!showFilter && (
-        <button
-          className="filter-toggle-btn"
-          onClick={() => setShowFilter(true)}
-        >
-          <FaFilter className="filter-icon" />
-          {/* <span className="filter-text">Filters</span> */}
-        </button>
+      {/* ── Floating Filter Button ── */}
+      <button
+        className="filter-fab"
+        onClick={() => setShowFilter(true)}
+        aria-label="Open filters"
+      >
+        <FaSlidersH className="fab-icon" />
+        <span className="fab-label">Filters</span>
+        {activeCount > 0 && (
+          <span className="fab-badge">{activeCount}</span>
+        )}
+      </button>
+
+      {/* ── Backdrop ── */}
+      {showFilter && (
+        <div
+          className={`filter-backdrop ${animateIn ? "backdrop-visible" : ""}`}
+          onClick={closeDrawer}
+        />
       )}
 
-      <div className={`filterBox ${showFilter ? "show" : ""}`}>
-        <div className="filter ">
-          {showFilter && (
-            <button
-              className="close-filter-btn"
-              onClick={() => setShowFilter(false)}
-            >
-              <FaWindowClose />
-              {/* <span className="filter-text">Close</span> */}
+      {/* ── Drawer ── */}
+      {showFilter && (
+        <div className={`filter-drawer ${animateIn ? "drawer-open" : ""}`}>
+          {/* Header */}
+          <div className="drawer-header">
+            <div className="drawer-title">
+              <FaSlidersH className="drawer-title-icon" />
+              <span>Filters</span>
+              {activeCount > 0 && (
+                <span className="drawer-badge">{activeCount} active</span>
+              )}
+            </div>
+            <button className="drawer-close" onClick={closeDrawer} aria-label="Close">
+              <FaTimes />
             </button>
-          )}
-
-          <h3 className="filter-heading">Filters</h3>
-          <div className="mb-2">
-            <h3 className="text-[1rem] font-semibold text-black-700 mb-0 tracking-wide">
-              Sort By
-            </h3>
-
-            <select
-              value={sortBy} // Update the Sort By dropdown to use state
-              onChange={(e) => setSortBy(e.target.value)}
-              className="w-full px-3 py-[0.3rem] border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-            >
-              <option value="price">Price</option>
-              <option value="name">Name</option>
-              <option value="duration">Duration</option>
-              <option value="rating">Rating</option>
-            </select>
           </div>
-          {/* Price Filter */}
-          {/* <div className="price-range-wrapper">
-            // <h4 className="heading4">Price Range</h4>
-            <div
-              className="slider"
-              style={{
-                "--min": filters.minPrice,
-                "--max": filters.maxPrice,
-              }}
-            >
-              <div className="price-display">
-                <span className="price-box">₹{filters.minPrice}</span>
-                <span className="price-box">₹{filters.maxPrice}</span>
+
+          {/* Scrollable body */}
+          <div className="drawer-body">
+
+            {/* Sort By */}
+            <div className="filter-section">
+              <label className="section-label">Sort By</label>
+              <div className="sort-pills">
+                {["price", "name", "duration", "rating"].map((opt) => (
+                  <button
+                    key={opt}
+                    className={`sort-pill ${sortBy === opt ? "sort-pill-active" : ""}`}
+                    onClick={() => setSortBy(opt)}
+                  >
+                    {opt.charAt(0).toUpperCase() + opt.slice(1)}
+                  </button>
+                ))}
               </div>
-              <div className="range-track" />
-              <input
-                type="range"
-                min="0"
-                max={priceCap}
-                step={STEP_MIN}
-                value={filters.minPrice}
-                onChange={handleMinChange}
-                className="thumb thumb-left"
-              />
-              <input
-                type="range"
-                min="0"
-                max={priceCap}
-                step={STEP_MAX}
-                value={filters.maxPrice}
-                onChange={handleMaxChange}
-                className="thumb thumb-right"
-              />
             </div>
-          </div>
-          <div className="flex items-center justify-center">OR </div> */}
-          <div className="space-y-1">
-            <h6 className="text-lg font-semibold text-black-700 mb-0 tracking-wide">Price Range</h6>
-            <div>
-              <label className="block text-xs text-gray-900 mb-1">
-                Min Price (₹)
-              </label>
-              <input
-                type="number"
-                placeholder="Enter Min Price"
-                value={filters.minPrice}
-                onChange={handleMinChange}
-                className="w-full px-3 py-[0.3rem] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-900 mb-1">
-                Max Price (₹)
-              </label>
-              <input
-                type="number"
-                placeholder="Enter Max Price"
-                value={filters.maxPrice}
-                onChange={handleMaxChange}
-                className="w-full px-3 py-[0.3rem] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-              />
-            </div>
-          </div>
 
-          {/* Location Filter */}
-          <div className="filter-section">
-            <h6 className="text-lg font-semibold text-black-700 mb-0 tracking-wide">Customer Rating</h6>
-            <div className="dropdown">
-              <select value={filters.rating} onChange={handleRatingChange}>
-                <option value="">Any Rating</option>
-                <option value="3">3+ Stars</option>
-                <option value="3.5">3.5+ Stars</option>
-                <option value="4">4+ Stars</option>
-                <option value="4.5">4.5+ Stars</option>
-                <option value="5">5 Stars</option>
-              </select>
+            <div className="filter-divider" />
+
+            {/* Price Range */}
+            <div className="filter-section">
+              <label className="section-label">Price Range (₹)</label>
+              <div className="price-inputs">
+                <div className="price-field">
+                  <span className="price-symbol">₹</span>
+                  <input
+                    type="number"
+                    placeholder="Min"
+                    value={filters.minPrice}
+                    onChange={handleMinChange}
+                    className="price-input"
+                  />
+                </div>
+                <span className="price-dash">—</span>
+                <div className="price-field">
+                  <span className="price-symbol">₹</span>
+                  <input
+                    type="number"
+                    placeholder="Max"
+                    value={filters.maxPrice}
+                    onChange={handleMaxChange}
+                    className="price-input"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
 
-          {/* Location Filter */}
-          <div className="filter-section">
-             <h6 className="text-lg font-semibold text-black-700 mb-0 tracking-wide">Location</h6>
+            <div className="filter-divider" />
 
-            <div className="dropdown">
-              <label>State</label>
-              <select value={filters.state} onChange={handleStateChange}>
-                <option value="">Select State</option>
-                {states.map((state) => (
-                  <option key={state} value={state}>
-                    {state}
-                  </option>
+            {/* Customer Rating */}
+            <div className="filter-section">
+              <label className="section-label">Customer Rating</label>
+              <div className="rating-pills">
+                {[
+                  { value: "", label: "Any" },
+                  { value: "3", label: "3+ ★" },
+                  { value: "3.5", label: "3.5+ ★" },
+                  { value: "4", label: "4+ ★" },
+                  { value: "4.5", label: "4.5+ ★" },
+                  { value: "5", label: "5 ★" },
+                ].map(({ value, label }) => (
+                  <button
+                    key={value}
+                    className={`rating-pill ${filters.rating === (value ? Number(value) : "") ? "rating-pill-active" : ""}`}
+                    onClick={() =>
+                      setFilters({ ...filters, rating: value ? Number(value) : "" })
+                    }
+                  >
+                    {label}
+                  </button>
                 ))}
-              </select>
+              </div>
             </div>
 
-            <div className="dropdown">
-              <label>District</label>
-              <select
-                value={filters.subdistrict}
-                onChange={handleSubdistrictChange}
-                disabled={!filters.state}
-              >
-                <option value="">Select District</option>
-                {subdistricts.map((sub) => (
-                  <option key={sub} value={sub}>
-                    {sub}
-                  </option>
-                ))}
-              </select>
+            <div className="filter-divider" />
+
+            {/* Location */}
+            <div className="filter-section">
+              <label className="section-label">Location</label>
+              <div className="select-group">
+                <div className="select-wrapper">
+                  <label className="select-label">State</label>
+                  <select
+                    value={filters.state}
+                    onChange={handleStateChange}
+                    className="styled-select"
+                  >
+                    <option value="">Select State</option>
+                    {states.map((s) => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="select-wrapper">
+                  <label className="select-label">District</label>
+                  <select
+                    value={filters.subdistrict}
+                    onChange={handleSubdistrictChange}
+                    disabled={!filters.state}
+                    className="styled-select"
+                  >
+                    <option value="">Select District</option>
+                    {subdistricts.map((sub) => (
+                      <option key={sub} value={sub}>{sub}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div className="filter-divider" />
+
+            {/* Service Ready Within */}
+            <div className="filter-section">
+              <label className="section-label">Service Ready Within</label>
+              <div className="select-wrapper">
+                <select
+                  value={filters.duration}
+                  onChange={(e) =>
+                    setFilters({
+                      ...filters,
+                      duration: e.target.value ? parseInt(e.target.value) : "",
+                    })
+                  }
+                  className="styled-select"
+                >
+                  <option value="">Any time</option>
+                  <option value={1}>12 Hours</option>
+                  <option value={2}>1 Day</option>
+                  <option value={3}>2 Days</option>
+                  <option value={4}>3 Days</option>
+                  <option value={5}>4 Days</option>
+                  <option value={7}>1 Week</option>
+                </select>
+              </div>
             </div>
           </div>
 
-          {/* Service Ready Within */}
-          <div className="dropdown">
-            <h6 className="text-lg font-semibold text-black-700 mb-0 tracking-wide">Service Ready Within</h6>
-            <select
-              value={filters.duration}
-              onChange={(e) =>
-                setFilters({
-                  ...filters,
-                  duration: e.target.value ? parseInt(e.target.value) : "",
-                })
-              }
-            >
-              <option value="">Any</option>
-              <option value={1}>12 Hours</option>
-              <option value={2}>1 Day</option>
-              <option value={3}>2 Days</option>
-              <option value={4}>3 Days</option>
-              <option value={5}>4 Days</option>
-              <option value={7}>1 Week</option>
-            </select>
-          </div>
-
-          {/* Buttons */}
-          <div className="filter-btn">
-            <button className="applybtn" onClick={handleApply}>
-              Apply 
+          {/* Footer Buttons */}
+          <div className="drawer-footer">
+            <button className="btn-reset" onClick={handleCancel}>
+              <FaUndo className="btn-icon" />
+              Reset
             </button>
-            <button className="cancelbtn" onClick={handleCancel}>
-              Cancel
+            <button className="btn-apply" onClick={handleApply}>
+              <FaCheck className="btn-icon" />
+              Apply Filters
             </button>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

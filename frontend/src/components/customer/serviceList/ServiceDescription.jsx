@@ -398,10 +398,10 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
   }, [service]);
 
   return (
-    <section className="relative flex h-full flex-col bg-[#ffffff] p-4 sm:pr-[40px] text-gray-800 md:py-0 px-5">
-      <div className="absolute top-[0.5rem] right-4 z-20 flex flex-col items-end gap-3 md:right-5">
+    <section className="relative flex h-full flex-col bg-[#ffffff] px-3 py-2 text-gray-800">
+      <div className="absolute top-2 right-2 z-20 flex flex-row items-center gap-1">
         <div
-          className={`h-10 w-10 flex items-center justify-center rounded-full bg-gray-100 shadow-md cursor-pointer transition-all duration-300 ${
+          className={`h-7 w-7 flex items-center justify-center rounded-full bg-gray-100 shadow-md cursor-pointer transition-all duration-300 ${
             isWishlisted
               ? "text-red-600 ring-2 ring-red-300 shadow-red-200"
               : "text-gray-600 hover:text-red-500"
@@ -413,7 +413,7 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
 
         <div className="relative" ref={shareContainerRef}>
           <div
-            className="h-10 w-10 cursor-pointer overflow-hidden rounded-full shadow-md transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-lg"
+            className="h-7 w-7 cursor-pointer overflow-hidden rounded-full shadow-md transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-lg"
             onClick={handleShare}
           >
             <img
@@ -540,16 +540,16 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
             to={`/service/${service.categoryId}/${serviceId}`}
             className="text-inherit no-underline "
           >
-            <h3 className="text-lg font-bold leading-tight text-[#2c3e50] sm:text-xl md:text-2xl">
+            <h3 className="text-sm font-bold leading-tight text-[#2c3e50] truncate pr-8">
               {title.toUpperCase()}
             </h3>
           </Link>
-          <div className="flex flex-wrap items-center gap-2 md:flex-row md:gap-2">
-            <span className="text-sm font-semibold text-[#3498db] sm:text-base">
+          <div className="flex flex-wrap items-center gap-1 mt-0.5">
+            <span className="text-xs font-semibold text-[#3498db]">
               {vendorName}
             </span>
-            <span className="hidden text-sm text-gray-400 md:inline">|</span>
-            <span className="flex items-center gap-1.5 rounded-full border border-[#ffeaa7] bg-[#fff3cd] px-3 py-1 text-[11px] font-medium text-[#856404] sm:text-xs">
+            <span className="text-xs text-gray-400">|</span>
+            <span className="flex items-center gap-1 rounded-full border border-[#ffeaa7] bg-[#fff3cd] px-2 py-0.5 text-[10px] font-medium text-[#856404]">
               <FaRegCalendarCheck className="text-xs" />
               Event Hosted: {service.eventsHosted || 0}
             </span>
@@ -559,7 +559,7 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
               </span>
             )}
           </div>
-          <p className="mb-[0.2rem] text-sm leading-snug text-gray-500">
+          <p className="text-xs leading-snug text-gray-500">
             {displayLocation}
             {shouldTruncateLocation && (
               <button
@@ -574,23 +574,23 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
             )}
           </p>
 
-          <p className="mb-[0.2rem] text-sm leading-snug text-gray-500">
+          <p className="text-xs leading-snug text-gray-500">
             {stateLocation.toUpperCase()}
           </p>
           {ratingData ? (
             <div className="flex items-center gap-2 mb-[0.3rem]">
-              <span className="bg-green-600 text-white px-2 py-1 rounded-full text-sm font-semibold">
+              <span className="bg-green-600 text-white px-2 py-0.5 rounded-full text-xs font-semibold">
                 {ratingData.averageRating.toFixed(1)} ★
               </span>
-              <span className="text-gray-500 text-sm">
+              <span className="text-gray-500 text-xs">
                 ({ratingData.totalReviews} reviews)
               </span>
             </div>
           ) : (
-            <p className="text-gray-500 text-sm mb-3">Loading rating...</p>
+            <p className="text-gray-500 text-xs">Loading rating...</p>
           )}
-          <div className="mb-[0.2rem] flex flex-wrap items-center gap-1.5 md:flex-row md:gap-3">
-            <span className="text-xl font-bold text-[#2c3e50] sm:text-[22px]">
+          <div className="flex flex-wrap items-center gap-1 mt-1">
+            <span className="text-sm font-bold text-[#2c3e50]">
               {price}
             </span>
             {originalPrice && (
@@ -604,45 +604,20 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
               </>
             )}
           </div>
-          <p className="mb-[0.2rem] text-sm text-gray-500">
-            <span className="font-semibold text-[#34495e]">Prep Time: </span>
-            {duration}
-          </p>
-        </div>
-        <div className="mb-[0.5rem] flex-grow">
-          <p className="text-sm text-gray-500">
-            {displayDescription}
-            {shouldTruncate && (
-              <button
-                className="ml-1 inline cursor-pointer border-none bg-transparent p-0 text-sm font-semibold text-[#3498db] no-underline transition-colors duration-200 ease-in-out hover:text-[#2980b9] hover:underline"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsReadMore(!isReadMore);
-                }}
-              >
-                {isReadMore ? " Read Less" : " Read More"}
-              </button>
-            )}
-          </p>
-        </div>
-        <div className="flex flex-row gap-2.5 lg:flex-row lg:justify-center lg:gap-3">
+          </div>
+        <div className="flex-grow" />
+        <div className="flex flex-row gap-2 mt-2">
           {isVendorAvailable ? (
             <>
               <button
-                className="flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-[#001f3f] to-[#004f9f] lg:px-12 lg:py-3 px-1 py-1 text-xs lg:text-sm font-bold text-white transition-colors duration-300 ease-in-out hover:from-[#002366] hover:to-[#004c99] active:from-[#000d1a] active:to-[#002244] lg:w-auto lg:min-w-[120px] shadow-md hover:shadow-lg"
+                className="flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-[#001f3f] to-[#004f9f] px-3 py-2 text-xs font-bold text-white shadow-md hover:shadow-lg"
                 onClick={handleBookNow}
               >
                 BOOK NOW
               </button>
 
               <button
-                className="flex w-full cursor-pointer items-center justify-center 
-             rounded-full border-none 
-             bg-gradient-to-r from-[#fb923c] to-[#ef4444] 
-             text-white font-bold transition-all duration-300 shadow-md 
-             hover:shadow-lg hover:from-[#fca5a5] hover:to-[#dc2626] 
-             lg:px-10 lg:py-3 px-1 py-2 lg:text-sm text-xs lg:w-auto
-             "
+                className="flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-[#fb923c] to-[#ef4444] px-3 py-2 text-xs font-bold text-white shadow-md hover:shadow-lg"
                 onClick={handleAddToCart}
               >
                 ADD TO CART
