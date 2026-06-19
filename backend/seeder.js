@@ -8,7 +8,7 @@ import { name } from "agenda/dist/agenda/name.js";
 // EXACT category names matching your CategoryData.jsx
 const categories = [
   {
-    name: "DJ & Brash Band",
+    name: "DJ & Musical Band",
     defaultWhyChooseUs: [
       "Bringing electrifying beats and non-stop energy to light up your celebrations",
       "Backup Equipment Always On-Hand",

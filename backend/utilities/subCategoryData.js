@@ -1,6 +1,6 @@
 // ✅ Define subcategories for each main category
 export const SUBCATEGORY_MAP = {
-  "DJ & Brash Band": [
+  "DJ & Musical Band": [
     "Wedding DJ",
     "Corporate Event DJ",
     "Private Party DJ",

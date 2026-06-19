@@ -12,7 +12,7 @@ import insta40 from "/instagram-40.webp";
 import insta80 from "/instagram-80.webp";
 
 export const categoriesData = {
-  "DJ & Brash Band": [
+  "DJ & Musical Band": [
     "Wedding DJ",
     "Corporate Event DJ",
     "Private Party DJ",

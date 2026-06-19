@@ -15,12 +15,22 @@ import {
   MdAnalytics,
   MdPeople,
 } from "react-icons/md";
+import { MdVerified } from "react-icons/md";
+import { IoClose, IoShieldCheckmark } from "react-icons/io5";
+import { FaCheck } from "react-icons/fa";
 
 const NAV_ITEMS = [
   { key: "services",  label: "My Services",  icon: MdDashboard },
   { key: "bookings",  label: "My Bookings",  icon: MdBookOnline },
   { key: "analytics", label: "My Analytics", icon: MdAnalytics },
   { key: "customers", label: "My Customers", icon: MdPeople },
+];
+
+const VERIFY_PLANS = [
+  { key: "1m",  duration: "1 Month",  price: 300,  perMonth: 300, badge: null },
+  { key: "3m",  duration: "3 Months", price: 600,  perMonth: 200, badge: "Save 33%" },
+  { key: "6m",  duration: "6 Months", price: 1200, perMonth: 200, badge: "Most Popular" },
+  { key: "12m", duration: "12 Months", price: 2400, perMonth: 200, badge: "Best Value" },
 ];
 
 function DashBoardSideBar({
@@ -40,6 +50,8 @@ function DashBoardSideBar({
   const [removing, setRemoving] = useState(false);
   const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
   const [showProfileSection, setShowProfileSection] = useState(false);
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("6m");
 
   const { form, updateField, updateVendor, updateBank, resetForm } = UseVendorProfile();
 
@@ -169,6 +181,13 @@ function DashBoardSideBar({
               {activeTab === key && <span className="sb-nav-pip" />}
             </button>
           ))}
+
+          <button className="sb-verify-btn" onClick={() => setShowVerifyModal(true)}>
+            <span className="sb-verify-shine" />
+            <span className="sb-verify-icon"><IoShieldCheckmark size={17} /></span>
+            <span className="sb-verify-text">Verify My Service</span>
+            <MdVerified size={16} className="sb-verify-badge" />
+          </button>
         </nav>
 
         {/* Profile Details (collapsible) */}
@@ -301,6 +320,47 @@ function DashBoardSideBar({
                 Cancel
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {/* Verify My Service modal */}
+      {showVerifyModal && (
+        <div className="sb-overlay" onClick={() => setShowVerifyModal(false)}>
+          <div className="sb-verify-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="sb-verify-close" onClick={() => setShowVerifyModal(false)}>
+              <IoClose size={20} />
+            </button>
+
+            <div className="sb-verify-modal-icon">
+              <IoShieldCheckmark size={30} />
+            </div>
+            <h2 className="sb-verify-modal-title">Verify My Service</h2>
+            <p className="sb-verify-modal-sub">
+              Get a verified badge on your profile and win more customer trust. Choose a plan below.
+            </p>
+
+            <div className="sb-verify-plans">
+              {VERIFY_PLANS.map((plan) => (
+                <button
+                  key={plan.key}
+                  className={`sb-plan-card ${selectedPlan === plan.key ? "sb-plan-selected" : ""}`}
+                  onClick={() => setSelectedPlan(plan.key)}
+                >
+                  {plan.badge && <span className="sb-plan-badge">{plan.badge}</span>}
+                  <span className="sb-plan-duration">{plan.duration}</span>
+                  <span className="sb-plan-price">
+                    <span className="sb-plan-currency">₹</span>{plan.price}
+                  </span>
+                  <span className="sb-plan-permonth">₹{plan.perMonth}/month</span>
+                  <span className="sb-plan-check"><FaCheck size={11} /></span>
+                </button>
+              ))}
+            </div>
+
+            <button className="sb-verify-ok-btn" onClick={() => setShowVerifyModal(false)}>
+              <span className="sb-verify-ok-shine" />
+              OK, Got It
+            </button>
           </div>
         </div>
       )}

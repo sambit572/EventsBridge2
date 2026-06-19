@@ -38,7 +38,6 @@ const Navbar = ({ onOpenLogin, onOpenRegister, onOpenVendorLogin }) => {
   const [showMobileSearchBar, setShowMobileSearchBar] = useState(false);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const [showVendorLogoutPopup, setShowVendorLogoutPopup] = useState(false);
-  const [activeNav, setActiveNav] = useState("Explore");
 
   const profileRef = useRef(null);
   const ellipsisRef = useRef(null);
@@ -217,8 +216,6 @@ const Navbar = ({ onOpenLogin, onOpenRegister, onOpenVendorLogin }) => {
     }
   };
 
-  const navItems = ["Explore", "Venues", "Planners"];
-
   return (
     <>
       {/* ===== FIXED HEADER WRAPPER ===== */}
@@ -248,22 +245,6 @@ const Navbar = ({ onOpenLogin, onOpenRegister, onOpenVendorLogin }) => {
           <img src={logoImg} alt="EventsBridge" className="logo-icon" />
           <span className="logo-text">EventsBridge</span>
         </div>
-
-        {/* Center Nav Links */}
-        <nav className="nav-links">
-          {navItems.map((item) => (
-            <span
-              key={item}
-              className={`nav-link ${activeNav === item ? "active" : ""}`}
-              onClick={() => {
-                setActiveNav(item);
-                if (item === "Explore") handleHomeClick();
-              }}
-            >
-              {item}
-            </span>
-          ))}
-        </nav>
 
         {/* Right Side: Search + Auth */}
         <div className="search-and-nav-icons-container items-center">

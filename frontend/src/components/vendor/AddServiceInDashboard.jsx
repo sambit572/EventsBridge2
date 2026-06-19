@@ -128,7 +128,7 @@ function VendorService({ currentStep }) {
   };
 
   const categories = [
-    "DJ & Brash Band",
+    "DJ & Musical Band",
     "Music Concert & Orchestra",
     "Decor & Tenthouse",
     "Photo & Videography",
@@ -202,7 +202,7 @@ function VendorService({ currentStep }) {
   };
   // ✅ Define subcategories for each main category
   const subcategories = {
-    "DJ & Brash Band": [
+    "DJ & Musical Band": [
       "Wedding DJ",
       "Corporate Event DJ",
       "Private Party DJ",

@@ -3,7 +3,7 @@ import { getCategoryImage } from "./getCategoryImage";
 export const CategoryData = [
   {
     id: "dj",
-    title: "DJ & Brash Band",
+    title: "DJ & Musical Band",
     image: getCategoryImage("dj_image"),
     tagline: "Beats That Breathe Fun",
   },

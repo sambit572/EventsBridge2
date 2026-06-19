@@ -62,7 +62,7 @@ const ServiceList = ({ onSwitchToLogin }) => {
   const [showArrows, setShowArrows] = useState(false);
 
   const bannerMap = {
-    "DJ & Brash Band": djBanner,
+    "DJ & Musical Band": djBanner,
     "Music Concert & Orchestra": musicBanner,
     "Decor & Tenthouse": decorBanner,
     "Photo & Videography": photoBanner,
@@ -87,7 +87,7 @@ const ServiceList = ({ onSwitchToLogin }) => {
 
   // ✅ Define subcategories for each main category
   const subcategoryMap = {
-    "DJ & Brash Band": [
+    "DJ & Musical Band": [
       "All",
       "Wedding DJ",
       "Corporate Event DJ",

@@ -70,35 +70,6 @@
   display: inline;
 }
 
-/* ===== CENTER NAV LINKS ===== */
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  flex: 1;
-}
-
-.nav-link {
-  font-size: 14px;
-  font-weight: 600;
-  color: #444444;
-  cursor: pointer;
-  text-decoration: none;
-  padding-bottom: 4px;
-  border-bottom: 2px solid transparent;
-  transition: color 0.2s ease, border-color 0.2s ease;
-  white-space: nowrap;
-}
-
-.nav-link:hover {
-  color: #111111;
-}
-
-.nav-link.active {
-  color: #111111;
-  border-bottom: 2px solid #111111;
-}
-
 /* ===== SEARCH BAR ===== */
 .search-bar {
   display: flex;
@@ -298,19 +269,15 @@
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .navbar { padding: 0 20px; }
-  .nav-links { gap: 20px; }
   .search-bar { width: 180px; margin: 0 16px; }
 }
 
 @media (max-width: 860px) {
-  .nav-links { gap: 14px; }
-  .nav-link { font-size: 13px; }
   .search-bar { width: 160px; }
 }
 
 /* ── Hide desktop nav links on mobile — they move into 3-dot dropdown ── */
 @media (max-width: 768px) {
-  .nav-links { display: none; }
   .suggestions-dropdown { width: 80%; left: 10%; }
 
   /* Tighten right-side auth area */
