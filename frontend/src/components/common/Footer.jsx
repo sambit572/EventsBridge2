@@ -64,12 +64,11 @@ export const categoriesData = {
     "Live Performance",
     "Special Event",
   ],
-  "Hindu Pandit": [
-    "Wedding Ceremony",
-    "Puja Ceremony",
-    "Housewarming",
-    "Naming Ceremony",
-    "Shraddh Ceremony",
+  "Mehendi & Henna Artist": [
+    "Bridal Mehendi",
+    "Arabic Mehendi",
+    "Traditional Mehendi",
+    "Indo-Arabic Mehendi",
     "Special Event",
   ],
   "Beauty Makeover": ["Bridal Makeup", "Unisex", "Mehendi Artist"],
@@ -80,10 +79,11 @@ export const categoriesData = {
   ],
   "Ceremonial Ride": ["Bridal Car", "Luxury Car", "Classic Car"],
   Fireworks: ["Wedding Fireworks", "Indoor Fireworks", "Outdoor Fireworks"],
-  "Card Design & Printing": [
-    "Wedding Invitations",
-    "Birthday Party Invitations",
-    "Corporate Cards",
+  "Mascot Artists": [
+    "Birthday Mascots",
+    "Corporate Mascots",
+    "Theme Party Mascots",
+    "Walkabout Characters",
   ],
   "Magic Shows": [
     "Children’s Magic Shows",

@@ -57,7 +57,7 @@ const CATEGORIES = [
   { id: "photo_video",     label: "Photo and Videography",      icon: "📷" },
   { id: "food_catering",   label: "Food and Catering",          icon: "🍽️" },
   { id: "beauty_makeover", label: "Beauty Makeover",            icon: "💄" },
-  { id: "card_printing",   label: "Card Design and Printing",   icon: "🖨️" },
+  { id: "card_printing",   label: "Mascot Artists",   icon: "🎭" },
 ];
 
 /* ── Chart.js Loader ── */

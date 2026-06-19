@@ -70,9 +70,9 @@ export const CategoryData = [
   },
   {
     id: "pandit",
-    title: "Hindu Pandit",
-    image: getCategoryImage("pandit"),
-    tagline: "Mantras Meet Moments",
+    title: "Mehendi & Henna Artist",
+    image: getCategoryImage("mehendi-henna-artist"),
+    tagline: "Art That Adorns Your Story",
   },
   {
     id: "floral",
@@ -101,9 +101,9 @@ export const CategoryData = [
 
   {
     id: "card-design",
-    title: "Card Design & Printing",
-    image: getCategoryImage("marriage-card"),
-    tagline: "Words That Welcome",
+    title: "Mascot Artists",
+    image: getCategoryImage("mascot-artists"),
+    tagline: "Characters That Create Memories",
   },
   {
     id: "magic",

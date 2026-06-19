@@ -63,7 +63,8 @@ const Navbar = ({ onOpenLogin, onOpenRegister, onOpenVendorLogin }) => {
   mapAliases(["floral","flowers","flower","decor","florist"], "floral");
   mapAliases(["transport","car","vehicle","cab"], "transport");
   mapAliases(["fireworks","firework","crackers","pataka"], "fireworks");
-  mapAliases(["card","invitation","invite","invites","cards"], "card-design");
+  mapAliases(["mascot","mascots","character","characters","costume","costumed"], "card-design");
+  mapAliases(["mehendi","henna","mehndi","hennaartist","mehendiartist"], "pandit");
   mapAliases(["church","christian","weddingchurch"], "stars-influencers");
   mapAliases(["islam","muslim","imam","maulbi","moulbi","muslim priest"], "bouncers-security");
   mapAliases(["bouncer","bouncers","security","guard","guards","event security"], "bouncers-security");

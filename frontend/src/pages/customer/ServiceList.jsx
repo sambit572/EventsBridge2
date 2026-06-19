@@ -18,12 +18,12 @@ import banquetBanner from "../../assets/serviceListBanner/banquet-banner.webp";
 import danceBanner from "../../assets/serviceListBanner/classical-ban.webp";
 import bouncersBanner from "../../assets/serviceListBanner/bouncers-security-ban.webp";
 import starsBanner from "../../assets/serviceListBanner/stars-influencers-ban.webp";
-import panditBanner from "/categories/pandit.webp";
+import panditBanner from "/categories/mehendi-henna-artist.webp";
 import makeupBanner from "../../assets/serviceListBanner/beauty-ban.webp";
 import floralBanner from "../../assets/serviceListBanner/flower-ban.webp";
 import carBanner from "../../assets/serviceListBanner/car-ban.webp";
 import fireworksBanner from "/categories/fireworks.webp";
-import cardBanner from "/categories/marriage-card.webp";
+import cardBanner from "/categories/mascot-artists.webp";
 import magicBanner from "/categories/magician.webp";
 import resortBanner from "/categories/resortBanner.webp";
 // import stageBanner from "../../assets/home/categoriesImages/stage_decor.webp";
@@ -71,13 +71,13 @@ const ServiceList = ({ onSwitchToLogin }) => {
     "Classical Music & Dance": danceBanner,
     "Bouncers & Security": bouncersBanner,
     "Stars & Influencers": starsBanner,
-    "Hindu Pandit": panditBanner,
+    "Mehendi & Henna Artist": panditBanner,
     "Beauty Makeover": makeupBanner,
     "Floral Decor": floralBanner,
     "Ceremonial Ride": carBanner,
     "Luxury Ride": carBanner,
     Fireworks: fireworksBanner,
-    "Card Design & Printing": cardBanner,
+    "Mascot Artists": cardBanner,
     "Magic Shows": magicBanner,
     // "Stage Decor": stageBanner,
     "Event Management Company": eventBanner,
@@ -148,13 +148,12 @@ const ServiceList = ({ onSwitchToLogin }) => {
       "Live Performance",
       "Special Event",
     ],
-    "Hindu Pandit": [
+    "Mehendi & Henna Artist": [
       "All",
-      "Wedding Ceremony",
-      "Puja Ceremony",
-      "Housewarming",
-      "Naming Ceremony",
-      "Shraddh Ceremony",
+      "Bridal Mehendi",
+      "Arabic Mehendi",
+      "Traditional Mehendi",
+      "Indo-Arabic Mehendi",
       "Special Event",
     ],
     "Beauty Makeover": ["All", "Bridal Makeup", "Unisex", "Mehendi Artist"],
@@ -172,11 +171,12 @@ const ServiceList = ({ onSwitchToLogin }) => {
       "Indoor Fireworks",
       "Outdoor Fireworks",
     ],
-    "Card Design & Printing": [
+    "Mascot Artists": [
       "All",
-      "Wedding Invitations",
-      "Birthday Party Invitations",
-      "Corporate Cards",
+      "Birthday Mascots",
+      "Corporate Mascots",
+      "Theme Party Mascots",
+      "Walkabout Characters",
     ],
     "Magic Shows": [
       "All",

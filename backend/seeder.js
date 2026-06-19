@@ -98,13 +98,13 @@ const categories = [
     ],
   },
   {
-    name: "Hindu Pandit",
+    name: "Mehendi & Henna Artist",
     defaultWhyChooseUs: [
-      "Experienced & knowledgeable pandits",
-      "Traditional Sanskrit mantras",
-      "Complete ritual guidance",
-      "Auspicious timing consultation",
-      "Professional ceremony conduct",
+      "Expert in intricate bridal mehendi designs",
+      "Uses natural & skin-safe henna",
+      "Wide variety of design styles",
+      "Quick & precise application",
+      "On-location service available",
     ],
   },
   {
@@ -158,13 +158,13 @@ const categories = [
     ],
   },
   {
-    name: "Card Design & Printing",
+    name: "Mascot Artists",
     defaultWhyChooseUs: [
-      "Creative & unique design options",
-      "High-quality printing materials",
-      "Fast turnaround delivery",
-      "Customizable templates available",
-      "Professional design consultation",
+      "Professionally crafted mascot costumes",
+      "Fun & engaging character performances",
+      "Perfect for all event types",
+      "Highly interactive with crowd",
+      "Safe & comfortable for performers",
     ],
   },
   {
