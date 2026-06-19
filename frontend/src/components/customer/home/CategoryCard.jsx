@@ -6,11 +6,11 @@ const CategoryCard = ({ category }) => {
   return (
     <div
       className="courseCard"
-      onClick={() => {
-        navigate(`/category/${category.id}`, {
-          state: { category }, // ✅ pass full category object
-        });
-      }}
+     onClick={() => {
+  navigate(`/category/${encodeURIComponent(category.title)}`, {
+    state: { category },
+  });
+}}
     >
       <span className="brandLabel">EventsBridge</span>
 

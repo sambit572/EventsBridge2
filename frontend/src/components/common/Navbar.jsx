@@ -14,6 +14,7 @@ import CartButton from "./navbar/CartButton";
 import ProfileMenu from "./navbar/ProfileMenu";
 import VendorMenu from "./navbar/VendorMenu";
 import ThreeDot from "./navbar/ThreeDot";
+import CategoryData from "../../utils/CatogoryData.jsx";
 
 const CATEGORIES = [
   "dj","band","tenthouse","photographer","pandit","magic","cultural-troupe",
@@ -48,27 +49,6 @@ const Navbar = ({ onOpenLogin, onOpenRegister, onOpenVendorLogin }) => {
   const suggestionRef = useRef(null);
   const searchBarRef = useRef(null);
 
-  const RELATED_TERMS = {};
-  const mapAliases = (aliases, category) => {
-    aliases.forEach((alias) => { RELATED_TERMS[alias.toLowerCase()] = category; });
-  };
-  mapAliases(["photo","photos","photography","picture"], "photographer");
-  mapAliases(["dj","deejay"], "dj");
-  mapAliases(["band","music","musician"], "band");
-  mapAliases(["tent","tenthouse","tents"], "tenthouse");
-  mapAliases(["pandit","priest","brahmin","brahman","pujari"], "pandit");
-  mapAliases(["magic","magician","illusionist"], "magic");
-  mapAliases(["cater","catering","caterers","food","buffet"], "catering");
-  mapAliases(["makeup","beauty","beautician","makeupartist","parlour"], "makeup");
-  mapAliases(["floral","flowers","flower","decor","florist"], "floral");
-  mapAliases(["transport","car","vehicle","cab"], "transport");
-  mapAliases(["fireworks","firework","crackers","pataka"], "fireworks");
-  mapAliases(["card","invitation","invite","invites","cards"], "card-design");
-  mapAliases(["church","christian","weddingchurch"], "stars-influencers");
-  mapAliases(["islam","muslim","imam","maulbi","moulbi","muslim priest"], "bouncers-security");
-  mapAliases(["bouncer","bouncers","security","guard","guards","event security"], "bouncers-security");
-  mapAliases(["star","stars","influencer","influencers","celebrity","celeb","actor","actress"], "stars-influencers");
-  mapAliases(["culture","troupe","artist","folk","dance","group dance"], "cultural-troupe");
 
   useEffect(() => {
     const storedName = localStorage.getItem("userFirstName");
@@ -81,14 +61,6 @@ const Navbar = ({ onOpenLogin, onOpenRegister, onOpenVendorLogin }) => {
     return () => { socket.off("cart-updated", handleCartUpdate); };
   }, [dispatch]);
 
-  const fetchDynamicSuggestions = async (query) => {
-    try {
-      if (query.trim().length <= 1) { setSuggestions([]); setShowSuggestions(false); return; }
-      const res = await axios.get(`http://localhost:8001/api/search/suggestion?q=${query}`);
-      if (res.data.success) { setSuggestions(res.data.suggestions); setShowSuggestions(true); }
-    } catch (err) { setSuggestions([]); setShowSuggestions(false); }
-  };
-
   const handleSearchicon = (e) => {
     e.stopPropagation();
     if (window.innerWidth <= 768) { setShowMobileSearchBar((prev) => !prev); }
@@ -97,10 +69,29 @@ const Navbar = ({ onOpenLogin, onOpenRegister, onOpenVendorLogin }) => {
 
   const handleSearchNavigate = (text) => {
     if (!text.trim()) return;
-    const keyword = text.toLowerCase().trim();
-    if (RELATED_TERMS[keyword]) { navigate(`/category/${RELATED_TERMS[keyword]}`); return; }
+
+    const keyword = text.toLowerCase();
+
+    const category = CategoryData.find(cat =>
+        cat.title.toLowerCase().includes(keyword) ||
+        (cat.keywords &&
+            cat.keywords.some(k =>
+                k.toLowerCase().includes(keyword)
+            ))
+    );
+
+    if (category) {
+    navigate(
+        `/category/${encodeURIComponent(category.title)}`,
+        {
+            state: { category },
+        }
+    );
+    return;
+}
+
     navigate(`/search?query=${encodeURIComponent(text)}`);
-  };
+};
 
   const fetchUserProfile = async () => {
     try {
@@ -208,13 +199,14 @@ const Navbar = ({ onOpenLogin, onOpenRegister, onOpenVendorLogin }) => {
     else onOpenLogin(true);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && searchInput.trim()) {
-      handleSearchNavigate(searchInput.trim());
-      setSearchInput("");
-      setShowSuggestions(false);
-    }
-  };
+const handleKeyDown = (e) => {
+    if (e.key !== "Enter") return;
+
+    handleSearchNavigate(searchInput);
+
+    setSearchInput("");
+    setShowSuggestions(false);
+};
 
   const navItems = ["Explore", "Venues", "Planners"];
 
@@ -289,14 +281,28 @@ const Navbar = ({ onOpenLogin, onOpenRegister, onOpenVendorLogin }) => {
                   const value = e.target.value;
                   setSearchInput(value);
                   if (value.trim().length <= 1) { setSuggestions([]); setShowSuggestions(false); return; }
-                  fetchDynamicSuggestions(value);
-                  const localHistory = JSON.parse(localStorage.getItem("searchHistory")) || [];
-                  const matchingCategories = CATEGORIES.filter((c) => c.toLowerCase().includes(value.toLowerCase()));
-                  const matchingHistory = localHistory.filter((t) => t.toLowerCase().includes(value.toLowerCase()));
-                  setSuggestions((prev) =>
-                    [...new Set([...prev, ...matchingCategories, ...matchingHistory])].slice(0, 6)
-                  );
-                  setShowSuggestions(true);
+                  // fetchDynamicSuggestions(value);
+                  const text = value.toLowerCase();
+
+        const matchedCategories = CategoryData.filter(cat =>
+
+    cat.title.toLowerCase().includes(text) ||
+
+    (cat.keywords &&
+        cat.keywords.some(k =>
+            k.toLowerCase().includes(text)
+        ))
+);
+
+setSuggestions(
+    matchedCategories.map(cat => ({
+        id: cat.id,
+        title: cat.title,
+    }))
+);
+
+
+setShowSuggestions(true);
                 }}
                 autoFocus
                 onKeyDown={handleKeyDown}
@@ -310,8 +316,16 @@ const Navbar = ({ onOpenLogin, onOpenRegister, onOpenVendorLogin }) => {
               {suggestions.length > 0 ? (
                 suggestions.map((s, i) => (
                   <div key={i} className="suggestion-item"
-                    onClick={() => { handleSearchNavigate(s); setSearchInput(""); setShowSuggestions(false); }}>
-                    {s}
+                    onClick={() => {   navigate(`/category/${encodeURIComponent(s.title)}`, {
+    state: {
+      category: {
+        id: s.id,
+        title: s.title,
+      },
+    },
+  });
+; setSearchInput(""); setShowSuggestions(false); }}>
+                    {s.title}
                   </div>
                 ))
               ) : (
