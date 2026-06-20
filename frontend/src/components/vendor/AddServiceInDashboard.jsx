@@ -1747,24 +1747,22 @@ function VendorService({ currentStep }) {
         <div
           style={{
             display: "flex",
-            justifyContent: "center",
+            justifyContent: "space-between",
             marginTop: "20px",
           }}
         >
-          <div className="flex flex-row text-white gap-4 ml-5">
-            <button
-              className="bg-blue-500 px-6 py-2 font-semibold rounded-lg hover:bg-blue-800 ease-in-out"
-              onClick={handleAdd}
-            >
-              Add
-            </button>
-            <button
-              className="bg-red-500 px-4 py-2 rounded-lg font-semibold hover:bg-red-800 ease-in-out"
-              onClick={handleCancel}
-            >
-              Cancel
-            </button>
-          </div>
+          <button
+            className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-800 ease-in-out"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+          <button
+            className="bg-blue-500 text-white px-6 py-2 font-semibold rounded-lg hover:bg-blue-800 ease-in-out"
+            onClick={handleAdd}
+          >
+            Next
+          </button>
         </div>
       </div>
     </>

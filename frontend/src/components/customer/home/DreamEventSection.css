@@ -1,64 +1,197 @@
-/* ── Flip Card Base ── */
-.dream-flip-card {
-  perspective: 1200px;
-  width: 100%;
-  cursor: pointer;
-}
-
-.dream-flip-inner {
+/* ── Trust Showcase Card (static, no flip, no images) ── */
+.trust-showcase-card {
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 1.1s cubic-bezier(0.4, 0.2, 0.2, 1);
-  transform-style: preserve-3d;
+  min-height: 300px;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 2rem 1.75rem;
+  gap: 1.1rem;
+  background: linear-gradient(155deg, #0c0a1f 0%, #1c1242 50%, #2d1b5e 100%);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-.dream-flip-card:hover .dream-flip-inner {
-  transform: rotateY(180deg);
+.trust-showcase-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 55px rgba(124, 92, 255, 0.3);
 }
 
-.dream-flip-front,
-.dream-flip-back {
+/* animated glow blobs */
+.trust-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(54px);
+  pointer-events: none;
+  animation: trustBlobFloat 7s ease-in-out infinite;
+  z-index: 0;
+}
+
+.trust-blob-1 {
+  width: 260px; height: 260px;
+  background: rgba(124, 92, 255, 0.30);
+  top: -70px; right: -60px;
+  animation-delay: 0s;
+}
+
+.trust-blob-2 {
+  width: 200px; height: 200px;
+  background: rgba(56, 189, 248, 0.18);
+  bottom: -50px; left: -50px;
+  animation-delay: 2.2s;
+}
+
+.trust-blob-3 {
+  width: 140px; height: 140px;
+  background: rgba(236, 72, 153, 0.16);
+  bottom: 40%; right: 15%;
+  animation-delay: 4.4s;
+}
+
+@keyframes trustBlobFloat {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-16px) scale(1.06); }
+}
+
+/* faint grid texture overlay for depth */
+.trust-grid-overlay {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 75% 75% at 30% 20%, black 30%, transparent 100%);
 }
 
-.dream-flip-back {
-  transform: rotateY(180deg);
+.trust-header {
+  position: relative;
+  z-index: 2;
 }
 
-/* ── On hover: hide all overlays & text on back — pure photo only ── */
-.dream-flip-card:hover .dream-back-overlay {
+.trust-badge {
+  display: inline-block;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background: linear-gradient(120deg, #7c5cff, #a78bfa);
+  padding: 4px 12px;
+  border-radius: 50px;
+  margin-bottom: 0.7rem;
+  box-shadow: 0 4px 14px rgba(124,92,255,0.4);
+}
+
+.trust-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.18;
+  margin: 0;
+}
+
+.trust-points-list {
+  position: relative;
+  z-index: 2;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem 0.9rem;
+  align-content: center;
+}
+
+.trust-point-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.7rem;
+  background: rgba(255,255,255,0.045);
+  border: 1px solid rgba(255,255,255,0.07);
+  backdrop-filter: blur(6px);
   opacity: 0;
-  transition: opacity 0.25s ease 0.55s;
+  transform: translateY(10px);
+  animation: trustPointIn 0.55s ease forwards;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 
-/* ── Mobile: disable 3D flip, show tap toggle instead ── */
+.trust-point-item:hover {
+  background: rgba(124, 92, 255, 0.16);
+  border-color: rgba(124, 92, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+@keyframes trustPointIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.trust-point-emoji {
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.trust-point-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.3;
+}
+
+.trust-cta {
+  position: relative;
+  z-index: 2;
+  align-self: flex-start;
+  background: linear-gradient(120deg, #7c5cff, #6246ea);
+  color: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 10px 22px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(124,92,255,0.45);
+  letter-spacing: 0.01em;
+}
+
+.trust-cta:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124,92,255,0.6);
+}
+
+/* Mobile adjustments */
 @media (max-width: 767px) {
-  .dream-flip-card:hover .dream-flip-inner {
-    transform: none;
+  .trust-showcase-card {
+    padding: 1.5rem 1.4rem;
+    gap: 0.85rem;
   }
-
-  .dream-flip-back {
-    display: none;
+  .trust-title { font-size: 1.25rem; }
+  .trust-points-list {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
   }
+  .trust-point-label { font-size: 0.74rem; }
+  .trust-cta { font-size: 0.78rem; padding: 8px 18px; }
+}
 
-  .dream-flip-card.flipped .dream-flip-front {
-    display: none;
-  }
-
-  .dream-flip-card.flipped .dream-flip-back {
-    display: flex;
-    position: relative;
-    transform: none;
-    min-height: inherit;
-  }
-
-  /* Mobile layout — 2 column grid */
+/* ── Mobile layout grid (kept from original) ── */
+@media (max-width: 767px) {
   .dream-mobile-layout {
     display: grid !important;
     grid-template-columns: 1fr 1fr;

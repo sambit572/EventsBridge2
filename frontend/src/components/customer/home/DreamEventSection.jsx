@@ -13,20 +13,16 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
-// ── 12 flip images from /public/ ──
-const venuePhotos = [
-  { src: "/flipimg1.webp",  label: "Grand Venue" },
-  { src: "/flipimg2.webp",  label: "Grand Venue" },
-  { src: "/flipimg3.webp",  label: "Grand Venue" },
-  { src: "/flipimg4.webp",  label: "Grand Venue" },
-  { src: "/flipimg5.webp",  label: "Grand Venue" },
-  { src: "/flipimg6.webp",  label: "Grand Venue" },
-  { src: "/flipimg7.webp",  label: "Grand Venue" },
-  { src: "/flipimg8.webp",  label: "Grand Venue" },
-  { src: "/flipimg9.webp",  label: "Grand Venue" },
-  { src: "/flipimg10.webp", label: "Grand Venue" },
-  { src: "/flipimg11.webp", label: "Grand Venue" },
-  { src: "/flipimg12.webp", label: "Grand Venue" },
+// ── Trust signals for the static showcase card ──
+const trustPoints = [
+  { emoji: "✨", label: "Verified & Trusted Vendors" },
+  { emoji: "💰", label: "Best Deals for Every Budget" },
+  { emoji: "🤝", label: "Direct Price Negotiation" },
+  { emoji: "📍", label: "Connect with Top Local Event Vendors" },
+  { emoji: "💳", label: "Flexible EMI Payments" },
+  { emoji: "⭐", label: "Genuine Customer Reviews" },
+  { emoji: "🔒", label: "Safe & Secure Bookings" },
+  { emoji: "📅", label: "One Platform for Every Event" },
 ];
 
 // ── Event Types for Artisan Catering Card ──
@@ -114,157 +110,60 @@ function ArtisanCateringCard({ className, style, isMobile }) {
   );
 }
 
-// ── Grand Venues Flip Card (cycling photos on each hover) ──
-function GrandVenuesCard({ className, style, minHeight }) {
+// ── Trust Showcase Card (static, no images — animated background only) ──
+function TrustShowcaseCard({ className, style, minHeight }) {
   const navigate = useNavigate();
-  const [photoIndex, setPhotoIndex] = useState(0);
-  const [isFlipped, setIsFlipped] = useState(false);
-  const isHovering = useRef(false);
 
-  // Desktop: each new hover-in advances to next photo
-  const handleMouseEnter = () => {
-    if (!isHovering.current) {
-      isHovering.current = true;
-      setPhotoIndex((prev) => (prev + 1) % venuePhotos.length);
+  const scrollToCategories = () => {
+    const el = document.getElementById("categories");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      navigate("/", { state: { scrollTo: "categories" } });
     }
   };
 
-  const handleMouseLeave = () => {
-    isHovering.current = false;
-  };
-
-  // Mobile: tap toggles flip and cycles to next photo
-  const handleTap = (e) => {
-    e.stopPropagation();
-    setPhotoIndex((prev) => (prev + 1) % venuePhotos.length);
-    setIsFlipped((prev) => !prev);
-  };
-
-  const current = venuePhotos[photoIndex];
-  const next = venuePhotos[(photoIndex + 1) % venuePhotos.length];
-
   return (
     <div
-      className={`dream-flip-card ${isFlipped ? "flipped" : ""} ${className || ""}`}
+      className={`trust-showcase-card ${className || ""}`}
       style={{ ...style, minHeight }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleTap}
+      onClick={scrollToCategories}
     >
-      <div className="dream-flip-inner" style={{ borderRadius: "1.5rem" }}>
+      {/* Animated background glow blobs */}
+      <div className="trust-blob trust-blob-1" />
+      <div className="trust-blob trust-blob-2" />
+      <div className="trust-blob trust-blob-3" />
+      <div className="trust-grid-overlay" />
 
-        {/* ── FRONT ── */}
-        <div
-          className="dream-flip-front rounded-3xl overflow-hidden"
-          style={{ background: "linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%)" }}
-        >
-          <div
-            className="absolute inset-0 transition-all duration-700"
-            style={{
-              backgroundImage: `url('${current.src}')`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              opacity: 0.45,
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-
-          {/* photo counter badge */}
-          <div
-            className="absolute top-4 right-4 text-white text-xs font-bold px-3 py-1 rounded-full z-10"
-            style={{ background: "rgba(0,0,0,0.55)", backdropFilter: "blur(4px)" }}
-          >
-            {photoIndex + 1} / {venuePhotos.length}
-          </div>
-
-          <div className="absolute bottom-0 left-0 right-0 p-7 z-10">
-            <span
-              className="inline-block text-xs font-black tracking-widest px-3 py-1 rounded-full mb-3"
-              style={{ background: "#F5C518", color: "#111" }}
-            >
-              POPULAR
-            </span>
-            <h3
-              className="text-white text-3xl font-black mb-1"
-              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-            >
-              Grand Celebrations
-            </h3>
-            <p className="text-gray-300 text-sm mb-5">Stunning spaces for every scale</p>
-            {/* <p className="text-gray-400 text-xs">Hover to explore →</p> */}
-          </div>
-        </div>
-
-        {/* ── BACK (full photo) ── */}
-        <div className="dream-flip-back rounded-3xl overflow-hidden">
-          <div
-            className="absolute inset-0 transition-all duration-700"
-            style={{
-              backgroundImage: `url('${current.src}')`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          />
-          <div className="dream-back-overlay absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10" />
-
-          {/* photo counter */}
-          <div
-            className="dream-back-overlay absolute top-4 right-4 text-white text-xs font-bold px-3 py-1 rounded-full z-10"
-            style={{ background: "rgba(0,0,0,0.55)", backdropFilter: "blur(4px)" }}
-          >
-            {photoIndex + 1} / {venuePhotos.length}
-          </div>
-
-          {/* bottom content */}
-          <div className="dream-back-overlay absolute bottom-0 left-0 right-0 p-7 z-10 flex flex-col gap-3">
-            <div>
-              <p
-                className="text-yellow-400 text-xs font-bold tracking-widest uppercase mb-1"
-                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-              >
-                {current.label}
-              </p>
-              <h3
-                className="text-white text-2xl font-black"
-                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-              >
-                Grand Venues
-              </h3>
-              <p className="text-gray-300 text-sm mt-1 leading-relaxed">
-                Discover stunning banquet halls &amp; outdoor venues for weddings,
-                receptions, and corporate events — tailored to every scale.
-              </p>
-            </div>
-            <div className="flex items-center gap-3 flex-wrap">
-              <button
-                onClick={(e) => { e.stopPropagation(); navigate("/category/banquet-hall"); }}
-                className="text-gray-900 font-bold text-sm px-6 py-2.5 rounded-full hover:opacity-80 transition-all duration-200"
-                style={{ background: "#F5C518" }}
-              >
-                Explore Venues →
-              </button>
-              {/* dot indicator strip */}
-              <div className="flex gap-1.5 ml-auto">
-                {venuePhotos.map((_, i) => (
-                  <div
-                    key={i}
-                    className="rounded-full transition-all duration-300"
-                    style={{
-                      width: i === photoIndex ? "20px" : "6px",
-                      height: "6px",
-                      background: i === photoIndex ? "#F5C518" : "rgba(255,255,255,0.35)",
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
+      {/* Header */}
+      <div className="trust-header">
+        <span className="trust-badge">WHY EVENTSBRIDGE</span>
+        <h3 className="trust-title">
+          Your Dream Event,<br />Made Effortless
+        </h3>
       </div>
 
-      {/* Preload next image silently */}
-      <img src={next.src} alt="" style={{ display: "none" }} aria-hidden="true" />
+      {/* Trust points list */}
+      <ul className="trust-points-list">
+        {trustPoints.map((point, i) => (
+          <li
+            key={i}
+            className="trust-point-item"
+            style={{ animationDelay: `${0.08 * i}s` }}
+          >
+            <span className="trust-point-emoji">{point.emoji}</span>
+            <span className="trust-point-label">{point.label}</span>
+          </li>
+        ))}
+      </ul>
+
+      {/* CTA */}
+      <button
+        className="trust-cta"
+        onClick={(e) => { e.stopPropagation(); scrollToCategories(); }}
+      >
+        Explore Vendors →
+      </button>
     </div>
   );
 }
@@ -307,7 +206,7 @@ export default function DreamEventSection() {
         <div className="dream-mobile-layout md:hidden">
 
           {/* Grand Venues cycling flip */}
-          <GrandVenuesCard className="dream-mobile-grand" minHeight="240px" />
+          <TrustShowcaseCard className="dream-mobile-grand" minHeight="240px" />
 
           {/* Artisan Catering */}
           <ArtisanCateringCard className="dream-mobile-catering" style={{ minHeight: "220px" }} isMobile={true} />
@@ -316,11 +215,11 @@ export default function DreamEventSection() {
           <motion.div
             variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}
             className="dream-mobile-emi relative overflow-hidden rounded-2xl p-5 flex flex-col justify-center"
-            style={{ minHeight: "130px", background: "#f7f7f7" }}
+            style={{ minHeight: "130px", background: "linear-gradient(155deg, #0c0a1f 0%, #1c1242 50%, #2d1b5e 100%)" }}
           >
-            <p className="font-semibold mb-1" style={{ fontSize: "14px", color: "#555", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Up to</p>
-            <p className="font-black leading-none mb-1" style={{ fontSize: "clamp(3rem, 14vw, 4.5rem)", color: "#111", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>80%</p>
-            <p className="font-bold" style={{ fontSize: "15px", color: "#E6A800", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Pay with Emi</p>
+            <p className="font-semibold mb-1" style={{ fontSize: "14px", color: "rgba(255,255,255,0.6)", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Up to</p>
+            <p className="font-black leading-none mb-1" style={{ fontSize: "clamp(3rem, 14vw, 4.5rem)", color: "#fff", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>80%</p>
+            <p className="font-bold" style={{ fontSize: "15px", color: "#a78bfa", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Pay with Emi</p>
           </motion.div>
 
           {/* Join As a Vendor */}
@@ -398,7 +297,7 @@ export default function DreamEventSection() {
 
           {/* Grand Venues — cycling flip (spans 2 rows) */}
           <motion.div variants={cardVariants} style={{ gridColumn: "1", gridRow: "1 / span 2" }}>
-            <GrandVenuesCard style={{ height: "100%" }} />
+            <TrustShowcaseCard style={{ height: "100%" }} />
           </motion.div>
 
           {/* Artisan Catering */}
@@ -410,12 +309,12 @@ export default function DreamEventSection() {
           <motion.div
             variants={cardVariants}
             className="relative overflow-hidden rounded-3xl p-7 flex flex-col justify-center"
-            style={{ gridColumn: "3", gridRow: "1", background: "#f7f7f7" }}
+            style={{ gridColumn: "3", gridRow: "1", background: "linear-gradient(155deg, #0c0a1f 0%, #1c1242 50%, #2d1b5e 100%)" }}
           >
-            <p className="font-semibold mb-1" style={{ fontSize: "16px", color: "#555", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Up to</p>
-            <p className="font-black leading-none mb-2" style={{ fontSize: "clamp(4rem, 7vw, 6rem)", color: "#111", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>80%</p>
-            <p className="font-bold" style={{ fontSize: "20px", color: "#E6A800", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Pay with Emi</p>
-            <div className="absolute -bottom-8 -right-8 w-32 h-32 rounded-full opacity-10" style={{ background: "#E6A800" }} />
+            <p className="font-semibold mb-1" style={{ fontSize: "16px", color: "rgba(255,255,255,0.6)", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Up to</p>
+            <p className="font-black leading-none mb-2" style={{ fontSize: "clamp(4rem, 7vw, 6rem)", color: "#fff", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>80%</p>
+            <p className="font-bold" style={{ fontSize: "20px", color: "#a78bfa", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Pay with Emi</p>
+            <div className="absolute -bottom-8 -right-8 w-32 h-32 rounded-full opacity-20" style={{ background: "#7c5cff", filter: "blur(10px)" }} />
           </motion.div>
 
           {/* Join As a Vendor (spans 2 cols) */}
