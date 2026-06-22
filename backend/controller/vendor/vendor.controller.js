@@ -684,7 +684,34 @@ const verifyVendorLogin = async (req, res) => {
       )
     );
 };
+const submitVerificationRequest = async (req, res) => {
+  try {
+    const { duration, amount } = req.body;
 
+    const vendor = await Vendor.findByIdAndUpdate(
+      req.vendor._id,
+      {
+        "verification.status": "pending",
+        "verification.submittedAt": new Date(),
+        "verification.plan.duration": duration,
+        "verification.plan.amount": amount,
+      },
+      { new: true }
+    );
+   console.log(vendor)
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        vendor,
+        "Verification request submitted successfully"
+      )
+    );
+  } catch (error) {
+    return res
+      .status(500)
+      .json(new ApiError(500, error.message));
+  }
+};
 export {
   registerVendor,
   loginVendor,
@@ -701,4 +728,5 @@ export {
   getVendorDashboard,
   getSearchSuggestions,
   verifyVendorLogin,
+  submitVerificationRequest,
 };

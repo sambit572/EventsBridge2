@@ -72,6 +72,30 @@ const vendorSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    verification: {
+  status: {
+    type: String,
+    enum: ["not_verified", "pending", "verified", "rejected"],
+    default: "not_verified",
+  },
+
+  submittedAt: {
+    type: Date,
+    default: null,
+  },
+
+  plan: {
+    duration: {
+      type: String,
+      default: null,
+    },
+
+    amount: {
+      type: Number,
+      default: 0,
+    },
+  },
+},
   },
   {
     timestamps: true,
@@ -117,6 +141,7 @@ vendorSchema.methods.generateRefreshToken = function () {
     { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
   );
 };
+
 
 const Vendor = mongoose.model("Vendor", vendorSchema);
 export default Vendor;

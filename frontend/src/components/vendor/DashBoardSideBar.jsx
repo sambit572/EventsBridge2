@@ -9,6 +9,7 @@ import { IoKey } from "react-icons/io5";
 import { BsBank } from "react-icons/bs";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { MdOutlineEdit } from "react-icons/md";
+import { BACKEND_URL } from "../../utils/constant.js";
 import {
   MdDashboard,
   MdBookOnline,
@@ -124,7 +125,38 @@ function DashBoardSideBar({
       setShowRemoveConfirm(false);
     }
   };
+const handleVerificationRequest = async () => {
+  try {
+    const plan = VERIFY_PLANS.find(
+      (p) => p.key === selectedPlan
+    );
 
+    if (!plan) {
+      alert("Please select a plan");
+      return;
+    }
+
+    const response = await axios.put(
+      `${BACKEND_URL}/vendors/verification-request`,
+      {
+        duration: plan.duration,
+        amount: plan.price,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+
+    alert("Verification request submitted successfully");
+
+    setShowVerifyModal(false);
+
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
+    alert("Failed to submit verification request");
+  }
+};
   return (
     <aside className={`dash-sidebar ${isOpen ? "open" : ""}`}>
       {/* Replaced Logo with Profile Card at the top */}
@@ -357,10 +389,10 @@ function DashBoardSideBar({
               ))}
             </div>
 
-            <button className="sb-verify-ok-btn" onClick={() => setShowVerifyModal(false)}>
-              <span className="sb-verify-ok-shine" />
-              OK, Got It
-            </button>
+           <button className="sb-verify-ok-btn" onClick={handleVerificationRequest}>
+          <span className="sb-verify-ok-shine" />
+           Submit Verification Request
+          </button>
           </div>
         </div>
       )}
