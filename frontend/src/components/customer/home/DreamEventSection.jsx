@@ -34,9 +34,6 @@ const eventTypes = [
   { emoji: "❤️", label: "Anniversary Parties" },
   { emoji: "👶", label: "Baby Shower Events" },
   { emoji: "🎵", label: "Concerts & Live Shows" },
-  // { emoji: "🎓", label: "College & Farewell Events" },
-  // { emoji: "🪔", label: "Religious & Cultural Functions" },
-  // { emoji: "🎉", label: "Private Parties & Gatherings" },
 ];
 
 // ── Artisan Catering Card with animated event scroller ──
@@ -110,6 +107,57 @@ function ArtisanCateringCard({ className, style, isMobile }) {
   );
 }
 
+// ── Single-slot cycling reveal for the 8 trust points ──
+// Shows ONE item at a time, big. The outgoing item rises up and out the top
+// while the incoming item rises up from behind a mask to take its place.
+function TrustPointsReveal() {
+  const [index, setIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState(null);
+  const cleanupRef = useRef(null);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setPrevIndex(index);
+      setIndex((i) => (i + 1) % trustPoints.length);
+      // Remove the outgoing item from the DOM once its leave animation finishes
+      clearTimeout(cleanupRef.current);
+      cleanupRef.current = setTimeout(() => setPrevIndex(null), 700);
+    }, 2200);
+    return () => {
+      clearInterval(id);
+      clearTimeout(cleanupRef.current);
+    };
+  }, [index]);
+
+  const current = trustPoints[index];
+  const outgoing = prevIndex !== null ? trustPoints[prevIndex] : null;
+
+  return (
+    <div className="trust-reveal-stage">
+      {outgoing && (
+        <div key={`out-${prevIndex}`} className="trust-reveal-item is-leaving">
+          <span className="trust-reveal-emoji">{outgoing.emoji}</span>
+          <span className="trust-reveal-label">{outgoing.label}</span>
+        </div>
+      )}
+      <div key={`in-${index}`} className="trust-reveal-item is-entering">
+        <span className="trust-reveal-emoji">{current.emoji}</span>
+        <span className="trust-reveal-label">{current.label}</span>
+      </div>
+
+      {/* Progress dots so the person can see position in the cycle */}
+      <div className="trust-reveal-dots">
+        {trustPoints.map((_, i) => (
+          <span
+            key={i}
+            className={`trust-reveal-dot ${i === index ? "active" : ""}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ── Trust Showcase Card (static, no images — animated background only) ──
 function TrustShowcaseCard({ className, style, minHeight }) {
   const navigate = useNavigate();
@@ -133,7 +181,15 @@ function TrustShowcaseCard({ className, style, minHeight }) {
       <div className="trust-blob trust-blob-1" />
       <div className="trust-blob trust-blob-2" />
       <div className="trust-blob trust-blob-3" />
+      {/* Slow-rotating aurora sweep for extra motion/depth */}
+      <div className="trust-aurora-sweep" />
       <div className="trust-grid-overlay" />
+      {/* Floating sparkle particles */}
+      <div className="trust-particle trust-particle-1" />
+      <div className="trust-particle trust-particle-2" />
+      <div className="trust-particle trust-particle-3" />
+      <div className="trust-particle trust-particle-4" />
+      <div className="trust-particle trust-particle-5" />
 
       {/* Header */}
       <div className="trust-header">
@@ -143,19 +199,8 @@ function TrustShowcaseCard({ className, style, minHeight }) {
         </h3>
       </div>
 
-      {/* Trust points list */}
-      <ul className="trust-points-list">
-        {trustPoints.map((point, i) => (
-          <li
-            key={i}
-            className="trust-point-item"
-            style={{ animationDelay: `${0.08 * i}s` }}
-          >
-            <span className="trust-point-emoji">{point.emoji}</span>
-            <span className="trust-point-label">{point.label}</span>
-          </li>
-        ))}
-      </ul>
+      {/* Trust points: single big slot, one item at a time, sliding text reveal */}
+      <TrustPointsReveal />
 
       {/* CTA */}
       <button
@@ -214,8 +259,8 @@ export default function DreamEventSection() {
           {/* EMI Card */}
           <motion.div
             variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="dream-mobile-emi relative overflow-hidden rounded-2xl p-5 flex flex-col justify-center"
-            style={{ minHeight: "130px", background: "linear-gradient(155deg, #0c0a1f 0%, #1c1242 50%, #2d1b5e 100%)" }}
+            className="dream-mobile-emi dream-emi-gradient relative overflow-hidden rounded-2xl p-5 flex flex-col justify-center"
+            style={{ minHeight: "130px" }}
           >
             <p className="font-semibold mb-1" style={{ fontSize: "14px", color: "rgba(255,255,255,0.6)", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Up to</p>
             <p className="font-black leading-none mb-1" style={{ fontSize: "clamp(3rem, 14vw, 4.5rem)", color: "#fff", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>80%</p>
@@ -308,13 +353,13 @@ export default function DreamEventSection() {
           {/* EMI Card */}
           <motion.div
             variants={cardVariants}
-            className="relative overflow-hidden rounded-3xl p-7 flex flex-col justify-center"
-            style={{ gridColumn: "3", gridRow: "1", background: "linear-gradient(155deg, #0c0a1f 0%, #1c1242 50%, #2d1b5e 100%)" }}
+            className="dream-emi-gradient relative overflow-hidden rounded-3xl p-7 flex flex-col justify-center"
+            style={{ gridColumn: "3", gridRow: "1" }}
           >
             <p className="font-semibold mb-1" style={{ fontSize: "16px", color: "rgba(255,255,255,0.6)", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Up to</p>
             <p className="font-black leading-none mb-2" style={{ fontSize: "clamp(4rem, 7vw, 6rem)", color: "#fff", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>80%</p>
             <p className="font-bold" style={{ fontSize: "20px", color: "#a78bfa", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Pay with Emi</p>
-            <div className="absolute -bottom-8 -right-8 w-32 h-32 rounded-full opacity-20" style={{ background: "#7c5cff", filter: "blur(10px)" }} />
+            <div className="absolute -bottom-8 -right-8 w-32 h-32 rounded-full opacity-20" style={{ background: "#a78bfa", filter: "blur(10px)" }} />
           </motion.div>
 
           {/* Join As a Vendor (spans 2 cols) */}
