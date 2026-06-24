@@ -195,7 +195,7 @@ function TrustShowcaseCard({ className, style, minHeight }) {
       <div className="trust-header">
         <span className="trust-badge">WHY EVENTSBRIDGE</span>
         <h3 className="trust-title">
-          Your Dream Event,<br />Made Effortless
+          Everything You Need for your Perfect Event
         </h3>
       </div>
 
