@@ -27,10 +27,10 @@ const NAV_ITEMS = [
 ];
 
 const VERIFY_PLANS = [
-  { key: "1m",  duration: "1 Month",  price: 300,  perMonth: 300, badge: null },
-  { key: "3m",  duration: "3 Months", price: 600,  perMonth: 200, badge: "Save 33%" },
-  { key: "6m",  duration: "6 Months", price: 1200, perMonth: 200, badge: "Most Popular" },
-  { key: "12m", duration: "12 Months", price: 2400, perMonth: 200, badge: "Best Value" },
+  { key: "1m",  duration: "1 Month",  price: 299,  perMonth: 300, badge: null },
+  { key: "3m",  duration: "3 Months", price: 599,  perMonth: 200, badge: "Save 33%" },
+  { key: "6m",  duration: "6 Months", price: 1199, perMonth: 200, badge: "Most Popular" },
+  { key: "12m", duration: "12 Months", price: 2399, perMonth: 200, badge: "Best Value" },
 ];
 
 function DashBoardSideBar({
