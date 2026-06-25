@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./DashBoardSideBar.css";
+import VerifyIntroModal from "./VerifyIntroModal.jsx";
 import { FaCamera, FaUpload, FaTrash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { UseVendorProfile } from "./UseVendorProfile.jsx";
@@ -51,6 +52,7 @@ function DashBoardSideBar({
   const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
   const [showProfileSection, setShowProfileSection] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [showVerifyIntro, setShowVerifyIntro] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("6m");
 
   const { form, updateField, updateVendor, updateBank, resetForm } = UseVendorProfile();
@@ -182,7 +184,7 @@ function DashBoardSideBar({
             </button>
           ))}
 
-          <button className="sb-verify-btn" onClick={() => setShowVerifyModal(true)}>
+          <button className="sb-verify-btn" onClick={() => setShowVerifyIntro(true)}>
             <span className="sb-verify-shine" />
             <span className="sb-verify-icon"><IoShieldCheckmark size={17} /></span>
             <span className="sb-verify-text">Verify My Service</span>
@@ -322,6 +324,16 @@ function DashBoardSideBar({
             </div>
           </div>
         </div>
+      )}
+      {/* Verify Intro modal — "Why verify" step with the lamp */}
+      {showVerifyIntro && (
+        <VerifyIntroModal
+          onClose={() => setShowVerifyIntro(false)}
+          onAgree={() => {
+            setShowVerifyIntro(false);
+            setShowVerifyModal(true);
+          }}
+        />
       )}
       {/* Verify My Service modal */}
       {showVerifyModal && (
