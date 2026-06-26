@@ -620,7 +620,7 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
                 className="flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-[#001f3f] to-[#004f9f] px-3 py-2 text-xs font-bold text-white shadow-md hover:shadow-lg"
                 onClick={handleBookNow}
               >
-                BOOK NOW
+                Call to Vendor
               </button>
             </>
           ) : (
