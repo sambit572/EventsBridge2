@@ -153,8 +153,11 @@ const handleVerificationRequest = async () => {
 
     console.log(response.data);
   } catch (error) {
-    console.error(error);
-    alert("Failed to submit verification request");
+   const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      "Failed to submit verification request";
+    alert(message);
   }
 };
   return (
