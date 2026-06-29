@@ -875,7 +875,7 @@ function VendorService({ currentStep }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "16px 16px 20px",
+        padding: "10px 16px 14px",
         position: "relative",
         overflow: "hidden",
       }}>
