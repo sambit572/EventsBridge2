@@ -610,17 +610,17 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
           {isVendorAvailable ? (
             <>
               <button
-                className="flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-[#001f3f] to-[#004f9f] px-3 py-2 text-xs font-bold text-white shadow-md hover:shadow-lg"
-                onClick={handleBookNow}
-              >
-                BOOK NOW
-              </button>
-
-              <button
                 className="flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-[#fb923c] to-[#ef4444] px-3 py-2 text-xs font-bold text-white shadow-md hover:shadow-lg"
                 onClick={handleAddToCart}
               >
                 ADD TO CART
+              </button>
+
+              <button
+                className="flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-[#001f3f] to-[#004f9f] px-3 py-2 text-xs font-bold text-white shadow-md hover:shadow-lg"
+                onClick={handleBookNow}
+              >
+                CALL TO VENDER
               </button>
             </>
           ) : (

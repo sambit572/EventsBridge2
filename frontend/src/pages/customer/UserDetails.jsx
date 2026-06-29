@@ -228,15 +228,17 @@ const FormField = ({
 }) => {
   const isSelect = children.type === "select";
 
+  // Same colors as before (slate border, indigo focus) — just tighter
+  // padding/text size so more fields fit without scrolling.
   const commonInputClasses =
-    "w-full px-2 py-2 rounded-xl border border-slate-400 text-base text-gray-800 font-medium focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 focus:outline-none";
+    "w-full px-2.5 py-1.5 rounded-xl border border-slate-400 text-[13.5px] text-gray-800 font-medium focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 focus:outline-none";
 
   if (useStaticLabel) {
     return (
       <div>
         <label
           htmlFor={id}
-          className="block mb-1 text-sm font-medium text-gray-700"
+          className="block mb-0.5 text-xs font-medium text-gray-700"
         >
           {label}
         </label>
@@ -251,28 +253,28 @@ const FormField = ({
 
   // These classes position the label inside the input/select when it's empty OR disabled
   const unfocusedClasses = isSelect
-    ? "peer-invalid:text-gray-500 peer-invalid:top-3 peer-invalid:text-sm peer-invalid:left-4 peer-disabled:text-gray-500 peer-disabled:top-3 peer-disabled:text-sm peer-disabled:left-4 peer-disabled:bg-[#e9ecef]"
-    : "peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3 peer-placeholder-shown:text-sm peer-placeholder-shown:left-4";
+    ? "peer-invalid:text-gray-500 peer-invalid:top-2 peer-invalid:text-xs peer-invalid:left-3 peer-disabled:text-gray-500 peer-disabled:top-2 peer-disabled:text-xs peer-disabled:left-3 peer-disabled:bg-[#e9ecef]"
+    : "peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:text-xs peer-placeholder-shown:left-3";
 
   return (
     <div className="relative">
       {React.cloneElement(children, {
         id: id,
         className: `peer transition-all duration-300 ease-in-out placeholder-transparent disabled:bg-[#e9ecef] disabled:cursor-not-allowed ${commonInputClasses} ${
-          isSelect ? "appearance-none pr-10" : ""
+          isSelect ? "appearance-none pr-9" : ""
         }`,
         placeholder: label,
       })}
       <label
         htmlFor={id}
-        className={`absolute left-2.5 -top-2.5 px-1 bg-white text-xs text-indigo-500 font-medium tracking-wider capitalize transition-all duration-300 ease-in-out pointer-events-none peer-focus:-top-2.5 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-indigo-500 ${unfocusedClasses}`}
+        className={`absolute left-2 -top-2 px-1 bg-white text-[11px] text-indigo-500 font-medium tracking-wider capitalize transition-all duration-300 ease-in-out pointer-events-none peer-focus:-top-2 peer-focus:left-2 peer-focus:text-[11px] peer-focus:text-indigo-500 ${unfocusedClasses}`}
       >
         {label}
       </label>
       {isSelect && (
-        <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+        <div className="absolute inset-y-0 right-0 flex items-center px-2.5 pointer-events-none">
           <svg
-            className="w-5 h-5 text-gray-500"
+            className="w-4 h-4 text-gray-500"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -806,202 +808,203 @@ const UserDetails = () => {
   };
 
   return (
-    <div className="font-sans px-4">
-      <div className="max-w-2xl p-4 mx-auto my-20 text-gray-800 bg-[#fff] rounded-2xl border-[3px] border-[#001F3F] shadow-[0_8px_32px_rgba(31,38,135,0.2)] backdrop-blur-lg">
-        <h3 className="mb-[-10px] text-center text-3xl font-bold tracking-wide bg-gradient-to-r from-[#004989] to-[#001F3F] bg-clip-text text-transparent">
+    <div className="font-sans px-4 py-6">
+      <div className="max-w-4xl p-5 mx-auto my-10 text-gray-800 bg-[#fff] rounded-2xl border-[3px] border-[#001F3F] shadow-[0_8px_32px_rgba(31,38,135,0.2)] backdrop-blur-lg">
+        <h3 className="text-center text-2xl sm:text-3xl font-bold tracking-wide bg-gradient-to-r from-[#004989] to-[#001F3F] bg-clip-text text-transparent">
           Fill Out Your Event Details
         </h3>
-        <div className="mx-auto mt-3.5 h-1 w-48 rounded-full bg-gradient-to-r from-[#004989] to-[#001F3F]"></div>
-        <form className="flex flex-col gap-5 mt-6" onSubmit={handleSave}>
-          <FormField id="userName" label="User Name">
-            <input
-              type="text"
-              name="userName"
-              value={userName}
-              onChange={handleChange}
-              required
-            />
-          </FormField>
+        <div className="mx-auto mt-2.5 h-1 w-48 rounded-full bg-gradient-to-r from-[#004989] to-[#001F3F]"></div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <FormField id="phone" label="Phone Number">
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-              />
-            </FormField>
-            <FormField id="altPhone" label="Alternate Number">
-              <input
-                type="tel"
-                name="altPhone"
-                value={formData.altPhone}
-                onChange={handleChange}
-                required
-              />
-            </FormField>
-          </div>
-
-          {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <FormField
-              id="startDate"
-              label="Start Date"
-              useStaticLabel={true}
-              placeholder="dd/mm/yyyy"
-            >
-              <input
-                type="date"
-                name="startDate"
-                value={formData.startDate}
-                onChange={handleChange}
-                required
-              />
-            </FormField>
-            <FormField
-              id="endDate"
-              label="End Date"
-              useStaticLabel={true}
-              placeholder="dd/mm/yyyy"
-            >
-              <input
-                type="date"
-                name="endDate"
-                value={formData.endDate}
-                onChange={handleChange}
-                required
-              />
-            </FormField>
-          </div> */}
-          <div className="mt-4">
-            <label className="block mb-2 text-lg font-semibold text-center text-gray-800">
-              Select Event Dates
-            </label>
-            {isLoadingAvailability ? (
-              <div className="text-center p-8 bg-gray-100 w-full rounded-lg animate-pulse">
-                Checking availability for all vendors...
-              </div>
-            ) : (
-              <VendorCalendar
-                disabledDays={disabledDays}
-                onDateSelect={handleDateSelect}
-              />
-            )}
-          </div>
-          {/* VVV CORRECTED ADDRESS FIELD STRUCTURE VVV */}
-          <div>
-            <div className="relative">
-              <FormField id="address" label="Event Address">
+        <form onSubmit={handleSave} className="mt-5">
+          {/* Two columns so the whole form (incl. Save/Cancel) fits in
+              one view without scrolling — calendar runs alongside the
+              text fields instead of stacking after them. */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-4">
+            {/* LEFT COLUMN */}
+            <div className="flex flex-col gap-3.5">
+              <FormField id="userName" label="User Name">
                 <input
                   type="text"
-                  name="address"
-                  value={formData.address}
+                  name="userName"
+                  value={userName}
                   onChange={handleChange}
                   required
                 />
               </FormField>
-              <button
-                type="button"
-                onClick={handleUseCurrentAddress}
-                className="absolute right-3 top-1/2 -translate-y-1/2 bg-amber-300 hover:bg-indigo-600 text-white text-xs px-2 py-1 rounded-md shadow-sm"
-                title="Use Current Location"
-              >
-                📍
-              </button>
+
+              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+                <FormField id="phone" label="Phone Number">
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                  />
+                </FormField>
+                <FormField id="altPhone" label="Alternate Number">
+                  <input
+                    type="tel"
+                    name="altPhone"
+                    value={formData.altPhone}
+                    onChange={handleChange}
+                    required
+                  />
+                </FormField>
+              </div>
+
+              <div>
+                <div className="relative">
+                  <FormField id="address" label="Event Address">
+                    <input
+                      type="text"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleChange}
+                      required
+                    />
+                  </FormField>
+                  <button
+                    type="button"
+                    onClick={handleUseCurrentAddress}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-amber-300 hover:bg-indigo-600 text-white text-xs px-2 py-1 rounded-md shadow-sm"
+                    title="Use Current Location"
+                  >
+                    📍
+                  </button>
+                </div>
+                {locationMessage && (
+                  <small className="block mt-1 text-blue-600">
+                    {locationMessage}
+                  </small>
+                )}
+              </div>
+
+              <FormField id="landmark" label="Landmark">
+                <input
+                  type="text"
+                  name="landmark"
+                  value={formData.landmark}
+                  onChange={handleChange}
+                  required
+                />
+              </FormField>
+
+              <div className="grid grid-cols-2 gap-3.5">
+                <FormField id="state" label="State">
+                  <select
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value=""></option>
+                    <option value="Odisha">Odisha</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="TamilNadu">Tamil Nadu</option>
+                    <option value="UttarPradesh">Uttar Pradesh</option>
+                  </select>
+                </FormField>
+                <FormField id="district" label="District">
+                  <select
+                    name="district"
+                    value={formData.district}
+                    onChange={handleChange}
+                    required
+                    disabled={!formData.state}
+                  >
+                    <option value=""></option>
+                    {stateDistricts[formData.state]?.map((district) => (
+                      <option key={district} value={district}>
+                        {district}
+                      </option>
+                    ))}
+                  </select>
+                </FormField>
+                <FormField id="city" label="City">
+                  <select
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    required
+                    disabled={!formData.district}
+                  >
+                    <option value=""></option>
+                    {districtCities[formData.district]?.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </FormField>
+                <FormField id="pincode" label="Pincode">
+                  <input
+                    type="text"
+                    name="pincode"
+                    value={formData.pincode}
+                    onChange={handleChange}
+                    required
+                  />
+                </FormField>
+              </div>
             </div>
-            {locationMessage && (
-              <small className="block mt-1 text-blue-600">
-                {locationMessage}
-              </small>
-            )}
+
+            {/* RIGHT COLUMN */}
+            <div className="flex flex-col">
+              <label className="block mb-2 text-base font-semibold text-center text-gray-800">
+                Select Event Dates
+              </label>
+              <div className="border border-slate-300 rounded-xl p-2 flex-1 flex flex-col">
+                {isLoadingAvailability ? (
+                  <div className="flex-1 flex items-center justify-center text-center p-8 bg-gray-100 w-full rounded-lg animate-pulse">
+                    Checking availability for all vendors...
+                  </div>
+                ) : (
+                  <VendorCalendar
+                    disabledDays={disabledDays}
+                    onDateSelect={handleDateSelect}
+                  />
+                )}
+              </div>
+
+              {(formData.startDate || formData.endDate) && (
+                <div className="mt-3 px-3 py-2 rounded-lg border border-indigo-200 bg-indigo-50 text-[12.5px] text-indigo-700 text-center font-medium">
+                  {formData.startDate
+                    ? new Date(formData.startDate).toLocaleDateString(
+                        "en-IN",
+                        { day: "numeric", month: "short" }
+                      )
+                    : "—"}
+                  {"  →  "}
+                  {formData.endDate
+                    ? new Date(formData.endDate).toLocaleDateString("en-IN", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })
+                    : "select end date"}
+                </div>
+              )}
+            </div>
           </div>
 
-          <FormField id="landmark" label="Landmark">
-            <input
-              type="text"
-              name="landmark"
-              value={formData.landmark}
-              onChange={handleChange}
-              required
-            />
-          </FormField>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <FormField id="state" label="State">
-              <select
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                required
-              >
-                <option value=""></option>
-                <option value="Odisha">Odisha</option>
-                <option value="Gujarat">Gujarat</option>
-                <option value="Maharashtra">Maharashtra</option>
-                <option value="Karnataka">Karnataka</option>
-                <option value="TamilNadu">Tamil Nadu</option>
-                <option value="UttarPradesh">Uttar Pradesh</option>
-              </select>
-            </FormField>
-            <FormField id="district" label="District">
-              <select
-                name="district"
-                value={formData.district}
-                onChange={handleChange}
-                required
-                disabled={!formData.state}
-              >
-                <option value=""></option>
-                {stateDistricts[formData.state]?.map((district) => (
-                  <option key={district} value={district}>
-                    {district}
-                  </option>
-                ))}
-              </select>
-            </FormField>
-            <FormField id="city" label="City">
-              <select
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                required
-                disabled={!formData.district}
-              >
-                <option value=""></option>
-                {districtCities[formData.district]?.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
-            </FormField>
-            <FormField id="pincode" label="Pincode">
-              <input
-                type="text"
-                name="pincode"
-                value={formData.pincode}
-                onChange={handleChange}
-                required
-              />
-            </FormField>
-          </div>
-
-          {/* --- CHANGES APPLIED HERE --- */}
-          <div className="flex flex-col justify-center gap-3.5 mt-2.5 md:flex-row">
-            <button
-              type="submit"
-              className="w-full px-5 py-3 text-base font-semibold tracking-wider text-white uppercase transition-transform duration-200 ease-in-out bg-[#7f00ff] rounded-lg cursor-pointer hover:shadow-[0_6px_15px_rgba(127,0,255,0.4)] md:w-36"
-              onClick={handleSave}
-            >
-              Save
-            </button>
+          {/* Actions — Cancel on the left, Save on the right */}
+          <div className="flex flex-col-reverse justify-end gap-3.5 mt-5 sm:flex-row">
             <button
               type="button"
-              className="w-full px-5 py-3 font-semibold tracking-wider text-white uppercase bg-gradient-to-r from-rose-500 to-rose-600 rounded-lg cursor-pointer hover:shadow-lg md:w-36  hover:from-red-600 hover:to-red-700"
+              className="w-full px-5 py-3 font-semibold tracking-wider text-white uppercase bg-gradient-to-r from-rose-500 to-rose-600 rounded-lg cursor-pointer hover:shadow-lg sm:w-36 hover:from-red-600 hover:to-red-700"
               onClick={handleCancel}
             >
               Cancel
+            </button>
+            <button
+              type="submit"
+              className="w-full px-5 py-3 text-base font-semibold tracking-wider text-white uppercase transition-transform duration-200 ease-in-out bg-[#7f00ff] rounded-lg cursor-pointer hover:shadow-[0_6px_15px_rgba(127,0,255,0.4)] sm:w-36"
+              onClick={handleSave}
+            >
+              Save
             </button>
           </div>
 

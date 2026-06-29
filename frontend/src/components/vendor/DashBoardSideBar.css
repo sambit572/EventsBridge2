@@ -91,12 +91,13 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(135deg, #1e3a8a 0%, #4338ca 50%, #6d28d9 100%);
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 20px;
   padding: 20px 16px 16px;
   backdrop-filter: blur(8px);
   margin-bottom: 8px;
+  box-shadow: 0 8px 24px rgba(67,56,202,0.25);
 }
 
 .sb-avatar-wrap {
@@ -357,15 +358,14 @@
   max-width: 460px;
   max-height: 88vh;
   overflow-y: auto;
-  background: linear-gradient(180deg, #0d1b3e 0%, #001233 100%);
-  border: 1px solid rgba(245,158,11,0.25);
+  background: linear-gradient(160deg, #1e2a78 0%, #3b2f8f 45%, #6d28d9 100%);
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 24px;
   padding: 32px 26px 26px;
-  box-shadow: 0 24px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04);
+  box-shadow: 0 24px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06);
   text-align: center;
   font-family: Montserrat, sans-serif;
 }
-
 .sb-verify-close {
   position: absolute;
   top: 16px;
@@ -432,16 +432,16 @@
   gap: 4px;
   padding: 18px 10px 14px;
   border-radius: 16px;
-  border: 1.5px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.22);
   cursor: pointer;
   transition: all 0.22s ease;
   text-align: center;
 }
 
 .sb-plan-card:hover {
-  background: rgba(255,255,255,0.08);
-  border-color: rgba(245,158,11,0.35);
+  background: rgba(0,0,0,0.32);
+  border-color: rgba(245,158,11,0.4);
   transform: translateY(-2px);
 }
 
