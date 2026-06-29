@@ -83,7 +83,6 @@ const vendorSchema = new mongoose.Schema(
     type: Date,
     default: null,
   },
-
   plan: {
     duration: {
       type: String,
@@ -96,6 +95,14 @@ const vendorSchema = new mongoose.Schema(
     },
   },
 },
+ verifiedAt:{
+    type:Date,
+    default:null,
+  },
+  subscriptionEndsAt:{
+    type:Date,
+    default:null,
+  },
   },
   {
     timestamps: true,

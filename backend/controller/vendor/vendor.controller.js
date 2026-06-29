@@ -685,6 +685,7 @@ const verifyVendorLogin = async (req, res) => {
       )
     );
 };
+// For Verify my service
 const submitVerificationRequest = async (req, res) => {
   try {
     const { duration, amount } = req.body;

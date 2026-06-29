@@ -13,6 +13,7 @@ import reviewRoutes from "./routes/common/review.routes.js";
 import test_router from "./routes/agenda/agenda.routes.js";
 import startAgenda from "./agenda/startAgenda.js";
 import "./cronjobs/startCronjobs.js";
+import "./cronjobs/subscriptionEndVendor.js";
 import feedbackRoutes from "./routes/common/feedback.routes.js";
 import serviceRoutes from "./routes/common/serviceList.routes.js";
 import reportRoutes from "./routes/common/report.routes.js";
