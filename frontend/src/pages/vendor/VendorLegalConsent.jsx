@@ -261,14 +261,30 @@ export default function VendorLegalConsent() {
 
       {isLoading && <Spinner />}
 
-      <div className="bg-[#e5e5de] rounded-[10px] max-w-[600px] h-[600px] my-[90px] mx-auto p-[30px] shadow-sm max-lg:max-w-[95%] max-lg:h-auto max-lg:p-[25px] max-lg:my-[70px] max-md:max-w-[95%] max-md:p-5 max-md:my-[60px] max-[480px]:max-w-[94%] max-[480px]:p-4 max-[480px]:h-auto max-[480px]:my-10 max-[480px]:overflow-x-hidden">
-        <p className="text-base mb-5 leading-[1.8] text-black max-md:text-[15px] max-[480px]:text-sm max-[480px]:leading-[1.6]">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        .lc-card, .lc-card * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .lc-card { animation: lc-rise 0.5s cubic-bezier(.22,1,.36,1) both; }
+        @keyframes lc-rise { from { opacity:0; transform: translateY(16px) scale(.985); } to { opacity:1; transform: translateY(0) scale(1); } }
+        .lc-row { animation: lc-fade 0.4s ease both; }
+        @keyframes lc-fade { from { opacity:0; transform: translateX(-6px); } to { opacity:1; transform: translateX(0); } }
+        .lc-row input[type="checkbox"] {
+          width: 16px; height: 16px; cursor: pointer; accent-color: #16a34a;
+          transition: transform .15s ease;
+        }
+        .lc-row input[type="checkbox"]:hover { transform: scale(1.12); }
+        .lc-upload-box { transition: border-color .2s ease, box-shadow .2s ease, transform .15s ease; }
+        .lc-upload-box:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
+      `}</style>
+
+      <div className="lc-card bg-[#e5e5de] rounded-[10px] max-w-[600px] my-[40px] mx-auto p-[24px] shadow-sm max-lg:max-w-[95%] max-lg:p-[22px] max-lg:my-[30px] max-md:max-w-[95%] max-md:p-5 max-md:my-[24px] max-[480px]:max-w-[94%] max-[480px]:p-4 max-[480px]:my-5 max-[480px]:overflow-x-hidden">
+        <p className="text-[14px] mb-3.5 leading-[1.6] text-black max-md:text-[13.5px] max-[480px]:text-[13px] max-[480px]:leading-[1.5]">
           Before submitting your registration, please review and agree to the
           following terms and authorizations.
         </p>
 
-        <form className="flex flex-col gap-[30px]" onSubmit={handleSubmit}>
-          <label className="flex items-center gap-[6px] whitespace-nowrap text-[15px] leading-[1.3] max-md:text-xs max-md:gap-[14px] max-md:flex-row max-md:items-start max-[480px]:text-[13.5px] max-[480px]:gap-2.5 max-[480px]:flex-row max-[480px]:items-start max-[480px]:flex-wrap">
+        <form className="flex flex-col gap-[18px]" onSubmit={handleSubmit}>
+          <label className="lc-row flex items-center gap-[6px] whitespace-nowrap text-[15px] leading-[1.3] max-md:text-xs max-md:gap-[14px] max-md:flex-row max-md:items-start max-[480px]:text-[13.5px] max-[480px]:gap-2.5 max-[480px]:flex-row max-[480px]:items-start max-[480px]:flex-wrap" style={{ animationDelay: "0ms" }}>
             <input
               type="checkbox"
               checked={consents.iAgreeTC}
@@ -287,7 +303,7 @@ export default function VendorLegalConsent() {
             <FiAlertCircle className="text-xs -ml-0.5" />
           </label>
 
-          <label className="flex items-center gap-[6px] whitespace-nowrap text-[15px] leading-[1.3] max-md:text-xs max-md:gap-[14px] max-md:flex-row max-md:items-start max-[480px]:text-[13.5px] max-[480px]:gap-2.5 max-[480px]:flex-row max-[480px]:items-start max-[480px]:flex-wrap">
+          <label className="lc-row flex items-center gap-[6px] whitespace-nowrap text-[15px] leading-[1.3] max-md:text-xs max-md:gap-[14px] max-md:flex-row max-md:items-start max-[480px]:text-[13.5px] max-[480px]:gap-2.5 max-[480px]:flex-row max-[480px]:items-start max-[480px]:flex-wrap" style={{ animationDelay: "60ms" }}>
             <input
               type="checkbox"
               checked={consents.iAgreeCP}
@@ -306,7 +322,7 @@ export default function VendorLegalConsent() {
             <FiAlertCircle className="text-xs -ml-0.5" />
           </label>
 
-          <label className="flex items-center gap-[6px] whitespace-nowrap text-[15px] leading-[1.3] max-md:text-xs max-md:gap-[14px] max-md:flex-row max-md:items-start max-[480px]:text-[13.5px] max-[480px]:gap-2.5 max-[480px]:flex-row max-[480px]:items-start max-[480px]:flex-wrap">
+          <label className="lc-row flex items-center gap-[6px] whitespace-nowrap text-[15px] leading-[1.3] max-md:text-xs max-md:gap-[14px] max-md:flex-row max-md:items-start max-[480px]:text-[13.5px] max-[480px]:gap-2.5 max-[480px]:flex-row max-[480px]:items-start max-[480px]:flex-wrap" style={{ animationDelay: "120ms" }}>
             <input
               type="checkbox"
               checked={consents.iAgreeKYCVerifyUsingPanAndAdhar}
@@ -328,13 +344,13 @@ export default function VendorLegalConsent() {
             <FiAlertCircle className="text-xs -ml-0.5" />
           </label>
 
-          <div className="mt-7 text-center">
-            <label className="block text-base font-medium mb-2.5">
+          <div className="lc-row mt-2 text-center" style={{ animationDelay: "180ms" }}>
+            <label className="block text-[15px] font-medium mb-1.5">
               Signature (digital) or Name as e-sign
             </label>
 
             {/* Updated Validation Guidelines */}
-            <div className="text-xs text-gray-600 mb-2.5 text-center leading-relaxed">
+            <div className="text-xs text-gray-600 mb-2 text-center leading-relaxed">
               Upload your signature or written name (PNG/JPEG only, max 2MB)
               <br />
               Ensure good contrast with white/transparent background
@@ -342,16 +358,16 @@ export default function VendorLegalConsent() {
 
             <div
               className={`
-                cursor-pointer bg-white border-[1.5px] rounded-[10px] p-5 w-[280px] mx-auto 
-                flex items-center justify-between text-base shadow-sm transition-colors
+                lc-upload-box cursor-pointer bg-white border-[1.5px] rounded-[10px] p-4 w-[260px] mx-auto 
+                flex items-center justify-between text-base shadow-sm
                 ${
                   validationError
                     ? "border-red-500 bg-red-50"
                     : "border-gray-300 hover:border-gray-400"
                 }
-                max-lg:w-[260px] max-lg:p-[18px] max-lg:text-[15px]
-                max-md:w-[240px] max-md:p-4 max-md:text-sm
-                max-[480px]:w-full max-[480px]:p-[14px] max-[480px]:text-[13px]
+                max-lg:w-[240px] max-lg:p-[16px] max-lg:text-[15px]
+                max-md:w-[220px] max-md:p-3.5 max-md:text-sm
+                max-[480px]:w-full max-[480px]:p-[12px] max-[480px]:text-[13px]
               `}
               onClick={() => fileInputRef.current.click()}
             >
@@ -367,7 +383,7 @@ export default function VendorLegalConsent() {
                     loading="lazy"
                     src={URL.createObjectURL(signatureFile)}
                     alt="Uploaded Signature"
-                    className="max-h-[60px] max-w-[220px] object-contain"
+                    className="max-h-[50px] max-w-[200px] object-contain"
                   />
                   <span className="text-xs text-emerald-500 font-medium">
                     ✓ Signature accepted
@@ -381,7 +397,7 @@ export default function VendorLegalConsent() {
                     loading="lazy"
                     src="/Upload.webp"
                     alt="Upload Icon"
-                    className="h-6 w-6 max-lg:h-[22px] max-lg:w-[22px] max-md:h-5 max-md:w-5 max-[480px]:h-[18px] max-[480px]:w-[18px]"
+                    className="h-5 w-5 max-lg:h-[20px] max-lg:w-[20px] max-md:h-[18px] max-md:w-[18px] max-[480px]:h-4 max-[480px]:w-4"
                   />
                 </>
               )}
@@ -397,19 +413,12 @@ export default function VendorLegalConsent() {
 
             {/* Enhanced Validation Error Display */}
             {validationError && (
-              <div className="mt-2.5 p-3 bg-red-50 border border-red-200 rounded-md text-red-600 text-xs text-center max-w-[280px] mx-auto">
+              <div className="mt-2 p-2.5 bg-red-50 border border-red-200 rounded-md text-red-600 text-xs text-center max-w-[260px] mx-auto">
                 <div className="flex items-center justify-center gap-1 mb-1">
                   <FiAlertCircle className="text-sm" />
                   <span className="font-medium">Upload Error</span>
                 </div>
                 <div className="text-xs">{validationError}</div>
-              </div>
-            )}
-
-            {/* Helpful Tips */}
-            {!signatureFile && !validationError && (
-              <div className="mt-3 text-xs text-gray-500 max-w-[280px] mx-auto">
-                <div className="text-left"></div>
               </div>
             )}
           </div>
