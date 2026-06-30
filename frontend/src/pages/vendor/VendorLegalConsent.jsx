@@ -264,8 +264,24 @@ export default function VendorLegalConsent() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         .lc-card, .lc-card * { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .lc-card { animation: lc-rise 0.5s cubic-bezier(.22,1,.36,1) both; }
+        .lc-card {
+          animation: lc-rise 0.5s cubic-bezier(.22,1,.36,1) both;
+          background-image:
+            linear-gradient(145deg, #fff9d6, #ffe680, #ffd34d, #ffe680, #fff9d6),
+            linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #3b82f6 100%);
+          background-origin: border-box;
+          background-clip: padding-box, border-box;
+          border: 4px solid transparent;
+          background-size: 300% 300%;
+          box-shadow: 0 20px 60px rgba(76, 29, 149, 0.22) !important;
+          animation: lc-rise 0.5s cubic-bezier(.22,1,.36,1) both, lc-gradient-shift 6s ease infinite;
+        }
         @keyframes lc-rise { from { opacity:0; transform: translateY(16px) scale(.985); } to { opacity:1; transform: translateY(0) scale(1); } }
+        @keyframes lc-gradient-shift {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
         .lc-row { animation: lc-fade 0.4s ease both; }
         @keyframes lc-fade { from { opacity:0; transform: translateX(-6px); } to { opacity:1; transform: translateX(0); } }
         .lc-row input[type="checkbox"] {
@@ -277,7 +293,7 @@ export default function VendorLegalConsent() {
         .lc-upload-box:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
       `}</style>
 
-      <div className="lc-card bg-[#e5e5de] rounded-[10px] max-w-[600px] my-[40px] mx-auto p-[24px] shadow-sm max-lg:max-w-[95%] max-lg:p-[22px] max-lg:my-[30px] max-md:max-w-[95%] max-md:p-5 max-md:my-[24px] max-[480px]:max-w-[94%] max-[480px]:p-4 max-[480px]:my-5 max-[480px]:overflow-x-hidden">
+      <div className="lc-card rounded-[18px] max-w-[600px] my-[40px] mx-auto p-[24px] max-lg:max-w-[95%] max-lg:p-[22px] max-lg:my-[30px] max-md:max-w-[95%] max-md:p-5 max-md:my-[24px] max-[480px]:max-w-[94%] max-[480px]:p-4 max-[480px]:my-5 max-[480px]:overflow-x-hidden">
         <p className="text-[14px] mb-3.5 leading-[1.6] text-black max-md:text-[13.5px] max-[480px]:text-[13px] max-[480px]:leading-[1.5]">
           Before submitting your registration, please review and agree to the
           following terms and authorizations.
