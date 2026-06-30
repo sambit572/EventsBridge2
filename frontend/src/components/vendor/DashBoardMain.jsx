@@ -255,34 +255,36 @@ function DashBoardMain() {
         {popupData && (
           <div className="popup-overlayfinal">
             <div className="popup-container">
-              <h3 className="popup-title">New Booking Request</h3>
-              <div className="popup-content">
-                <p><strong>Service:</strong> {popupData.serviceName}</p>
-                <p><strong>Venue:</strong> {popupData.venueLocation}</p>
-                <p><strong>Type:</strong> {popupData.type}</p>
-                <p><strong>Original Price Range:</strong> ₹{popupData.originalPriceRange.min} – ₹{popupData.originalPriceRange.max}</p>
-                <p><strong>Proposed Price:</strong>{" "}
-                  {popupData.type === "No Negotiation Requested" ? "To be negotiated upon discussion." : `₹${popupData.proposedPrice}`}
-                </p>
-                <p><strong>Enter Final Price:</strong>
-                  <input 
-                    type="text" 
-                    placeholder="Enter Your Final Price" 
-                    className="VenueInput"
-                    value={finalPrice} 
-                    onChange={(e) => setFinalPrice(e.target.value)} 
-                    required 
-                  />
-                </p>
-                <p><strong>Date:</strong>{" "}
-                  {new Date(popupData.date.startDate).toLocaleDateString() === new Date(popupData.date.endDate).toLocaleDateString()
-                    ? new Date(popupData.date.startDate).toLocaleDateString()
-                    : `${new Date(popupData.date.startDate).toLocaleDateString()} to ${new Date(popupData.date.endDate).toLocaleDateString()}`}
-                </p>
-              </div>
-              <div className="popup-actions">
-                <button className="btn-accept" onClick={() => handleResponse("accept")}>Accept</button>
-                <button className="btn-decline" onClick={() => handleResponse("decline")}>Reject</button>
+              <div className="popup-inner">
+                <h3 className="popup-title">New Booking Request</h3>
+                <div className="popup-content">
+                  <p><strong>Service:</strong> {popupData.serviceName}</p>
+                  <p><strong>Venue:</strong> {popupData.venueLocation}</p>
+                  <p><strong>Type:</strong> {popupData.type}</p>
+                  <p><strong>Original Price Range:</strong> ₹{popupData.originalPriceRange.min} – ₹{popupData.originalPriceRange.max}</p>
+                  <p><strong>Proposed Price:</strong>{" "}
+                    {popupData.type === "No Negotiation Requested" ? "To be negotiated upon discussion." : `₹${popupData.proposedPrice}`}
+                  </p>
+                  <p><strong>Enter Final Price:</strong>
+                    <input 
+                      type="text" 
+                      placeholder="Enter Your Final Price" 
+                      className="VenueInput"
+                      value={finalPrice} 
+                      onChange={(e) => setFinalPrice(e.target.value)} 
+                      required 
+                    />
+                  </p>
+                  <p><strong>Date:</strong>{" "}
+                    {new Date(popupData.date.startDate).toLocaleDateString() === new Date(popupData.date.endDate).toLocaleDateString()
+                      ? new Date(popupData.date.startDate).toLocaleDateString()
+                      : `${new Date(popupData.date.startDate).toLocaleDateString()} to ${new Date(popupData.date.endDate).toLocaleDateString()}`}
+                  </p>
+                </div>
+                <div className="popup-actions">
+                  <button className="btn-accept" onClick={() => handleResponse("accept")}>Accept</button>
+                  <button className="btn-decline" onClick={() => handleResponse("decline")}>Reject</button>
+                </div>
               </div>
             </div>
           </div>

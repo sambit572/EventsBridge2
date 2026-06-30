@@ -424,6 +424,50 @@
   margin-bottom: 22px;
 }
 
+.sb-tier-group {
+  margin-bottom: 8px;
+}
+
+.sb-tier-label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 1;
+}
+
+.sb-tier-basic {
+  color: #fff;
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+.sb-tier-premium {
+  color: #1a1100;
+  background: linear-gradient(135deg, #fde68a, #f59e0b);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.5);
+}
+
+.sb-tier-group .sb-verify-plans {
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px 14px 14px 14px;
+  padding: 14px 10px 10px;
+  margin-bottom: 16px;
+}
+
+.sb-tier-group:has(.sb-tier-basic) .sb-verify-plans {
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.sb-tier-group:has(.sb-tier-premium) .sb-verify-plans {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
 .sb-plan-card {
   position: relative;
   display: flex;

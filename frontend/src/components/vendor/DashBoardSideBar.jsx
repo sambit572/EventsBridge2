@@ -29,10 +29,15 @@ const NAV_ITEMS = [
 ];
 
 const VERIFY_PLANS = [
-  { key: "1m",  duration: "1 Month",  price: 299,  perMonth: 300, badge: null },
-  { key: "3m",  duration: "3 Months", price: 599,  perMonth: 200, badge: "Save 33%" },
-  { key: "6m",  duration: "6 Months", price: 1199, perMonth: 200, badge: "Most Popular" },
-  { key: "12m", duration: "12 Months", price: 2399, perMonth: 200, badge: "Best Value" },
+  { key: "1m",  duration: "1 Month",  price: 299,  perMonth: 300, badge: null, tier: "basic" },
+  { key: "3m",  duration: "3 Months", price: 599,  perMonth: 200, badge: "Save 33%", tier: "basic" },
+  { key: "6m",  duration: "1 Months", price: 999, perMonth: 200, badge: "Most Popular", tier: "premium" },
+  { key: "12m", duration: "3 Months", price: 2399, perMonth: 200, badge: "Best Value", tier: "premium" },
+];
+
+const VERIFY_TIERS = [
+  { key: "basic", label: "Basic Verify" },
+  { key: "premium", label: "Premium Verify" },
 ];
 
 function DashBoardSideBar({
@@ -386,23 +391,28 @@ const handleVerificationRequest = async () => {
               Get a verified badge on your profile and win more customer trust. Choose a plan below.
             </p>
 
-            <div className="sb-verify-plans">
-              {VERIFY_PLANS.map((plan) => (
-                <button
-                  key={plan.key}
-                  className={`sb-plan-card ${selectedPlan === plan.key ? "sb-plan-selected" : ""}`}
-                  onClick={() => setSelectedPlan(plan.key)}
-                >
-                  {plan.badge && <span className="sb-plan-badge">{plan.badge}</span>}
-                  <span className="sb-plan-duration">{plan.duration}</span>
-                  <span className="sb-plan-price">
-                    <span className="sb-plan-currency">₹</span>{plan.price}
-                  </span>
-                  <span className="sb-plan-permonth">₹{plan.perMonth}/month</span>
-                  <span className="sb-plan-check"><FaCheck size={11} /></span>
-                </button>
-              ))}
-            </div>
+            {VERIFY_TIERS.map((tier) => (
+              <div className="sb-tier-group" key={tier.key}>
+                <div className={`sb-tier-label sb-tier-${tier.key}`}>{tier.label}</div>
+                <div className="sb-verify-plans">
+                  {VERIFY_PLANS.filter((plan) => plan.tier === tier.key).map((plan) => (
+                    <button
+                      key={plan.key}
+                      className={`sb-plan-card ${selectedPlan === plan.key ? "sb-plan-selected" : ""}`}
+                      onClick={() => setSelectedPlan(plan.key)}
+                    >
+                      {plan.badge && <span className="sb-plan-badge">{plan.badge}</span>}
+                      <span className="sb-plan-duration">{plan.duration}</span>
+                      <span className="sb-plan-price">
+                        <span className="sb-plan-currency">₹</span>{plan.price}
+                      </span>
+                      <span className="sb-plan-permonth">₹{plan.perMonth}/month</span>
+                      <span className="sb-plan-check"><FaCheck size={11} /></span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
 
            <button className="sb-verify-ok-btn" onClick={handleVerificationRequest}>
           <span className="sb-verify-ok-shine" />
