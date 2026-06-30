@@ -29,6 +29,7 @@ import resortBanner from "/categories/resortBanner.webp";
 // import stageBanner from "../../assets/home/categoriesImages/stage_decor.webp";
 import eventBanner from "/categories/event_company.webp";
 import balloonBanner from "../../assets/serviceListBanner/balloon banner.webp";
+import CategoryData from "../../utils/CatogoryData.jsx";
 
 const ServiceCardSkeleton = () => (
   <div className="serviceCardSkeleton">
@@ -44,9 +45,15 @@ const ServiceList = ({ onSwitchToLogin }) => {
   const location = useLocation();
   const scrollRef = useRef(null);
   // ✅ Get category object from navigation
-  const categoryData = location.state?.category;
+ const { categoryId } = useParams();
+ const categoryName = decodeURIComponent(categoryId);
+ const categoryData =
+  location.state?.category ||
+  CategoryData.find(
+    (cat) => cat.title === decodeURIComponent(categoryId)
+  );
 
-  const { categoryId } = useParams(); // This is the category name passed in URL
+ // This is the category name passed in URL
   console.log("################################");
   console.log(categoryId);
   console.log("################################");
@@ -224,9 +231,8 @@ const ServiceList = ({ onSwitchToLogin }) => {
     const fetchServices = async () => {
       try {
         setLoading(true);
-
         const response = await axios.get(
-          `${BACKEND_URL}/common/category/${categoryId}`,
+          `${BACKEND_URL}/common/category/${categoryName}`,
           {
             params: {
               subCategory:
