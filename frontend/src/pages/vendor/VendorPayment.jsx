@@ -308,6 +308,7 @@ export default function VendorPayment() {
       <StepProgress currentStep={2} />
       {isLoading && <Spinner />}
       <div className="payment-box">
+        <div className="payment-box-inner">
         <h2 className="payment-box-title">Bank Details</h2>
 
         <div className="vp-grid">
@@ -524,6 +525,7 @@ export default function VendorPayment() {
 
         <div className="vp-submit-wrap" style={{ marginTop: "18px" }}>
           <Button onBack={handleBack} onNext={handleNext} />
+        </div>
         </div>
       </div>
       <style jsx>{`

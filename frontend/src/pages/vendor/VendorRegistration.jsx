@@ -289,8 +289,23 @@ const VendorRegister = () => {
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
           .vr-root, .vr-root * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
-          .vr-card { animation: vr-rise 0.5s cubic-bezier(.22,1,.36,1) both; }
+          .vr-card {
+            animation: vr-rise 0.5s cubic-bezier(.22,1,.36,1) both;
+            background-image:
+              linear-gradient(145deg, #fff9d6, #ffe680, #ffd34d, #ffe680, #fff9d6),
+              linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #3b82f6 100%);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            border: 4px solid transparent !important;
+            background-size: 300% 300%;
+            animation: vr-rise 0.5s cubic-bezier(.22,1,.36,1) both, vr-gradient-shift 6s ease infinite;
+          }
           @keyframes vr-rise { from { opacity:0; transform: translateY(18px) scale(.985); } to { opacity:1; transform: translateY(0) scale(1); } }
+          @keyframes vr-gradient-shift {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
           .vr-field { animation: vr-fade 0.45s ease both; }
           @keyframes vr-fade { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }
           .vr-input {
@@ -317,10 +332,10 @@ const VendorRegister = () => {
         `}</style>
 
         <div className="vr-root min-h-[calc(100vh-110px)] w-full bg-gray-100 flex items-center justify-center p-3 sm:p-4 lg:p-6">
-          <div className="vr-card w-full max-w-5xl flex flex-col lg:flex-row shadow-2xl rounded-2xl overflow-hidden">
+          <div className="vr-card w-full max-w-5xl flex flex-col lg:flex-row shadow-2xl rounded-[18px]">
             {/* LEFT SIDE: Form area - Full width on mobile */}
             <div
-              className="w-full lg:w-1/2 flex items-center justify-center p-3 sm:p-5 lg:p-6 bg-cover bg-center relative"
+              className="w-full lg:w-1/2 flex items-center justify-center p-3 sm:p-5 lg:p-6 bg-cover bg-center relative rounded-l-[14px] rounded-r-none"
               style={{
                 backgroundImage: `url(${laptopBackground})`,
               }}
@@ -472,15 +487,15 @@ const VendorRegister = () => {
             </div>
 
             {/* RIGHT SIDE: Branding area - Hidden on mobile */}
-            <div className="hidden lg:flex w-full lg:w-1/2 bg-white flex-col items-center justify-center text-center p-6 relative">
+            <div className="hidden lg:flex w-full lg:w-1/2 flex-col items-center justify-center text-center p-6 relative rounded-r-[14px]" style={{ background: "linear-gradient(145deg, #fff9d6, #ffe680, #ffd34d)" }}>
               <div className="vr-illustration w-full max-w-xs mt-[-40px]">
-                <img
+                {/* <img
                   decoding="async"
                   loading="lazy"
                   src="../new-illustrator.png"
                   alt="Registration Illustration"
                   className="w-full h-auto object-contain"
-                />
+                /> */}
               </div>
               <h1 className="text-3xl font-bold text-gray-800 mb-2 mt-[-6px]">
                 Register Here

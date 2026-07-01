@@ -463,17 +463,17 @@ const Service = ({ onSwitchToLogin }) => {
                 {isVendorAvailable ? (
                   <>
                     <button
-                      className="flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-[#001f3f] to-[#004f9f] sm:px-[1rem] lg:px-12 py-3 text-sm font-bold text-white transition-colors duration-300 ease-in-out hover:from-[#002366] hover:to-[#0066cc] active:from-[#000d1a] active:to-[#003366] lg:w-auto lg:min-w-[220px]"
-                      onClick={handleBookNow}
-                    >
-                      BOOK NOW
-                    </button>
-
-                    <button
                       className="w-full lg:w-auto lg:min-w-[220px] px-4 py-3 rounded-full text-sm font-bold text-white bg-gradient-to-r from-[#fb923c] to-[#ef4444] hover:shadow-lg hover:from-[#fca5a5] hover:to-[#dc2626] focus:outline-none focus:ring-2 focus:ring-orange-300 shadow-md transition-all duration-300"
                       onClick={handleAddToCart}
                     >
                       ADD TO CART
+                    </button>
+
+                    <button
+                      className="flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-[#001f3f] to-[#004f9f] sm:px-[1rem] lg:px-12 py-3 text-sm font-bold text-white transition-colors duration-300 ease-in-out hover:from-[#002366] hover:to-[#0066cc] active:from-[#000d1a] active:to-[#003366] lg:w-auto lg:min-w-[220px]"
+                      onClick={handleBookNow}
+                    >
+                      BOOK NOW
                     </button>
                   </>
                 ) : (
