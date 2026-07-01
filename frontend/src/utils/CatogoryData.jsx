@@ -77,12 +77,11 @@ export const CategoryData = [
     tagline: "Star Power for Your Event",
     keywords: ["celebrity", "star", "influencer", "guest", "artist"],
   },
-  {
+ {
     id: "pandit",
-    title: "Hindu Pandit",
-    image: getCategoryImage("pandit"),
-    tagline: "Mantras Meet Moments",
-    keywords: ["pandit", "priest", "puja", "havan", "brahmin"],
+    title: "Mehendi & Henna Artist",
+    image: getCategoryImage("mehendi-henna-artist"),
+    tagline: "Art That Adorns Your Story",
   },
   {
     id: "floral",
@@ -112,12 +111,11 @@ export const CategoryData = [
     tagline: "Skies that Spark Magic",
     keywords: ["fireworks", "cracker", "pyro", "celebration"],
   },
-  {
+   {
     id: "card-design",
-    title: "Card Design & Printing",
-    image: getCategoryImage("marriage-card"),
-    tagline: "Words That Welcome",
-    keywords: ["card", "invitation", "printing", "wedding card"],
+    title: "Mascot Artists",
+    image: getCategoryImage("mascot-artists"),
+    tagline: "Characters That Create Memories",
   },
   {
     id: "magic",

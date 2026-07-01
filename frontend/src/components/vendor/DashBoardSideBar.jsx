@@ -148,6 +148,7 @@ const handleVerificationRequest = async () => {
       {
         duration: plan.duration,
         amount: plan.price,
+        tier:plan.tier,
       },
       {
         withCredentials: true,
@@ -395,7 +396,7 @@ const handleVerificationRequest = async () => {
               <div className="sb-tier-group" key={tier.key}>
                 <div className={`sb-tier-label sb-tier-${tier.key}`}>{tier.label}</div>
                 <div className="sb-verify-plans">
-                  {VERIFY_PLANS.filter((plan) => plan.tier === tier.key).map((plan) => (
+                  {VERIFY_PLANS.filter((plan) => plan.tier === "premium").map((plan) => (
                     <button
                       key={plan.key}
                       className={`sb-plan-card ${selectedPlan === plan.key ? "sb-plan-selected" : ""}`}

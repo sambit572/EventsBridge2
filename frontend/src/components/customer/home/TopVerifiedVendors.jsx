@@ -58,7 +58,7 @@ const VendorCard = ({ vendor }) => {
             <path d="M9 12l2 2 4-4" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             <circle cx="12" cy="12" r="10" stroke="#fff" strokeWidth="2"/>
           </svg>
-          Verified
+          {vendor.tier==="premium"?"Premium Verified" :"Basic Verified"}
         </div>
         {hovered && total > 1 && <button className="tvv-arrow tvv-arrow-left" onClick={prev}>‹</button>}
         {hovered && total > 1 && <button className="tvv-arrow tvv-arrow-right" onClick={next}>›</button>}
@@ -96,7 +96,6 @@ export default function TopVerifiedVendors() {
       if (data.success) {
         const formattedVendors = data.vendors.map((vendor, index) => ({
           ...vendor,
-          rating: 5,
           rank: index + 1,
         }));
 

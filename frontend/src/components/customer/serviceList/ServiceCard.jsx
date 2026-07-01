@@ -80,6 +80,20 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
           EventsBridge
         </span>
 
+        {service.vendorVerificationStatus === "verified" &&
+  service.vendorTier === "premium" && (
+    <span className="absolute top-[10px] right-[10px] z-[20] bg-yellow-500 px-2 py-1 rounded-md text-[11px] font-bold text-white">
+      Premium
+    </span>
+)}
+
+{service.vendorVerificationStatus === "verified" &&
+  service.vendorTier === "basic" && (
+    <span className="absolute top-[10px] right-[10px] z-[20] bg-blue-500 px-2 py-1 rounded-md text-[11px] font-bold text-white">
+      Basic
+    </span>
+)}
+
         <div className="relative w-full h-full">
           {Array.isArray(media) && media.length > 0 ? (
             <>
