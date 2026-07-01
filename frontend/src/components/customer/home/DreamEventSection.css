@@ -151,10 +151,10 @@
 
 .trust-title {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  font-size: clamp(1.7rem, 2.9vw, 2.5rem);
   font-weight: 900;
   color: #fff;
-  line-height: 1.18;
+  line-height: 1.15;
   margin: 0;
 }
 
@@ -268,6 +268,7 @@
   position: relative;
   z-index: 2;
   align-self: flex-start;
+  margin-top: auto;
   background: linear-gradient(120deg, #818cf8, #7c3aed);
   color: #fff;
   font-family: 'Plus Jakarta Sans', sans-serif;
