@@ -93,6 +93,11 @@ const vendorSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    tier:{
+      type:String,
+      enum:["premium","basic"],
+      default:null,
+    },
   },
 },
  verifiedAt:{
