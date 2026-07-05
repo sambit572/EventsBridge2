@@ -10,6 +10,7 @@ import { IoKey } from "react-icons/io5";
 import { BsBank } from "react-icons/bs";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { MdOutlineEdit } from "react-icons/md";
+import { BACKEND_URL } from "../../utils/constant.js";
 import {
   MdDashboard,
   MdBookOnline,
@@ -28,8 +29,8 @@ const NAV_ITEMS = [
 ];
 
 const VERIFY_PLANS = [
-  { key: "1m",  duration: "1 Month",  price: 399,  perMonth: 300, badge: null, tier: "basic" },
-  { key: "3m",  duration: "3 Months", price: 1099,  perMonth: 200, badge: "Save 33%", tier: "basic" },
+  { key: "1m",  duration: "1 Month",  price: 299,  perMonth: 300, badge: null, tier: "basic" },
+  { key: "3m",  duration: "3 Months", price: 599,  perMonth: 200, badge: "Save 33%", tier: "basic" },
   { key: "6m",  duration: "1 Months", price: 999, perMonth: 200, badge: "Most Popular", tier: "premium" },
   { key: "12m", duration: "3 Months", price: 2399, perMonth: 200, badge: "Best Value", tier: "premium" },
 ];
@@ -131,7 +132,42 @@ function DashBoardSideBar({
       setShowRemoveConfirm(false);
     }
   };
+const handleVerificationRequest = async () => {
+  try {
+    const plan = VERIFY_PLANS.find(
+      (p) => p.key === selectedPlan
+    );
 
+    if (!plan) {
+      alert("Please select a plan");
+      return;
+    }
+
+    const response = await axios.put(
+      `${BACKEND_URL}/vendors/verification-request`,
+      {
+        duration: plan.duration,
+        amount: plan.price,
+        tier:plan.tier,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+
+    alert("Verification request submitted successfully");
+
+    setShowVerifyModal(false);
+
+    console.log(response.data);
+  } catch (error) {
+   const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      "Failed to submit verification request";
+    alert(message);
+  }
+};
   return (
     <aside className={`dash-sidebar ${isOpen ? "open" : ""}`}>
       {/* Replaced Logo with Profile Card at the top */}
@@ -360,12 +396,16 @@ function DashBoardSideBar({
               <div className="sb-tier-group" key={tier.key}>
                 <div className={`sb-tier-label sb-tier-${tier.key}`}>{tier.label}</div>
                 <div className="sb-verify-plans">
-                  {VERIFY_PLANS.filter((plan) => plan.tier === tier.key).map((plan) => (
-                    <button
-                      key={plan.key}
-                      className={`sb-plan-card ${selectedPlan === plan.key ? "sb-plan-selected" : ""}`}
-                      onClick={() => setSelectedPlan(plan.key)}
-                    >
+                 {VERIFY_PLANS
+        .filter((plan) => plan.tier === tier.key)
+        .map((plan) => (
+          <button
+            key={plan.key}
+            className={`sb-plan-card ${
+              selectedPlan === plan.key ? "sb-plan-selected" : ""
+            }`}
+            onClick={() => setSelectedPlan(plan.key)}
+          >
                       {plan.badge && <span className="sb-plan-badge">{plan.badge}</span>}
                       <span className="sb-plan-duration">{plan.duration}</span>
                       <span className="sb-plan-price">
@@ -379,10 +419,10 @@ function DashBoardSideBar({
               </div>
             ))}
 
-            <button className="sb-verify-ok-btn" onClick={() => setShowVerifyModal(false)}>
-              <span className="sb-verify-ok-shine" />
-              Request
-            </button>
+           <button className="sb-verify-ok-btn" onClick={handleVerificationRequest}>
+          <span className="sb-verify-ok-shine" />
+           Submit Verification Request
+          </button>
           </div>
         </div>
       )}
