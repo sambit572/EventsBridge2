@@ -29,8 +29,8 @@ const NAV_ITEMS = [
 ];
 
 const VERIFY_PLANS = [
-  { key: "1m",  duration: "1 Month",  price: 299,  perMonth: 300, badge: null, tier: "basic" },
-  { key: "3m",  duration: "3 Months", price: 599,  perMonth: 200, badge: "Save 33%", tier: "basic" },
+  { key: "1m",  duration: "1 Month",  price: 399,  perMonth: 300, badge: null, tier: "basic" },
+  { key: "3m",  duration: "3 Months", price: 1099,  perMonth: 200, badge: "Save 33%", tier: "basic" },
   { key: "6m",  duration: "1 Months", price: 999, perMonth: 200, badge: "Most Popular", tier: "premium" },
   { key: "12m", duration: "3 Months", price: 2399, perMonth: 200, badge: "Best Value", tier: "premium" },
 ];
@@ -166,6 +166,7 @@ const handleVerificationRequest = async () => {
       error.response?.data?.error ||
       "Failed to submit verification request";
     alert(message);
+    setShowVerifyModal(false);
   }
 };
   return (
@@ -419,10 +420,10 @@ const handleVerificationRequest = async () => {
               </div>
             ))}
 
-           <button className="sb-verify-ok-btn" onClick={handleVerificationRequest}>
-          <span className="sb-verify-ok-shine" />
-           Submit Verification Request
-          </button>
+            <button className="sb-verify-ok-btn" onClick={handleVerificationRequest }>
+              <span className="sb-verify-ok-shine" />
+              Request
+            </button>
           </div>
         </div>
       )}

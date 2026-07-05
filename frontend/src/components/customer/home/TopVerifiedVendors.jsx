@@ -48,17 +48,11 @@ const VendorCard = ({ vendor }) => {
           ))}
         </div>
         <span className="tvv-brand-label">EVENTSBRIDGE</span>
-        {vendor.rank <= 3 && (
-          <div className="tvv-rank-badge">
-            {vendor.rank === 1 ? "🥇" : vendor.rank === 2 ? "🥈" : "🥉"}
-          </div>
-        )}
         <div className="tvv-verified-badge">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
-            <path d="M9 12l2 2 4-4" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <circle cx="12" cy="12" r="10" stroke="#fff" strokeWidth="2"/>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="#1a1100">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
           </svg>
-          {vendor.tier==="premium"?"Premium Verified" :"Basic Verified"}
+          Premium
         </div>
         {hovered && total > 1 && <button className="tvv-arrow tvv-arrow-left" onClick={prev}>‹</button>}
         {hovered && total > 1 && <button className="tvv-arrow tvv-arrow-right" onClick={next}>›</button>}
@@ -191,7 +185,7 @@ if (!vendors.length) {
       <div className="tvv-header">
         <p className="tvv-eyebrow">HANDPICKED FOR YOU</p>
         <h2 className="tvv-title">
-          Top Premium <span className="tvv-title-accent">Partners</span>
+          Top Verified <span className="tvv-title-accent">Partners</span>
         </h2>
         <p className="tvv-subtitle">Premium partners ranked by performance & trust</p>
       </div>

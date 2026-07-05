@@ -31,6 +31,11 @@ function Profile() {
   const [filterPayment, setFilterPayment] = useState("All");
   const [filterDate, setFilterDate] = useState("All");
   const [sortOption, setSortOption] = useState("Newest First");
+ const [showReviewModal, setShowReviewModal] = useState(false);
+const [selectedBooking, setSelectedBooking] = useState(null);
+const [rating, setRating] = useState(0);
+const [reviewMessage, setReviewMessage] = useState("");
+
 
   /* -------------------- RESPONSIVE SIDEBAR -------------------- */
   useEffect(() => {
@@ -153,7 +158,36 @@ function Profile() {
         console.error("Invalid reDirectTo value:", reDirectTo);
     }
   };
+const handleSubmitReview = async () => {
+  try {
+    console.log(selectedBooking); // Check booking object
 
+    const response = await axios.post(
+      `${BACKEND_URL}/reviews/add`,
+      {
+        serviceId: selectedBooking.userDetailsId.serviceId[0],
+        rating,
+        reviewMessage,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (response.data.success) {
+      alert("Review submitted successfully!");
+
+      setShowReviewModal(false);
+      setRating(0);
+      setReviewMessage("");
+      setSelectedBooking(null);
+    }
+  } catch (error) {
+    console.error(error);
+    alert(error.response?.data?.message || "Failed to submit review");
+    setShowReviewModal(false);
+  }
+};
   return (
     <div className="profile_section relative w-full flex bg-white">
       {/* ✅ Password Success Notification */}
@@ -350,27 +384,99 @@ function Profile() {
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center mt-4">
-                    <p className="text-xs text-gray-500">
-                      Click to view details
-                    </p>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent card click
-                        navigate("/report", {
-                          state: { selectedType: "user" },
-                        });
-                      }}
-                      className="bg-[#001F3F] hover:bg-[#003165] text-white px-4 py-2 rounded-md flex items-center gap-2"
-                    >
-                      <MdReportGmailerrorred size={20} /> Report
-                    </button>
-                  </div>
+                <div className="flex justify-between items-center mt-4">
+
+  <div className="flex gap-3">
+
+    {
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setSelectedBooking(b);
+          setShowReviewModal(true);
+        }}
+        className="bg-[#001F3F] hover:bg-[#003165] text-white px-4 py-2 rounded-md flex items-center gap-2"
+      >
+         Write Review
+      </button>
+    }
+
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        navigate("/report", {
+          state: { selectedType: "user" },
+        });
+      }}
+      className="bg-[#001F3F] hover:bg-[#003165] text-white px-4 py-2 rounded-md flex items-center gap-2"
+    >
+      <MdReportGmailerrorred size={20} />
+      Report
+    </button>
+
+  </div>
+
+</div>
                 </div>
               </div>
             ))
           )}
         </div>
+        {showReviewModal && (
+  <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+
+    <div className="bg-white w-[500px] rounded-xl p-6">
+
+      <h2 className="text-2xl font-bold mb-4">
+        Rate Your Experience
+      </h2>
+
+      <div className="flex gap-3 justify-center mb-5">
+        {[1,2,3,4,5].map((star) => (
+          <button
+            key={star}
+            onClick={() => setRating(star)}
+            className={`text-4xl ${
+              rating >= star
+                ? "text-yellow-500"
+                : "text-gray-300"
+            }`}
+          >
+            ★
+          </button>
+        ))}
+      </div>
+
+      <textarea
+        rows={5}
+        value={reviewMessage}
+        onChange={(e)=>setReviewMessage(e.target.value)}
+        placeholder="Write your review..."
+        className="w-full border rounded-lg p-3"
+      />
+
+      <div className="flex justify-end gap-3 mt-5">
+
+        <button
+          onClick={() => setShowReviewModal(false)}
+          className="bg-gray-300 px-4 py-2 rounded"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={handleSubmitReview}
+          className="bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          Submit Review
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+)}
       </div>
 
       {/* ✅ Password Change Modal */}
