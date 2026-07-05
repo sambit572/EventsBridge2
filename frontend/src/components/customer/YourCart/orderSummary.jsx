@@ -71,6 +71,7 @@ const OrderSummary = () => {
     const cgst = Math.round(totalAfterDiscount * 0.09);
     const sgst = Math.round(totalAfterDiscount * 0.09);
     const grandTotal = totalAfterDiscount + cgst + sgst;
+   
 
     return {
       finalTotal,

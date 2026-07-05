@@ -30,6 +30,7 @@ import {
   getSearchSuggestions,
   getVendorDashboard,
   verifyVendorLogin,
+  submitVerificationRequest
   // updateTheBankDetails,
 } from "../../controller/vendor/vendor.controller.js";
 
@@ -62,6 +63,9 @@ import {
   resetWhyChooseUs,
 } from "../../controller/vendor/whychooseus.controller.js";
 import { getVendorBookings } from "../../controller/vendor/vendorBookingHistory.controller.js";
+
+//Top-Verified-Vendors-Route
+import { getVerifiedVendors } from "../../controller/vendor/TopVerifiedVendors.js";
 
 const vendor_router = express.Router();
 
@@ -96,7 +100,9 @@ vendor_router.post("/change-password", verifyVendorJwt, changeVendorPassword);
 vendor_router.get("/silent-login", verifyVendorJwt, vendorSilentLogin);
 vendor_router.post("/check-email", checkVendorEmailStatus);
 vendor_router.get("/me", verifyVendorJwt, getVendorProfile);
+vendor_router.put( "/verification-request",verifyVendorJwt,submitVerificationRequest);
 vendor_router.get("/category/:category", getServicesByCategory);
+vendor_router.get("/top-verified-vendors",getVerifiedVendors);
 vendor_router.post("/verify-otp", verifyVendorLogin);
 
 vendor_router.get("/service/:id", getServiceById); // --- PROFILE ROUTES --- //

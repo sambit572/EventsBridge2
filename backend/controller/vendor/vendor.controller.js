@@ -12,6 +12,7 @@ import crypto from "crypto";
 import { User } from "../../model/user/user.model.js";
 import { Service } from "../../model/vendor/service.model.js";
 
+
 const isProd = process.env.NODE_ENV === "production";
 
 const baseOption = {
@@ -684,7 +685,41 @@ const verifyVendorLogin = async (req, res) => {
       )
     );
 };
+// For Verify my service
+const submitVerificationRequest = async (req, res) => {
+  try {
+    const { duration, amount,tier } = req.body;
+    const vendor = await Vendor.findByIdAndUpdate(req.vendor._id);
+    if(!vendor){
+      return res.status(404).json(new ApiError(404,"vendor not found"));
+    }
+    if(vendor.verification?.status==="verified"){
+      return res.status(400).json(new ApiError(400,"Vendor is already verified"));
+    }
+    if(vendor.verification?.status==="pending"){
+      return res.status(400).json(new ApiError(400,"Vendor verification is pending"));
+    }
+    vendor.verification.status = "pending";
+    vendor.verification.submittedAt = new Date();
+    vendor.verification.plan.duration = duration;
+    vendor.verification.plan.amount = amount;
+    vendor.verification.plan.tier=tier;
 
+  await vendor.save();
+   console.log(vendor)
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        vendor,
+        "Verification request submitted successfully"
+      )
+    );
+  } catch (error) {
+    return res
+      .status(500)
+      .json(new ApiError(500, error.message));
+  }
+};
 export {
   registerVendor,
   loginVendor,
@@ -701,4 +736,5 @@ export {
   getVendorDashboard,
   getSearchSuggestions,
   verifyVendorLogin,
+  submitVerificationRequest,
 };

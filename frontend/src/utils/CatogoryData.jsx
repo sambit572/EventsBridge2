@@ -1,74 +1,83 @@
 import { getCategoryImage } from "./getCategoryImage";
-
 export const CategoryData = [
   {
     id: "dj",
     title: "DJ & Musical Band",
     image: getCategoryImage("dj_image"),
     tagline: "Beats That Breathe Fun",
+    keywords: ["dj", "music", "dance", "party", "disc jockey", "brass band"],
   },
   {
     id: "band",
     title: "Music Concert & Orchestra",
     image: getCategoryImage("bass-brand"),
     tagline: "Brass Beats the Best",
+    keywords: ["music", "concert", "orchestra", "band", "musician", "live music"],
   },
   {
     id: "tenthouse",
     title: "Decor & Tenthouse",
     image: getCategoryImage("tent_house"),
     tagline: "Dream Drapes, Divine Vibes",
+    keywords: ["tent", "tenthouse", "decor", "decoration", "stage", "pandal"],
   },
   {
     id: "photographer",
     title: "Photo & Videography",
     image: getCategoryImage("photographer"),
     tagline: "Freeze Time with Frames",
+    keywords: ["photo", "photography", "photographer", "video", "videography", "camera"],
   },
   {
     id: "catering",
     title: "Food & Catering",
     image: getCategoryImage("catering_img"),
     tagline: "Flavours that Speak Love",
+    keywords: ["food", "catering", "caterer", "buffet", "meal", "chef"],
   },
   {
     id: "banquet-hall",
     title: "Banquet Hall & Mandap",
     image: getCategoryImage("banquithall"),
     tagline: "Where Celebrations Begin",
+    keywords: ["banquet", "hall", "mandap", "venue", "marriage hall"],
   },
-
   {
     id: "cultural-troupe",
     title: "Classical Music & Dance",
     image: getCategoryImage("classical_music_and_dance"),
     tagline: "Echoes of Celebration",
+    keywords: ["classical", "dance", "music", "cultural", "bharatnatyam", "kathak"],
   },
   {
     id: "Beauty Makeover",
     title: "Beauty Makeover",
     image: getCategoryImage("bride-mehendi-&-makeup"),
     tagline: "Beauty in Every Brush",
+    keywords: ["beauty", "makeup", "bridal", "mehendi", "artist", "salon"],
   },
   {
     id: "balloon-decor",
     title: "Balloon Decor",
     image: getCategoryImage("ballon decor"),
     tagline: "Colorful Creations for Every Celebration",
+    keywords: ["balloon", "decor", "birthday", "party decoration"],
   },
   {
     id: "bouncers-security",
     title: "Bouncers & Security",
     image: getCategoryImage("bouncers-security"),
     tagline: "Safe Events, Secure Memories",
+    keywords: ["bouncer", "security", "guard", "protection"],
   },
   {
     id: "stars-influencers",
     title: "Stars & Influencers",
     image: getCategoryImage("stars-influencers"),
     tagline: "Star Power for Your Event",
+    keywords: ["celebrity", "star", "influencer", "guest", "artist"],
   },
-  {
+ {
     id: "pandit",
     title: "Mehendi & Henna Artist",
     image: getCategoryImage("mehendi-henna-artist"),
@@ -79,27 +88,30 @@ export const CategoryData = [
     title: "Floral Decor",
     image: getCategoryImage("flower-decor"),
     tagline: "Blooms that Whisper Joy",
+    keywords: ["flower", "floral", "garland", "bouquet", "decoration"],
   },
   {
     id: "transport",
     title: "Ceremonial Ride",
     image: getCategoryImage("ceremonial_ride"),
     tagline: "Royal Rides Await You",
+    keywords: ["car", "horse", "ride", "transport", "baraat"],
   },
   {
     id: "luxury-transport",
     title: "Luxury Ride",
     image: getCategoryImage("luxury_ride"),
     tagline: "Luxury Rides Await You",
+    keywords: ["luxury", "car", "bmw", "audi", "mercedes", "ride"],
   },
   {
     id: "fireworks",
     title: "Fireworks",
     image: getCategoryImage("fireworks"),
     tagline: "Skies that Spark Magic",
+    keywords: ["fireworks", "cracker", "pyro", "celebration"],
   },
-
-  {
+   {
     id: "card-design",
     title: "Mascot Artists",
     image: getCategoryImage("mascot-artists"),
@@ -110,18 +122,21 @@ export const CategoryData = [
     title: "Magic Shows",
     image: getCategoryImage("magician"),
     tagline: "Illusions that Amaze All",
+    keywords: ["magic", "magician", "illusion", "show"],
   },
   {
     id: "event-management",
     title: "Event Management Company",
     image: getCategoryImage("event_company"),
     tagline: "Crafting Moments, Managing Memories",
+    keywords: ["event", "management", "planner", "organizer","birthday planner"],
   },
   {
     id: "Hotel-Resorts",
     title: "Hotel & Resorts",
     image: getCategoryImage("hotel-resort"),
     tagline: "Crafting Moments, Managing Memories",
+    keywords: ["hotel", "resort", "stay", "accommodation", "venue"],
   },
 ];
 
