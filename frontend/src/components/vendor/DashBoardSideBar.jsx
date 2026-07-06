@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./DashBoardSideBar.css";
 import VerifyIntroModal from "./VerifyIntroModal.jsx";
+import ThankYouModal from "./ThankYouModal.jsx";
 import { FaCamera, FaUpload, FaTrash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { UseVendorProfile } from "./UseVendorProfile.jsx";
@@ -59,6 +60,7 @@ function DashBoardSideBar({
   const [showProfileSection, setShowProfileSection] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [showVerifyIntro, setShowVerifyIntro] = useState(false);
+  const [showThankYou, setShowThankYou] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("6m");
 
   const { form, updateField, updateVendor, updateBank, resetForm } = UseVendorProfile();
@@ -155,9 +157,8 @@ const handleVerificationRequest = async () => {
       }
     );
 
-    alert("Verification request submitted successfully");
-
     setShowVerifyModal(false);
+    setShowThankYou(true);
 
     console.log(response.data);
   } catch (error) {
@@ -425,6 +426,11 @@ const handleVerificationRequest = async () => {
           </button>
           </div>
         </div>
+      )}
+
+      {/* Thank you modal — shown after a successful verification request */}
+      {showThankYou && (
+        <ThankYouModal onClose={() => setShowThankYou(false)} />
       )}
     </aside>
   );
