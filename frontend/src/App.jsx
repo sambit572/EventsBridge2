@@ -58,6 +58,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./redux/UserSlice.js";
 import { setVendor } from "./redux/VendorSlice.js";
 import ScrollToTop from "./components/common/ScrollToTop.jsx";
+import AnalyticsTracker from "./components/common/AnalyticsTracker.jsx";
 import AddToCart from "./components/customer/YourCart/AddToCart.jsx";
 import DashboardEnforcement from "./utils/DashboardEnforcement.jsx";
 const BookingSuccess = React.lazy(() =>
@@ -202,6 +203,7 @@ const App = () => {
   return (
     <>
       <ScrollToTop />
+      <AnalyticsTracker />
       {location.pathname !== "/admin" && (
         <Navbar
           onOpenLogin={handleOpenLogin}

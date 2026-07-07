@@ -113,8 +113,8 @@ const Register = ({ onClose, onSwitchToLogin }) => {
     }
     .ur-modal {
       display: flex; width: 100%; max-width: 820px;
-      min-height: 560px; border-radius: 20px; overflow: hidden;
-      box-shadow: 0 24px 80px rgba(79,70,229,0.25);
+      max-height: 90vh; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 24px 80px rgba(180,83,9,0.25);
       animation: ur-pop 0.45s cubic-bezier(0.22,1,0.36,1) both;
       font-family: 'Poppins', sans-serif;
     }
@@ -135,19 +135,19 @@ const Register = ({ onClose, onSwitchToLogin }) => {
     }
     .ur-orb1 {
       width:280px;height:280px;
-      background:radial-gradient(circle,rgba(108,62,244,0.55) 0%,transparent 70%);
+      background:radial-gradient(circle,rgba(217,119,6,0.55) 0%,transparent 70%);
       top:-80px;right:-80px;
       animation:ur-orb-move1 9s ease-in-out infinite;
     }
     .ur-orb2 {
       width:220px;height:220px;
-      background:radial-gradient(circle,rgba(79,70,229,0.45) 0%,transparent 70%);
+      background:radial-gradient(circle,rgba(180,83,9,0.45) 0%,transparent 70%);
       bottom:-60px;left:-60px;
       animation:ur-orb-move2 11s ease-in-out infinite;
     }
     .ur-orb3 {
       width:140px;height:140px;
-      background:radial-gradient(circle,rgba(167,139,250,0.3) 0%,transparent 70%);
+      background:radial-gradient(circle,rgba(252,211,77,0.3) 0%,transparent 70%);
       top:45%;left:30%;
       animation:ur-orb-move3 7s ease-in-out infinite;
     }
@@ -184,7 +184,7 @@ const Register = ({ onClose, onSwitchToLogin }) => {
 
     .ur-monogram {
       width:58px;height:58px;border-radius:16px;
-      background:linear-gradient(135deg,rgba(108,62,244,0.6),rgba(79,70,229,0.4));
+      background:linear-gradient(135deg,rgba(217,119,6,0.6),rgba(180,83,9,0.4));
       border:1px solid rgba(255,255,255,0.2);
       display:flex;align-items:center;justify-content:center;
       font-size:22px;font-weight:700;color:#fff;letter-spacing:-1px;
@@ -193,12 +193,12 @@ const Register = ({ onClose, onSwitchToLogin }) => {
     }
     .ur-monogram::after {
       content:'';position:absolute;inset:-1px;border-radius:16px;
-      background:linear-gradient(135deg,rgba(167,139,250,0.5),transparent,rgba(79,70,229,0.4));
+      background:linear-gradient(135deg,rgba(252,211,77,0.5),transparent,rgba(180,83,9,0.4));
       z-index:-1;animation:ur-border-spin 4s linear infinite;
     }
     @keyframes ur-logo-glow{
-      0%,100%{box-shadow:0 0 20px rgba(108,62,244,0.4),0 0 40px rgba(108,62,244,0.2)}
-      50%{box-shadow:0 0 30px rgba(167,139,250,0.6),0 0 60px rgba(108,62,244,0.3)}
+      0%,100%{box-shadow:0 0 20px rgba(217,119,6,0.4),0 0 40px rgba(217,119,6,0.2)}
+      50%{box-shadow:0 0 30px rgba(252,211,77,0.6),0 0 60px rgba(217,119,6,0.3)}
     }
     @keyframes ur-border-spin{
       0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}
@@ -207,7 +207,7 @@ const Register = ({ onClose, onSwitchToLogin }) => {
     .ur-left-headline {
       font-size:26px;font-weight:700;line-height:1.25;margin-bottom:12px;
       position:relative;z-index:2;
-      background:linear-gradient(135deg,#fff 40%,rgba(167,139,250,0.9) 100%);
+      background:linear-gradient(135deg,#fff 40%,rgba(252,211,77,0.9) 100%);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
     }
     .ur-left-sub {
@@ -237,7 +237,7 @@ const Register = ({ onClose, onSwitchToLogin }) => {
       width:34px;height:34px;border-radius:9px;flex-shrink:0;
       display:flex;align-items:center;justify-content:center;font-size:16px;
     }
-    .ur-stat-icon.bk{background:rgba(99,102,241,0.3)}
+    .ur-stat-icon.bk{background:rgba(217,119,6,0.3)}
     .ur-stat-icon.cu{background:rgba(16,185,129,0.25)}
     .ur-stat-icon.an{background:rgba(245,158,11,0.25)}
     .ur-stat-body { flex:1;min-width:0; }
@@ -248,7 +248,7 @@ const Register = ({ onClose, onSwitchToLogin }) => {
       animation:ur-blink 2s ease-in-out infinite;
     }
     .ur-stat-dot.green{background:#10b981}
-    .ur-stat-dot.blue{background:#6366f1}
+    .ur-stat-dot.blue{background:#eab308}
     .ur-stat-dot.amber{background:#f59e0b}
     @keyframes ur-blink{0%,100%{opacity:1}50%{opacity:0.3}}
 
@@ -284,7 +284,7 @@ const Register = ({ onClose, onSwitchToLogin }) => {
     .ur-portal-badge {
       display:inline-flex;align-items:center;gap:5px;
       padding:4px 12px;border-radius:50px;
-      background:#ede9fe;color:#5b21b6;
+      background:#fef3c7;color:#78350f;
       font-size:11px;font-weight:600;margin-bottom:16px;width:fit-content;
       animation:ur-fade-up 0.4s 0.25s both;
     }
@@ -308,7 +308,7 @@ const Register = ({ onClose, onSwitchToLogin }) => {
       transition:border 0.2s,box-shadow 0.2s;
       box-sizing:border-box;
     }
-    .ur-field input:focus { border-color:#6C3EF4;box-shadow:0 0 0 3px rgba(108,62,244,0.1); }
+    .ur-field input:focus { border-color:#d97706;box-shadow:0 0 0 3px rgba(217,119,6,0.1); }
     .ur-field label {
       position:absolute;left:16px;top:50%;transform:translateY(-50%);
       font-size:13px;color:#9ca3af;pointer-events:none;
@@ -316,7 +316,7 @@ const Register = ({ onClose, onSwitchToLogin }) => {
     }
     .ur-field input:focus ~ label,
     .ur-field input:not(:placeholder-shown) ~ label {
-      top:10px;transform:none;font-size:10px;color:#6C3EF4;font-weight:600;letter-spacing:0.3px;
+      top:10px;transform:none;font-size:10px;color:#d97706;font-weight:600;letter-spacing:0.3px;
     }
     .ur-field input::placeholder { color:transparent; }
     .ur-eye {
@@ -325,11 +325,11 @@ const Register = ({ onClose, onSwitchToLogin }) => {
       color:#9ca3af;font-size:17px;
       transition:color 0.2s;display:flex;align-items:center;
     }
-    .ur-eye:hover { color:#6C3EF4; }
+    .ur-eye:hover { color:#d97706; }
 
     .ur-signup-btn {
       width:100%;padding:11px;border-radius:50px;border:none;
-      background:linear-gradient(135deg,#4f46e5,#6C3EF4);color:#fff;
+      background:linear-gradient(135deg,#b45309,#d97706);color:#fff;
       font-size:14px;font-weight:600;font-family:'Poppins',sans-serif;
       cursor:pointer;position:relative;overflow:hidden;
       display:flex;align-items:center;justify-content:center;gap:8px;
@@ -338,7 +338,7 @@ const Register = ({ onClose, onSwitchToLogin }) => {
       margin-top: 4px;
     }
     .ur-signup-btn:disabled { opacity:0.7;cursor:not-allowed; }
-    .ur-signup-btn:not(:disabled):hover { transform:translateY(-2px);box-shadow:0 8px 22px rgba(108,62,244,0.35); }
+    .ur-signup-btn:not(:disabled):hover { transform:translateY(-2px);box-shadow:0 8px 22px rgba(217,119,6,0.35); }
     .ur-signup-btn:not(:disabled):active { transform:scale(0.98); }
     .ur-shimmer {
       position:absolute;top:0;left:-100%;width:55%;height:100%;
@@ -350,22 +350,33 @@ const Register = ({ onClose, onSwitchToLogin }) => {
 
     .ur-login-line { text-align:center;font-size:12.5px;color:#6b7280;margin-top:12px;animation:ur-fade-up 0.4s 0.66s both; }
     .ur-login-line span {
-      background:linear-gradient(135deg,#4f46e5,#6C3EF4);
+      background:linear-gradient(135deg,#b45309,#d97706);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
       font-weight:600;cursor:pointer;
     }
-    .ur-login-line span:hover { text-decoration:underline;text-decoration-color:#6C3EF4; }
+    .ur-login-line span:hover { text-decoration:underline;text-decoration-color:#d97706; }
 
     .ur-error { color:#dc2626;font-size:12px;text-align:center;font-weight:500;margin-bottom:8px;animation:ur-fade-up 0.3s both; }
 
     @media(max-width:640px){
-      .ur-modal { flex-direction:column;max-height:92vh;overflow-y:auto; }
-      .ur-left { padding:20px 24px 16px;flex-direction:row;align-items:center;gap:14px;flex-wrap:wrap;min-height:unset; }
-      .ur-monogram { width:42px;height:42px;font-size:15px;margin-bottom:0;flex-shrink:0; }
-      .ur-left-headline { font-size:15px;margin-bottom:0; }
+      .ur-overlay { padding:10px; }
+      .ur-modal { flex-direction:column;max-height:94vh;overflow-y:auto; }
+      .ur-left { padding:16px 20px 12px;flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap;min-height:unset; }
+      .ur-monogram { width:38px;height:38px;font-size:14px;margin-bottom:0;flex-shrink:0; }
+      .ur-left-headline { font-size:14px;margin-bottom:0; }
       .ur-left-sub,.ur-stats,.ur-bottom-tag { display:none; }
-      .ur-right { padding:24px 20px; }
-      .ur-title { font-size:20px; }
+      .ur-right { padding:20px 18px 16px; }
+      .ur-title { font-size:19px; }
+      .ur-subtitle { margin-bottom:14px; }
+      .ur-field { margin-bottom:9px; }
+      .ur-field input { padding:19px 14px 6px; }
+      .ur-close { top:10px;right:12px;font-size:18px; }
+    }
+    @media(max-width:380px){
+      .ur-right { padding:16px 14px 14px; }
+      .ur-title { font-size:17px; }
+      .ur-portal-badge { font-size:10px;padding:3px 10px;margin-bottom:12px; }
+      .ur-field input { padding:18px 12px 5px;font-size:13px; }
     }
   `;
 
