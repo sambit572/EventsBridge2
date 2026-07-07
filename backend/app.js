@@ -22,6 +22,7 @@ import cartRouter from "./routes/user/cart.routes.js";
 import { searchRouter } from "./routes/common/search.routes.js";
 import calendarRoutes from "./routes/common/calendar.routes.js";
 import userBookingHistoryRoutes from "./routes/user/userBookinghistory.routes.js";
+import posterRoutes from "./routes/common/poster.routes.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -32,7 +33,7 @@ const isProduction = process.env.NODE_ENV === "production"; // ✅ Auto detect
 // ✅ Middleware Setup
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: isProduction ? process.env.FRONTEND_URL : true,
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -98,6 +99,7 @@ app.use("/api/wishlist", wishlistRoutes); // Use wishlist routes
 app.use("/api/cart", cartRouter);
 app.use("/api/calendar", calendarRoutes);
 app.use("/api/user-bookings", userBookingHistoryRoutes);
+app.use("/api/posters", posterRoutes);
 
 // ✅ Health Check Route
 app.get("/", (req, res) => {
