@@ -3,9 +3,7 @@ import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { getFirebaseAuth } from "../../utils/firebase.js";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import OTPVerification from "../common/OTPVerification.jsx";
+import OTPVerificationEmail from "../common/OtpVerificationEmail.jsx";
 import SuccessBlock from "../common/SuccessBlock.jsx";
 import axios from "axios";
 import "../common/LoginRegister.css";
@@ -25,11 +23,10 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  const auth = getFirebaseAuth();
-  const [formData, setFormData] = useState({ phoneNo: "", email: "", password: "" });
+  const [formData, setFormData] = useState({  email: "", password: "",emailOtp:"" });
   const [errorMsg, setErrorMsg] = useState("");
   const { user } = useSelector((state) => state.user);
+  const [sendingOtp, setSendingOtp] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -57,43 +54,36 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  function setupRecaptcha() {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-        size: "invisible",
-        callback: (r) => console.log("Recaptcha passed", r),
-        "expired-callback": () => window.recaptchaVerifier.clear(),
-      });
-    }
-  }
 
-  async function handleGetOTP(e) {
-    e.preventDefault();
-    const phone = formData.phoneNo.replace(/\D/g, "");
-    const phoneNumber = "+91" + phone;
-    if (!/^\+91\d{10}$/.test(phoneNumber)) return setErrorMsg("Invalid Indian phone number.");
-    try {
-      setupRecaptcha();
-      const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
-      window.confirmationResult = confirmationResult;
-      setOtpSent(true);
-      setStep("otp");
-    } catch (err) {
-      console.error(err);
-      setErrorMsg("OTP send failed. Try again.");
-    }
+ async function handleGetOTP(e) {
+  setErrorMsg("");
+  e.preventDefault();
+  if(!formData.emailOtp){
+    return setErrorMsg("Invalid Email id");
   }
-
+  try{
+      setSendingOtp(true);
+    const res= await axios.post (`${BACKEND_URL}/vendors/send-otp`,{
+      emailOtp:formData.emailOtp.toLowerCase(),
+    });
+    toast.success(res.data.message || "OTP sent successfully");
+setStep("otp");
+  } catch(err){
+    setErrorMsg(
+       err.response?.data?.message || "Failed to send OTP."
+    );
+  }
+  
+ }
   async function handleLogin(e) {
     e.preventDefault();
     setErrorMsg("");
     if (!user) { toast("Please login as a user first.", { duration: 2000 }); return; }
-    if (!formData.email && !formData.phoneNo) return setErrorMsg("Enter email or phone to log in.");
+    if (!formData.email ) return setErrorMsg("Enter email to log in ");
     try {
       setLoginLoading(true);
       const res = await axios.post(`${BACKEND_URL}/vendors/login`, {
         email: formData.email.toLowerCase(),
-        phoneNo: formData.phoneNo,
         password: formData.password,
       }, { withCredentials: true });
       const { vendor } = res.data.data;
@@ -101,7 +91,7 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
       const fullName = vendor.fullName || "";
       const firstName = fullName.split(" ")[0];
       const firstLetter = firstName?.charAt(0).toUpperCase() || "";
-      const profilePic = vendor.profilePic || "";
+      const profilePic = vendor.profilePicture || "";
       localStorage.setItem("VendorCurrentlyLoggedIn", "true");
       localStorage.setItem("VendorFullName", fullName);
       localStorage.setItem("VendorFirstName", firstName);
@@ -450,32 +440,34 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
   const renderStep = () => {
     if (step === "success") return <SuccessBlock showSuccessIcon={showSuccessIcon} />;
     if (step === "otp") return (
-      <OTPVerification setStep={setStep} onClose={onClose} phoneNum={formData.phoneNo} type="vendor" />
+      <OTPVerificationEmail setStep={setStep} onClose={onClose} emailOtp={formData.emailOtp} type="vendor" />
     );
     if (step === "form") return (
       <div style={{ width: "100%" }}>
-        {/* Phone OTP section */}
-        <div className="vl-method-label">via phone</div>
+        {/* Email OTP section */}
+        <div className="vl-method-label">via email otp </div>
         <div className="vl-phone-row">
           <div className="vl-phone-top">
-            <select className="vl-flag-select" aria-label="Country code">
-              <option>🇮🇳 +91</option>
-              <option>🇺🇸 +1</option>
-              <option>🇬🇧 +44</option>
-            </select>
+            <div className="vl-flag-select">
+              Email otp
+            </div>
             <input
-              type="number"
-              name="phoneNo"
-              placeholder="Mobile number"
-              value={formData.phoneNo}
+              type="email"
+              name="emailOtp"
+              placeholder="Email Address"
+              value={formData.emailOtp}
               onChange={handleChange}
               className="vl-phone-input"
-              aria-label="Mobile number"
             />
           </div>
-          <button type="button" onClick={handleGetOTP} className="vl-otp-btn">
-            Send OTP
-          </button>
+         <button
+  type="button"
+  onClick={handleGetOTP}
+  className="vl-otp-btn"
+  disabled={sendingOtp}
+>
+  {sendingOtp ? "Sending OTP..." : "Send OTP"}
+</button>
         </div>
 
         {/* Divider */}
@@ -611,7 +603,6 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
           {/* RIGHT PANEL */}
           <div className="vl-right">
             <button className="vl-close" onClick={onClose} aria-label="Close"><RxCross2 /></button>
-            <div id="recaptcha-container" />
             <div className="vl-portal-badge">🏪 Partner Portal</div>
             <div className="vl-title">Sign In</div>
             <div className="vl-subtitle">Choose how you'd like to continue</div>

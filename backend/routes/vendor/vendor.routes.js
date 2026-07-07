@@ -18,6 +18,8 @@ import {
   registerVendor,
   updateVendor,
   loginVendor,
+  vendorLoginOtp,
+  verifyVendorLoginOtp,
   vendorLogout,
   sendVendorResetLink,
   resetVendorPassword,
@@ -29,7 +31,6 @@ import {
   verifyConfirmPassword,
   getSearchSuggestions,
   getVendorDashboard,
-  verifyVendorLogin,
   submitVerificationRequest
   // updateTheBankDetails,
 } from "../../controller/vendor/vendor.controller.js";
@@ -93,6 +94,8 @@ vendor_router.post(
   registerVendor
 );
 vendor_router.post("/login", loginVendor);
+vendor_router.post("/send-otp",vendorLoginOtp);
+vendor_router.post("/verify-login-otp", verifyVendorLoginOtp);
 vendor_router.post("/logout", verifyVendorJwt, vendorLogout);
 vendor_router.post("/send-reset-link", sendVendorResetLink);
 vendor_router.post("/reset-password/:resetToken", resetVendorPassword);
@@ -103,7 +106,7 @@ vendor_router.get("/me", verifyVendorJwt, getVendorProfile);
 vendor_router.put( "/verification-request",verifyVendorJwt,submitVerificationRequest);
 vendor_router.get("/category/:category", getServicesByCategory);
 vendor_router.get("/top-verified-vendors",getVerifiedVendors);
-vendor_router.post("/verify-otp", verifyVendorLogin);
+
 
 vendor_router.get("/service/:id", getServiceById); // --- PROFILE ROUTES --- //
 vendor_router.put("/:id", upload.single("profilePicture"), updateVendor);

@@ -51,8 +51,6 @@ const OrderSummary = () => {
         finalTotal: 0,
         platformDiscountAmount: 0,
         totalAfterDiscount: 0,
-        cgst: 0,
-        sgst: 0,
         grandTotal: 0,
       };
     }
@@ -68,17 +66,14 @@ const OrderSummary = () => {
     const platformDiscountAmount = Math.round(finalTotal * 0.1);
     const totalAfterDiscount = finalTotal - platformDiscountAmount;
 
-    const cgst = Math.round(totalAfterDiscount * 0.09);
-    const sgst = Math.round(totalAfterDiscount * 0.09);
-    const grandTotal = totalAfterDiscount + cgst + sgst;
+ 
+    const grandTotal = totalAfterDiscount ;
    
 
     return {
       finalTotal,
       platformDiscountAmount,
       totalAfterDiscount,
-      cgst,
-      sgst,
       grandTotal,
     };
   }, [items]);
@@ -441,21 +436,7 @@ const OrderSummary = () => {
                       </span>
                     </div>
 
-                    <div className="border-t border-gray-200 pt-4">
-                      <div className="flex justify-between items-center py-1 text-sm">
-                        <span className="text-gray-500">CGST (9%)</span>
-                        <span className="text-gray-700">
-                          ₹{orderSummary.cgst.toLocaleString()}
-                        </span>
-                      </div>
-
-                      <div className="flex justify-between items-center py-1 text-sm">
-                        <span className="text-gray-500">SGST (9%)</span>
-                        <span className="text-gray-700">
-                          ₹{orderSummary.sgst.toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
+                   
 
                     <div className="border-t-2 border-gray-200 pt-4">
                       <div className="flex justify-between items-center">

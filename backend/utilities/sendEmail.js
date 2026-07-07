@@ -2,6 +2,8 @@ import nodemailer from "nodemailer";
 
 export const sendEmail = async ({ to, subject, html, attachments }) => {
   try {
+      console.log(process.env.EMAIL_USER);
+      console.log(process.env.EMAIL_PASS);
     if (!to || !subject || !html) {
       throw new Error(
         "Missing required email parameters: to, subject, and html are required"

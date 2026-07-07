@@ -11,6 +11,9 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { User } from "../../model/user/user.model.js";
 import { Service } from "../../model/vendor/service.model.js";
+import { resetWhyChooseUs } from "./whychooseus.controller.js";
+import client from "../../db/redisClient.js";
+import vendorBookingHistoryModel from "../../model/vendor/vendorBookingHistory.model.js";
 
 
 const isProd = process.env.NODE_ENV === "production";
@@ -130,7 +133,6 @@ const registerVendor = async (req, res) => {
         .status(400)
         .json(new ApiError(400, `Validation failed: ${messages.join(", ")}`));
     }
-
     return res.status(500).json(new ApiError(500, "Internal server error"));
   }
 };
@@ -250,14 +252,14 @@ const generateVendorTokens = async (vendorId) => {
 };
 
 const loginVendor = async (req, res) => {
-  const { email, phoneNumber, password } = req.body;
-  if (!(email || phoneNumber) || !password)
+  const { email, password } = req.body;
+  if (! email || !password)
     return res
       .status(400)
-      .json(new ApiError(400, "Email/Phone and password required"));
+      .json(new ApiError(400, "Email and password required"));
 
   const vendor = await Vendor.findOne({
-    $or: [{ email }, { phoneNumber }],
+    $or: [{ email }],
   });
 
   if (!vendor)
@@ -281,6 +283,87 @@ const loginVendor = async (req, res) => {
         "Vendor logged in successfully"
       )
     );
+};
+// OTP send through Email for login
+const vendorLoginOtp=async(req,res)=>{
+  try{
+  const otp=Math.floor(100000 + Math.random() * 900000).toString();
+  const{emailOtp}=req.body;
+  if(!emailOtp){
+    return res.status(400).json(new ApiError("Email not Found"));
+  }
+  await client.set(
+    `vendor-login-otp:${emailOtp}`,
+    otp,
+    {EX:300}// 5 minutes
+  );
+  await sendEmail({
+    to:emailOtp,
+    subject: "Otp for login",
+    html:`
+     The otp for login is ${otp } `,
+  });
+ return  res.status(200).json(new ApiResponse(200,null,"Otp send successfully"));
+} catch(error){
+  return res.status(500).json(new ApiResponse(500,error.message));
+}
+}
+
+const verifyVendorLoginOtp=async(req,res)=>{
+  try{
+  const{emailOtp,otp}=req.body;
+  if(!emailOtp || !otp){
+    return res.status(400).json(new ApiResponse(400,"Email or otp not found"))
+  }
+  const savedotp=await client.get(`vendor-login-otp:${emailOtp}`);
+  if(!savedotp){
+    return res.status(400).json(new ApiResponse(400,"Otp is invalid"));
+  }
+  if(savedotp!=otp){
+    return res.status(400).json(new ApiResponse(400,"Otp is wrong"));
+  }
+  await client.del(`vendor-login-otp:${emailOtp}`);
+  const vendor=await Vendor.findOne({
+    email:emailOtp,
+  });
+  if(!vendor){
+    return res.status(400).json(new ApiResponse(400,"Vendor not found"));
+  }
+   const { accessToken, refreshToken } =
+      await generateVendorTokens(vendor._id);
+
+    const loggedInVendor = await Vendor.findById(vendor._id).select(
+      "-password -refreshToken"
+    );
+    return res
+      .status(200)
+      .cookie(
+        "vendorAccessToken",
+        accessToken,
+        accessTokenOption
+      )
+      .cookie(
+        "vendorRefreshToken",
+        refreshToken,
+        refreshTokenOption
+      )
+      .json(
+        new ApiResponse(
+          200,
+          {
+            loggedInVendor,
+            accessToken,
+            refreshToken,
+          },
+          "Vendor login successful"
+        )
+      );
+  }
+   catch (error) {
+    return res
+      .status(500)
+      .json(new ApiError(500, error.message));
+  }
 };
 
 // ✅ Logout Vendor
@@ -655,36 +738,6 @@ const getVendorDashboard = async (req, res) => {
   }
 };
 
-const verifyVendorLogin = async (req, res) => {
-  const { phoneNo } = req.body;
-
-  console.log("verifyVendorLogin called with phoneNo:", phoneNo);
-  if (!phoneNo || !isValidPhoneNumber(phoneNo, "IN")) {
-    return res.status(400).json(new ApiError(400, "Invalid phone number"));
-  }
-
-  const vendor = await Vendor.findOne({ phoneNumber: phoneNo });
-  if (!vendor)
-    return res.status(404).json(new ApiError(404, "Vendor not found"));
-
-  const { accessToken, refreshToken } = await generateVendorTokens(vendor._id);
-
-  const loggedInVendor = await Vendor.findById(vendor._id).select(
-    "-password -refreshToken"
-  );
-
-  return res
-    .status(200)
-    .cookie("vendorAccessToken", accessToken, accessTokenOption)
-    .cookie("vendorRefreshToken", refreshToken, refreshTokenOption)
-    .json(
-      new ApiResponse(
-        200,
-        { loggedInVendor, accessToken, refreshToken },
-        "Vendor Login successful"
-      )
-    );
-};
 // For Verify my service
 const submitVerificationRequest = async (req, res) => {
   try {
@@ -735,6 +788,7 @@ export {
   verifyConfirmPassword,
   getVendorDashboard,
   getSearchSuggestions,
-  verifyVendorLogin,
   submitVerificationRequest,
+  vendorLoginOtp,
+  verifyVendorLoginOtp,
 };

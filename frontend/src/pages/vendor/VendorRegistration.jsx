@@ -52,7 +52,15 @@ const VendorRegister = () => {
     const emailRegex = /^[a-z][a-z0-9._%+-]*@[a-z0-9.-]+\.[a-z]{2,}$/;
 
     if (!emailRegex.test(form.email)) {
-      setError("Invalid email! First letter must be lowercase.");
+      setError("Invalid email");
+      return false;
+    }
+    if(!form.fullName){
+      setError("Enter Full name");
+      return false;
+    }
+    if(form.phone.length >10 || form.phone.length <10){
+      setError("Invalid phone number");
       return false;
     }
 
@@ -166,7 +174,7 @@ const VendorRegister = () => {
       const fullName = vendor.fullName || "";
       const firstName = fullName.split(" ")[0];
       const firstLetter = firstName?.charAt(0).toUpperCase() || "";
-      const profilePic = vendor.profilePic || "";
+      const profilePic = vendor.profilePicture || "";
 
       localStorage.setItem("VendorCurrentlyLoggedIn", "true");
       localStorage.setItem("VendorFullName", fullName);

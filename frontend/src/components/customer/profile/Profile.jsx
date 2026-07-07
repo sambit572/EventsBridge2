@@ -176,15 +176,18 @@ const handleSubmitReview = async () => {
 
     if (response.data.success) {
       alert("Review submitted successfully!");
-
-      setShowReviewModal(false);
-      setRating(0);
+setRating(0);
       setReviewMessage("");
       setSelectedBooking(null);
+      setShowReviewModal(false);
+      
     }
   } catch (error) {
     console.error(error);
     alert(error.response?.data?.message || "Failed to submit review");
+    setRating(0);
+      setReviewMessage("");
+      setSelectedBooking(null);
     setShowReviewModal(false);
   }
 };

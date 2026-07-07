@@ -439,8 +439,6 @@ export const calculateOrderSummary = (items, orderType = "single") => {
       finalTotal: 0,
       platformDiscountAmount: 0,
       totalAfterDiscount: 0,
-      cgst: 0,
-      sgst: 0,
       grandTotal: 0,
     };
   }
@@ -456,16 +454,13 @@ export const calculateOrderSummary = (items, orderType = "single") => {
   const totalAfterDiscount = finalTotal - platformDiscountAmount;
 
   // Calculate taxes on the price after discount
-  const cgst = Math.round(totalAfterDiscount * 0.09);
-  const sgst = Math.round(totalAfterDiscount * 0.09);
-  const grandTotal = totalAfterDiscount + cgst + sgst;
+ 
+  const grandTotal = totalAfterDiscount ;
   
   return {
     finalTotal,
     platformDiscountAmount,
     totalAfterDiscount,
-    cgst,
-    sgst,
     grandTotal,
     itemCount: items.length,
     orderType,
