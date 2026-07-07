@@ -130,8 +130,8 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
     }
     .vl-modal {
       display: flex; width: 100%; max-width: 820px;
-      min-height: 560px; border-radius: 20px; overflow: hidden;
-      box-shadow: 0 24px 80px rgba(79,70,229,0.25);
+      max-height: 90vh; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 24px 80px rgba(180,83,9,0.25);
       animation: vl-pop 0.45s cubic-bezier(0.22,1,0.36,1) both;
       font-family: 'Poppins', sans-serif;
     }
@@ -153,19 +153,19 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
     }
     .vl-orb1 {
       width:280px;height:280px;
-      background:radial-gradient(circle,rgba(108,62,244,0.55) 0%,transparent 70%);
+      background:radial-gradient(circle,rgba(217,119,6,0.55) 0%,transparent 70%);
       top:-80px;right:-80px;
       animation:vl-orb-move1 9s ease-in-out infinite;
     }
     .vl-orb2 {
       width:220px;height:220px;
-      background:radial-gradient(circle,rgba(79,70,229,0.45) 0%,transparent 70%);
+      background:radial-gradient(circle,rgba(180,83,9,0.45) 0%,transparent 70%);
       bottom:-60px;left:-60px;
       animation:vl-orb-move2 11s ease-in-out infinite;
     }
     .vl-orb3 {
       width:140px;height:140px;
-      background:radial-gradient(circle,rgba(167,139,250,0.3) 0%,transparent 70%);
+      background:radial-gradient(circle,rgba(252,211,77,0.3) 0%,transparent 70%);
       top:45%;left:30%;
       animation:vl-orb-move3 7s ease-in-out infinite;
     }
@@ -205,7 +205,7 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
     /* monogram */
     .vl-monogram {
       width:58px;height:58px;border-radius:16px;
-      background:linear-gradient(135deg,rgba(108,62,244,0.6),rgba(79,70,229,0.4));
+      background:linear-gradient(135deg,rgba(217,119,6,0.6),rgba(180,83,9,0.4));
       border:1px solid rgba(255,255,255,0.2);
       display:flex;align-items:center;justify-content:center;
       font-size:22px;font-weight:700;color:#fff;letter-spacing:-1px;
@@ -214,12 +214,12 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
     }
     .vl-monogram::after {
       content:'';position:absolute;inset:-1px;border-radius:16px;
-      background:linear-gradient(135deg,rgba(167,139,250,0.5),transparent,rgba(79,70,229,0.4));
+      background:linear-gradient(135deg,rgba(252,211,77,0.5),transparent,rgba(180,83,9,0.4));
       z-index:-1;animation:vl-border-spin 4s linear infinite;
     }
     @keyframes vl-logo-glow{
-      0%,100%{box-shadow:0 0 20px rgba(108,62,244,0.4),0 0 40px rgba(108,62,244,0.2)}
-      50%{box-shadow:0 0 30px rgba(167,139,250,0.6),0 0 60px rgba(108,62,244,0.3)}
+      0%,100%{box-shadow:0 0 20px rgba(217,119,6,0.4),0 0 40px rgba(217,119,6,0.2)}
+      50%{box-shadow:0 0 30px rgba(252,211,77,0.6),0 0 60px rgba(217,119,6,0.3)}
     }
     @keyframes vl-border-spin{
       0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}
@@ -229,7 +229,7 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
     .vl-left-headline {
       font-size:26px;font-weight:700;line-height:1.25;margin-bottom:12px;
       position:relative;z-index:2;
-      background:linear-gradient(135deg,#fff 40%,rgba(167,139,250,0.9) 100%);
+      background:linear-gradient(135deg,#fff 40%,rgba(252,211,77,0.9) 100%);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
     }
     .vl-left-sub {
@@ -260,7 +260,7 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
       width:34px;height:34px;border-radius:9px;flex-shrink:0;
       display:flex;align-items:center;justify-content:center;font-size:16px;
     }
-    .vl-stat-icon.bk{background:rgba(99,102,241,0.3)}
+    .vl-stat-icon.bk{background:rgba(217,119,6,0.3)}
     .vl-stat-icon.cu{background:rgba(16,185,129,0.25)}
     .vl-stat-icon.an{background:rgba(245,158,11,0.25)}
     .vl-stat-body { flex:1;min-width:0; }
@@ -271,7 +271,7 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
       animation:vl-blink 2s ease-in-out infinite;
     }
     .vl-stat-dot.green{background:#10b981}
-    .vl-stat-dot.blue{background:#6366f1}
+    .vl-stat-dot.blue{background:#eab308}
     .vl-stat-dot.amber{background:#f59e0b}
     @keyframes vl-blink{0%,100%{opacity:1}50%{opacity:0.3}}
 
@@ -308,7 +308,7 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
     .vl-portal-badge {
       display:inline-flex;align-items:center;gap:5px;
       padding:4px 12px;border-radius:50px;
-      background:#ede9fe;color:#5b21b6;
+      background:#fef3c7;color:#78350f;
       font-size:11px;font-weight:600;margin-bottom:16px;width:fit-content;
       animation:vl-fade-up 0.4s 0.25s both;
     }
@@ -334,21 +334,21 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
       outline:none;transition:border 0.2s,box-shadow 0.2s;width:96px;flex-shrink:0;
       font-family:'Poppins',sans-serif;
     }
-    .vl-flag-select:focus { border-color:#6C3EF4;box-shadow:0 0 0 3px rgba(108,62,244,0.1); }
+    .vl-flag-select:focus { border-color:#d97706;box-shadow:0 0 0 3px rgba(217,119,6,0.1); }
     .vl-phone-input {
       flex:1;padding:11px 16px;border-radius:12px;border:1.5px solid #e5e7eb;
       background:#fff;font-size:13px;font-family:'Poppins',sans-serif;
       color:#111827;outline:none;transition:border 0.2s,box-shadow 0.2s;
     }
-    .vl-phone-input:focus { border-color:#6C3EF4;box-shadow:0 0 0 3px rgba(108,62,244,0.1); }
+    .vl-phone-input:focus { border-color:#d97706;box-shadow:0 0 0 3px rgba(217,119,6,0.1); }
     .vl-otp-btn {
       width:100%;padding:11px;border-radius:12px;border:none;
-      background:linear-gradient(135deg,#4f46e5,#6C3EF4);color:#fff;
+      background:linear-gradient(135deg,#b45309,#d97706);color:#fff;
       font-size:13px;font-weight:600;font-family:'Poppins',sans-serif;
       cursor:pointer;letter-spacing:0.3px;
       transition:transform 0.2s,box-shadow 0.2s;position:relative;overflow:hidden;
     }
-    .vl-otp-btn:hover { transform:translateY(-2px);box-shadow:0 6px 18px rgba(108,62,244,0.32); }
+    .vl-otp-btn:hover { transform:translateY(-2px);box-shadow:0 6px 18px rgba(217,119,6,0.32); }
     .vl-otp-btn:active { transform:scale(0.97); }
 
     /* OR DIVIDER */
@@ -370,7 +370,7 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
       transition:border 0.2s,box-shadow 0.2s;
       box-sizing:border-box;
     }
-    .vl-field input:focus { border-color:#6C3EF4;box-shadow:0 0 0 3px rgba(108,62,244,0.1); }
+    .vl-field input:focus { border-color:#d97706;box-shadow:0 0 0 3px rgba(217,119,6,0.1); }
     .vl-field label {
       position:absolute;left:16px;top:50%;transform:translateY(-50%);
       font-size:13px;color:#9ca3af;pointer-events:none;
@@ -378,7 +378,7 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
     }
     .vl-field input:focus ~ label,
     .vl-field input:not(:placeholder-shown) ~ label {
-      top:10px;transform:none;font-size:10px;color:#6C3EF4;font-weight:600;letter-spacing:0.3px;
+      top:10px;transform:none;font-size:10px;color:#d97706;font-weight:600;letter-spacing:0.3px;
     }
     .vl-field input::placeholder { color:transparent; }
     .vl-eye {
@@ -387,27 +387,27 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
       color:#9ca3af;font-size:17px;
       transition:color 0.2s;display:flex;align-items:center;
     }
-    .vl-eye:hover { color:#6C3EF4; }
+    .vl-eye:hover { color:#d97706; }
 
     /* FORGOT */
     .vl-forgot { text-align:right;margin:-4px 0 12px;animation:vl-fade-up 0.4s 0.58s both; }
     .vl-forgot span {
-      font-size:12px;color:#6C3EF4;cursor:pointer;font-weight:500;
+      font-size:12px;color:#d97706;cursor:pointer;font-weight:500;
       transition:color 0.2s;
     }
-    .vl-forgot span:hover { color:#4f46e5;text-decoration:underline; }
+    .vl-forgot span:hover { color:#b45309;text-decoration:underline; }
 
     /* LOGIN BUTTON */
     .vl-login-btn {
       width:100%;padding:11px;border-radius:50px;border:none;
-      background:linear-gradient(135deg,#4f46e5,#6C3EF4);color:#fff;
+      background:linear-gradient(135deg,#b45309,#d97706);color:#fff;
       font-size:14px;font-weight:600;font-family:'Poppins',sans-serif;
       cursor:pointer;position:relative;overflow:hidden;
       display:flex;align-items:center;justify-content:center;gap:8px;
       transition:transform 0.2s,box-shadow 0.2s;
       animation:vl-fade-up 0.4s 0.6s both;
     }
-    .vl-login-btn:hover { transform:translateY(-2px);box-shadow:0 8px 22px rgba(108,62,244,0.35); }
+    .vl-login-btn:hover { transform:translateY(-2px);box-shadow:0 8px 22px rgba(217,119,6,0.35); }
     .vl-login-btn:active { transform:scale(0.98); }
     .vl-shimmer {
       position:absolute;top:0;left:-100%;width:55%;height:100%;
@@ -426,24 +426,35 @@ const VendorLogin = ({ onClose, onSwitchToLogin }) => {
     /* SIGNUP LINE */
     .vl-signup { text-align:center;font-size:12.5px;color:#6b7280;margin-top:12px;animation:vl-fade-up 0.4s 0.65s both; }
     .vl-signup span {
-      background:linear-gradient(135deg,#4f46e5,#6C3EF4);
+      background:linear-gradient(135deg,#b45309,#d97706);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
       font-weight:600;cursor:pointer;
     }
-    .vl-signup span:hover { text-decoration:underline;text-decoration-color:#6C3EF4; }
+    .vl-signup span:hover { text-decoration:underline;text-decoration-color:#d97706; }
 
     /* ERROR */
     .vl-error { color:#dc2626;font-size:12px;text-align:center;font-weight:500;margin-bottom:8px;animation:vl-fade-up 0.3s both; }
 
     /* MOBILE */
     @media(max-width:640px){
-      .vl-modal { flex-direction:column;max-height:92vh;overflow-y:auto; }
-      .vl-left { padding:20px 24px 16px;flex-direction:row;align-items:center;gap:14px;flex-wrap:wrap;min-height:unset; }
-      .vl-monogram { width:42px;height:42px;font-size:15px;margin-bottom:0;flex-shrink:0; }
-      .vl-left-headline { font-size:15px;margin-bottom:0; }
-      .vl-left-sub,.vl-pills { display:none; }
-      .vl-right { padding:24px 20px; }
-      .vl-title { font-size:20px; }
+      .vl-overlay { padding:10px; }
+      .vl-modal { flex-direction:column;max-height:94vh;overflow-y:auto; }
+      .vl-left { padding:18px 20px 14px;flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap;min-height:unset; }
+      .vl-monogram { width:40px;height:40px;font-size:14px;margin-bottom:0;flex-shrink:0; }
+      .vl-left-headline { font-size:14px;margin-bottom:0; }
+      .vl-left-sub,.vl-stats,.vl-bottom-tag { display:none; }
+      .vl-right { padding:22px 18px 18px; }
+      .vl-title { font-size:19px; }
+      .vl-subtitle { margin-bottom:16px; }
+      .vl-field { margin-bottom:10px; }
+      .vl-close { top:10px;right:12px;font-size:18px; }
+    }
+    @media(max-width:380px){
+      .vl-right { padding:18px 14px 16px; }
+      .vl-title { font-size:17px; }
+      .vl-portal-badge { font-size:10px;padding:3px 10px; }
+      .vl-field input { padding:20px 12px 7px;font-size:13px; }
+      .vl-flag-select { width:82px;padding:10px; }
     }
   `;
 
