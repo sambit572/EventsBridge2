@@ -1,5 +1,6 @@
 // registerNegotiationHandler.js
 import { Negotiation } from "../../model/common/Negotiation.model.js";
+import { sendEmail } from "../../utilities/sendEmail.js";
 
 export default async function registerNegotiationHandler(
   apiNameSpace,
@@ -20,6 +21,75 @@ export default async function registerNegotiationHandler(
 
       console.log("✅ Negotiation request saved to DB:", res);
 
+      // Send email to vendor
+try {
+  await sendEmail({
+    to: data.vendorEmail,
+    subject: `New Negotiation Request for ${data.serviceName}`,
+    html: `
+      <h2>New Booking & Negotiation Request</h2>
+
+      <p>Hello ${data.vendorName},</p>
+
+      <p>You have received a new booking enquiry.</p>
+
+      <hr>
+
+      <h3>Customer Details</h3>
+
+      <p><strong>Name:</strong> ${data.bookedByUser}</p>
+      <hr>
+
+      <h3>Booking Details</h3>
+
+      <p><strong>Service:</strong> ${data.serviceName}</p>
+      <p><strong>Venue:</strong> ${data.venueLocation}</p>
+
+      <p><strong>Start Date:</strong>
+      ${new Date(data.date.startDate).toLocaleDateString()}</p>
+
+      <p><strong>End Date:</strong>
+      ${new Date(data.date.endDate).toLocaleDateString()}</p>
+
+      <hr>
+
+      <h3>Negotiation</h3>
+
+      <p><strong>Original Price:</strong>
+      ₹${data.originalPriceRange.min} - ₹${data.originalPriceRange.max}</p>
+
+      <p><strong>Customer Proposed Price:</strong>
+      ₹${data.proposedPrice}</p>
+
+      ${
+        data.packageName
+          ? `
+      <hr>
+      <h3>Catering Package</h3>
+
+      <p><strong>Package:</strong> ${data.packageName}</p>
+      <p><strong>Plate Count:</strong> ${data.plateCount}</p>
+      <p><strong>Price Per Plate:</strong> ₹${data.pricePerPlate}</p>
+      <p><strong>Total Price:</strong> ₹${data.totalPrice}</p>
+      `
+          : ""
+      }
+
+      <br>
+
+      <p>Please log in to your vendor dashboard to accept or reject this negotiation.</p>
+
+      <br>
+
+      <p>Thank you,</p>
+      <p><strong>EventsBridge Team</strong></p>
+    `,
+  });
+
+  console.log("✅ Negotiation email sent");
+} catch (emailError) {
+  console.error("❌ Email sending failed:", emailError);
+}
       // If vendor is online, send directly
       const vendorSocketId = vendorSocketMap.get(data.vendorId);
       if (vendorSocketId) {
