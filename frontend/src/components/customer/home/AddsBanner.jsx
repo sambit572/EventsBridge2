@@ -4,6 +4,7 @@ import { FaInfo } from "react-icons/fa";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import clsx from "clsx";
 
 const AddsBanner = () => {
   const [posters, setPosters] = useState([]);
