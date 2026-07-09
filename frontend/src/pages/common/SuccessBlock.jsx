@@ -108,24 +108,185 @@ const SuccessBlock = ({ onClose, autoCloseTime = 5000 }) => {
           background-size: 200% auto;
           animation: eb-shimmer 2.4s linear infinite;
         }
+
+        /* ─── Layout (responsive, class-driven so media queries can win) ─── */
+        .eb-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 10000;
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          background: rgba(15, 10, 40, 0.65);
+          backdrop-filter: blur(10px);
+          padding: 32px 16px;
+          box-sizing: border-box;
+        }
+
+        .eb-modal-box {
+          position: relative;
+          width: 100%;
+          max-width: 460px;
+          border-radius: 24px;
+          background: #ffffff;
+          overflow-y: auto;
+          max-height: calc(100vh - 64px);
+          -webkit-overflow-scrolling: touch;
+          box-shadow: 0 32px 80px rgba(79,70,229,.22), 0 8px 32px rgba(0,0,0,.12);
+        }
+
+        .eb-body {
+          position: relative;
+          z-index: 1;
+          padding: 36px 40px 40px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .eb-icon-wrap {
+          position: relative;
+          width: 110px;
+          height: 110px;
+          margin-bottom: 24px;
+          flex-shrink: 0;
+        }
+
+        .eb-heading {
+          font-size: 26px;
+          font-weight: 800;
+          letter-spacing: -0.5px;
+          background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 60%, #FB923C 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 8px;
+          line-height: 1.25;
+        }
+
+        .eb-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+          border-radius: 100px;
+          padding: 5px 14px;
+          margin-bottom: 16px;
+        }
+        .eb-badge span {
+          font-size: 13px;
+          font-weight: 700;
+          color: #065F46;
+          letter-spacing: .2px;
+        }
+
+        .eb-paragraph {
+          font-size: 14px;
+          color: #6B7280;
+          line-height: 1.7;
+          max-width: 340px;
+          margin-bottom: 28px;
+        }
+
+        .eb-icons-row {
+          display: flex;
+          gap: 16px;
+          margin-bottom: 28px;
+          font-size: 22px;
+        }
+
+        .eb-cta-btn {
+          width: 100%;
+          border: none;
+          border-radius: 14px;
+          padding: 14px 0;
+          color: #fff;
+          font-size: 15px;
+          font-weight: 700;
+          letter-spacing: 0.3px;
+          cursor: pointer;
+          box-shadow: 0 6px 24px rgba(59,130,246,.35);
+          transition: transform .15s, box-shadow .15s;
+        }
+        .eb-cta-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 32px rgba(59,130,246,.45);
+        }
+
+        .eb-footer-text {
+          margin-top: 14px;
+          font-size: 12px;
+          color: #9CA3AF;
+        }
+
+        .eb-close-btn {
+          position: absolute;
+          top: 18px;
+          right: 18px;
+          z-index: 20;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: #F3F4F6;
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          color: #6B7280;
+          transition: background .2s, color .2s;
+        }
+        .eb-close-btn:hover {
+          background: #EF4444;
+          color: #fff;
+        }
+
+        /* ─── Tablet & small laptop tweak ─── */
+        @media (max-width: 600px) {
+          .eb-overlay { padding: 20px 12px; align-items: center; }
+          .eb-modal-box { border-radius: 20px; max-height: calc(100vh - 40px); }
+        }
+
+        /* ─── Phones ─── */
+        @media (max-width: 480px) {
+          .eb-body { padding: 28px 22px 28px; }
+          .eb-icon-wrap { transform: scale(0.82); margin-bottom: 12px; }
+          .eb-heading { font-size: 21px; }
+          .eb-paragraph { font-size: 13.5px; max-width: 100%; margin-bottom: 22px; }
+          .eb-icons-row { gap: 10px; font-size: 19px; margin-bottom: 22px; }
+          .eb-cta-btn { font-size: 14px; padding: 13px 0; }
+          .eb-badge span { font-size: 12px; }
+        }
+
+        /* ─── Very small phones ─── */
+        @media (max-width: 360px) {
+          .eb-body { padding: 24px 16px 24px; }
+          .eb-icon-wrap { transform: scale(0.7); margin-bottom: 4px; }
+          .eb-heading { font-size: 19px; }
+          .eb-icons-row { gap: 8px; font-size: 17px; }
+        }
+
+        /* ─── Short viewports (landscape phones) ─── */
+        @media (max-height: 560px) {
+          .eb-overlay { align-items: flex-start; padding-top: 16px; }
+          .eb-modal-box { max-height: calc(100vh - 32px); }
+          .eb-icon-wrap { transform: scale(0.65); margin-bottom: 4px; }
+          .eb-body { padding: 20px 24px 20px; }
+          .eb-paragraph { margin-bottom: 14px; }
+          .eb-icons-row { margin-bottom: 14px; }
+        }
       `}</style>
 
       <div
-        className="eb-success-overlay login-wrapper flex justify-center items-center z-[10000] p-4 eb-overlay-anim"
-        style={{ background: "rgba(15,10,40,0.65)", backdropFilter: "blur(10px)" }}
+        className={`eb-success-overlay eb-overlay eb-overlay-anim`}
         onClick={handleClose}
       >
         <div
-          className={visible ? "eb-modal-enter" : "eb-modal-leave"}
-          style={{
-            position: "relative",
-            width: "100%",
-            maxWidth: 460,
-            borderRadius: 24,
-            background: "#ffffff",
-            overflow: "hidden",
-            boxShadow: "0 32px 80px rgba(79,70,229,.22), 0 8px 32px rgba(0,0,0,.12)",
-          }}
+          className={`eb-modal-box ${visible ? "eb-modal-enter" : "eb-modal-leave"}`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Gradient header strip */}
@@ -160,31 +321,17 @@ const SuccessBlock = ({ onClose, autoCloseTime = 5000 }) => {
           {/* Close button */}
           <button
             onClick={handleClose}
-            style={{
-              position: "absolute", top: 18, right: 18, zIndex: 20,
-              width: 32, height: 32, borderRadius: "50%",
-              background: "#F3F4F6", border: "none", cursor: "pointer",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 18, color: "#6B7280",
-              transition: "background .2s, color .2s",
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.background="#EF4444"; e.currentTarget.style.color="#fff"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background="#F3F4F6"; e.currentTarget.style.color="#6B7280"; }}
+            className="eb-close-btn"
             aria-label="Close"
           >
             ×
           </button>
 
           {/* Body */}
-          <div style={{
-            position: "relative", zIndex: 1,
-            padding: "36px 40px 40px",
-            display: "flex", flexDirection: "column", alignItems: "center",
-            textAlign: "center",
-          }}>
+          <div className="eb-body">
 
             {/* Animated success icon */}
-            <div className="eb-float-icon" style={{ position: "relative", width: 110, height: 110, marginBottom: 24 }}>
+            <div className="eb-float-icon eb-icon-wrap">
               {/* Glow aura */}
               <div style={{
                 position: "absolute", inset: -8, borderRadius: "50%",
@@ -257,28 +404,17 @@ const SuccessBlock = ({ onClose, autoCloseTime = 5000 }) => {
             </div>
 
             {/* Heading */}
-            <h2 style={{
-              fontSize: 26, fontWeight: 800, letterSpacing: "-0.5px",
-              background: "linear-gradient(135deg, #4F46E5 0%, #7C3AED 60%, #FB923C 100%)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-              marginBottom: 8, lineHeight: 1.25,
-            }}>
+            <h2 className="eb-heading">
               Welcome to EventsBridge! 🎉
             </h2>
 
             {/* Sub-heading badge */}
-            <div style={{
-              display: "inline-flex", alignItems: "center", gap: 6,
-              background: "linear-gradient(135deg, #D1FAE5, #A7F3D0)",
-              borderRadius: 100, padding: "5px 14px", marginBottom: 16,
-            }}>
-              <span style={{ fontSize: 13, fontWeight: 700, color: "#065F46", letterSpacing: ".2px" }}>
-                ✓ You are now successfully logged in
-              </span>
+            <div className="eb-badge">
+              <span>✓ You are now successfully logged in</span>
             </div>
 
             {/* Body text */}
-            <p style={{ fontSize: 14, color: "#6B7280", lineHeight: 1.7, maxWidth: 340, marginBottom: 28 }}>
+            <p className="eb-paragraph">
               Thank you for joining us! Ready to{" "}
               <span style={{ color: "#4F46E5", fontWeight: 600 }}>discover</span>,{" "}
               <span style={{ color: "#7C3AED", fontWeight: 600 }}>compare</span>, and{" "}
@@ -287,7 +423,7 @@ const SuccessBlock = ({ onClose, autoCloseTime = 5000 }) => {
             </p>
 
             {/* Event icons row */}
-            <div style={{ display: "flex", gap: 16, marginBottom: 28, fontSize: 22 }}>
+            <div className="eb-icons-row">
               {["🌸", "✨", "🎊", "💐", "🎶"].map((icon, i) => (
                 <span key={i} className="eb-sparkle-dot" style={{ animationDelay: `${i * 0.15}s` }}>{icon}</span>
               ))}
@@ -296,27 +432,12 @@ const SuccessBlock = ({ onClose, autoCloseTime = 5000 }) => {
             {/* CTA button */}
             <button
               onClick={handleExplore}
-              className="eb-btn-shimmer"
-              style={{
-                width: "100%", border: "none", borderRadius: 14,
-                padding: "14px 0", color: "#fff", fontSize: 15,
-                fontWeight: 700, letterSpacing: "0.3px", cursor: "pointer",
-                boxShadow: "0 6px 24px rgba(59,130,246,.35)",
-                transition: "transform .15s, box-shadow .15s",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = "0 10px 32px rgba(59,130,246,.45)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 6px 24px rgba(59,130,246,.35)";
-              }}
+              className="eb-btn-shimmer eb-cta-btn"
             >
               Start Exploring Events →
             </button>
 
-            <p style={{ marginTop: 14, fontSize: 12, color: "#9CA3AF" }}>
+            <p className="eb-footer-text">
               Auto-closing in a few seconds…
             </p>
           </div>

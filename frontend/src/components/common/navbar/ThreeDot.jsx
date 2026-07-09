@@ -1,16 +1,10 @@
 // src/components/common/ThreeDot.jsx
 import { useRef, useState, useEffect } from "react";
-import { FaBars, FaCompass, FaMapMarkerAlt, FaCalendarAlt, FaShoppingCart, FaTimes, FaChevronRight } from "react-icons/fa";
+import { FaBars, FaShoppingCart, FaTimes, FaChevronRight } from "react-icons/fa";
 import logoImg from "../../../assets/EventsBridgeOnlyLogo.png";
 import { FcAbout, FcAssistant } from "react-icons/fc";
 import { MdStorefront } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
-
-const NAV_ITEMS = [
-  { label: "Explore",  icon: <FaCompass />,     color: "#3b82f6", bg: "#eff6ff", path: "/" },
-  { label: "Venues",   icon: <FaMapMarkerAlt />, color: "#f43f5e", bg: "#fff1f2", path: "/venues" },
-  { label: "Planners", icon: <FaCalendarAlt />,  color: "#22c55e", bg: "#f0fdf4", path: "/planners" },
-];
 
 const ThreeDot = ({
   showEllipsisDropdown,
@@ -114,6 +108,8 @@ const ThreeDot = ({
         top: "94px",   /* below announcement bar (~30px) + navbar (~60px) */
         right: "12px",
         width: "230px",
+        maxWidth: "calc(100vw - 24px)",
+        maxHeight: "calc(100vh - 110px)",
         background: "#ffffff",
         borderRadius: "14px",
         zIndex: 2999,
@@ -121,6 +117,8 @@ const ThreeDot = ({
         border: "1px solid #eeeeee",
         animation: "fadeSlideDown 0.2s cubic-bezier(0.32,0.72,0,1)",
         overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
       }}>
 
         {/* Compact header */}
@@ -128,6 +126,7 @@ const ThreeDot = ({
           background: "linear-gradient(135deg, #001f3f 0%, #003366 100%)",
           padding: "10px 14px",
           display: "flex", alignItems: "center", justifyContent: "space-between",
+          flexShrink: 0,
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <img src={logoImg} alt="EventsBridge" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
@@ -147,25 +146,17 @@ const ThreeDot = ({
         </div>
 
         {/* Menu items */}
-        <div style={{ padding: "10px 10px 12px" }}>
-          <SectionLabel>Navigation</SectionLabel>
-          {NAV_ITEMS.map((item) => (
-            <MenuItem
-              key={item.label}
-              icon={item.icon}
-              iconColor={item.color}
-              iconBg={item.bg}
-              label={item.label}
-              active={location.pathname === item.path}
-              onClick={() => go(item.path)}
-            />
-          ))}
-
-          <div style={{ margin: "8px 0 6px", borderTop: "1px solid #f0f0f0" }} />
+        <div style={{
+          padding: "10px 10px 12px",
+          overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
+          flex: "1 1 auto",
+          minHeight: 0,
+        }}>
           <SectionLabel>Vendor</SectionLabel>
           {VendorFirstName ? (
             <>
-              <MenuItem icon={<MdStorefront />} iconColor="#7c3aed" iconBg="#f5f3ff" label="My Dashboard" onClick={() => go("/vendor/dashboard")} />
+              <MenuItem icon={<MdStorefront />} iconColor="#7c3aed" iconBg="#f5f3ff" label="My Dashboard" onClick={() => go("/dashboard")} />
               <MenuItem icon={<MdStorefront />} iconColor="#ef4444" iconBg="#fff5f5" label="Vendor Logout" danger onClick={() => { vendorLogout?.(); setShowEllipsisDropdown(false); }} />
             </>
           ) : (

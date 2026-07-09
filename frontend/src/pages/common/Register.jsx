@@ -7,6 +7,7 @@ import { setUser } from "../../redux/UserSlice.js";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import SuccessBlock from "./SuccessBlock.jsx";
+import EventsBridgeLogo from "../../assets/EventsBridgeOnlyLogo.png";
 
 const Register = ({ onClose, onSwitchToLogin }) => {
   const dispatch = useDispatch();
@@ -126,7 +127,7 @@ const Register = ({ onClose, onSwitchToLogin }) => {
     /* LEFT PANEL */
     .ur-left {
       flex: 1; position: relative; overflow: hidden;
-      background: #0f0a2e;
+      background: linear-gradient(135deg, #fde68a 0%, #fbbf24 45%, #d97706 100%);
       display: flex; flex-direction: column; justify-content: space-between;
       padding: 36px 32px;
     }
@@ -166,7 +167,7 @@ const Register = ({ onClose, onSwitchToLogin }) => {
 
     .ur-particle {
       position:absolute;border-radius:50%;pointer-events:none;
-      background:rgba(255,255,255,0.6);
+      background:rgba(69,26,3,0.35);
       animation:ur-float-up linear infinite;
     }
     .ur-p1{width:3px;height:3px;left:15%;animation-duration:6s;animation-delay:0s}
@@ -184,12 +185,15 @@ const Register = ({ onClose, onSwitchToLogin }) => {
 
     .ur-monogram {
       width:58px;height:58px;border-radius:16px;
-      background:linear-gradient(135deg,rgba(217,119,6,0.6),rgba(180,83,9,0.4));
-      border:1px solid rgba(255,255,255,0.2);
+      background:rgba(255,255,255,0.85);
+      border:1px solid rgba(255,255,255,0.4);
       display:flex;align-items:center;justify-content:center;
-      font-size:22px;font-weight:700;color:#fff;letter-spacing:-1px;
       position:relative;z-index:2;margin-bottom:20px;
       animation:ur-logo-glow 3s ease-in-out infinite;
+      overflow:hidden;
+    }
+    .ur-monogram img {
+      width:80%;height:80%;object-fit:contain;
     }
     .ur-monogram::after {
       content:'';position:absolute;inset:-1px;border-radius:16px;
@@ -207,11 +211,11 @@ const Register = ({ onClose, onSwitchToLogin }) => {
     .ur-left-headline {
       font-size:26px;font-weight:700;line-height:1.25;margin-bottom:12px;
       position:relative;z-index:2;
-      background:linear-gradient(135deg,#fff 40%,rgba(252,211,77,0.9) 100%);
+      background:linear-gradient(135deg,#451a03 30%,#7c2d12 100%);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
     }
     .ur-left-sub {
-      font-size:12.5px;color:rgba(255,255,255,0.5);line-height:1.7;
+      font-size:12.5px;color:rgba(69,26,3,0.75);line-height:1.7;
       position:relative;z-index:2;max-width:260px;
     }
 
@@ -222,13 +226,13 @@ const Register = ({ onClose, onSwitchToLogin }) => {
     .ur-stat {
       display:flex;align-items:center;gap:12px;
       padding:10px 14px;border-radius:12px;
-      background:rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.4);
+      border:1px solid rgba(120,53,15,0.15);
       backdrop-filter:blur(8px);
       animation:ur-stat-in 0.5s both;
       transition:background 0.3s,border 0.3s;
     }
-    .ur-stat:hover{background:rgba(255,255,255,0.09);border-color:rgba(255,255,255,0.16)}
+    .ur-stat:hover{background:rgba(255,255,255,0.6);border-color:rgba(120,53,15,0.25)}
     .ur-stat:nth-child(1){animation-delay:0.5s}
     .ur-stat:nth-child(2){animation-delay:0.65s}
     .ur-stat:nth-child(3){animation-delay:0.8s}
@@ -241,8 +245,8 @@ const Register = ({ onClose, onSwitchToLogin }) => {
     .ur-stat-icon.cu{background:rgba(16,185,129,0.25)}
     .ur-stat-icon.an{background:rgba(245,158,11,0.25)}
     .ur-stat-body { flex:1;min-width:0; }
-    .ur-stat-label{font-size:10px;color:rgba(255,255,255,0.45);font-weight:500;letter-spacing:0.3px}
-    .ur-stat-val{font-size:15px;font-weight:700;color:#fff;line-height:1.2}
+    .ur-stat-label{font-size:10px;color:rgba(69,26,3,0.65);font-weight:500;letter-spacing:0.3px}
+    .ur-stat-val{font-size:15px;font-weight:700;color:#451a03;line-height:1.2}
     .ur-stat-dot {
       width:7px;height:7px;border-radius:50%;flex-shrink:0;
       animation:ur-blink 2s ease-in-out infinite;
@@ -256,9 +260,9 @@ const Register = ({ onClose, onSwitchToLogin }) => {
       display:flex;align-items:center;gap:8px;
       position:relative;z-index:2;
     }
-    .ur-tag-line{flex:1;height:1px;background:rgba(255,255,255,0.1)}
+    .ur-tag-line{flex:1;height:1px;background:rgba(69,26,3,0.2)}
     .ur-tag-text{
-      font-size:10px;color:rgba(255,255,255,0.3);font-weight:500;
+      font-size:10px;color:rgba(69,26,3,0.55);font-weight:500;
       letter-spacing:1.2px;text-transform:uppercase;white-space:nowrap;
     }
 
@@ -329,7 +333,7 @@ const Register = ({ onClose, onSwitchToLogin }) => {
 
     .ur-signup-btn {
       width:100%;padding:11px;border-radius:50px;border:none;
-      background:linear-gradient(135deg,#b45309,#d97706);color:#fff;
+      background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;
       font-size:14px;font-weight:600;font-family:'Poppins',sans-serif;
       cursor:pointer;position:relative;overflow:hidden;
       display:flex;align-items:center;justify-content:center;gap:8px;
@@ -505,7 +509,9 @@ const Register = ({ onClose, onSwitchToLogin }) => {
             <div className="ur-particle ur-p6" />
 
             <div>
-              <div className="ur-monogram">EB</div>
+              <div className="ur-monogram">
+                <img src={EventsBridgeLogo} alt="EventsBridge Logo" />
+              </div>
               <div className="ur-left-headline">Join<br />EventsBridge</div>
               <div className="ur-left-sub">
                 Discover, book, and experience unforgettable event services — all in one place.

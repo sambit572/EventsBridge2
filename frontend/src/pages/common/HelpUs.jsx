@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaLock, FaShieldAlt, FaHeadset, FaMobileAlt } from "react-icons/fa";
+import { FaLock, FaShieldAlt, FaHeadset, FaMobileAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import { Seo } from "../../seo/seo";
 import bgBanner from "../../assets/helpUs/bgbanner.webp"; // Adjust path as needed
 
@@ -109,6 +109,62 @@ const HelpUs = () => {
               <p className="text-[#001f3f] mt-2">
                 Download the app and enjoy app-only offers at your fingertips
               </p>
+            </div>
+          </div>
+
+          {/* Contact Us Directly */}
+          <div className="text-center px-2">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#001f3f] mb-2">
+              Contact Us Directly
+            </h2>
+            <p className="text-[#475569] text-sm sm:text-base mb-8">
+              Reach out to our team via phone or email — we'd love to hear from you.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {/* Call us */}
+              <div className="bg-[#f7f7f7] p-6 rounded-lg shadow-md hover:shadow-xl transition text-left">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-11 h-11 rounded-full bg-[#001f3f]/10 flex items-center justify-center flex-shrink-0">
+                    <FaPhoneAlt className="text-lg text-[#001f3f]" />
+                  </div>
+                  <h3 className="font-bold text-[#001f3f] text-lg">Call Us</h3>
+                </div>
+                <a
+                  href="tel:+919348605002"
+                  className="flex items-center justify-between py-2 border-b border-gray-200 text-[#001f3f] hover:text-[#0ea5e9] transition"
+                >
+                  <span>+91 9348605002</span>
+                </a>
+                <a
+                  href="tel:+917008912849"
+                  className="flex items-center justify-between py-2 text-[#001f3f] hover:text-[#0ea5e9] transition"
+                >
+                  <span>+91 70089 12849</span>
+                </a>
+              </div>
+
+              {/* Email us */}
+              <div className="bg-[#f7f7f7] p-6 rounded-lg shadow-md hover:shadow-xl transition text-left">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-11 h-11 rounded-full bg-[#001f3f]/10 flex items-center justify-center flex-shrink-0">
+                    <FaEnvelope className="text-lg text-[#001f3f]" />
+                  </div>
+                  <h3 className="font-bold text-[#001f3f] text-lg">Email Us</h3>
+                </div>
+                <a
+                  href="mailto:support@eventsbridge.com"
+                  className="flex items-center justify-between py-2 border-b border-gray-200 text-[#001f3f] hover:text-[#0ea5e9] transition break-all"
+                >
+                  <span>support@eventsbridge.com</span>
+                </a>
+                <a
+                  href="mailto:support.eventsbridge@gmail.com"
+                  className="flex items-center justify-between py-2 text-[#001f3f] hover:text-[#0ea5e9] transition break-all"
+                >
+                  <span>support.eventsbridge@gmail.com</span>
+                </a>
+              </div>
             </div>
           </div>
 
