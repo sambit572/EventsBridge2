@@ -12,6 +12,7 @@ import {
   deleteFromCloudinary,
 } from "../../utilities/cloudinary.js";
 import { sendEmail } from "../../utilities/sendEmail.js";
+
 const isProd = process.env.NODE_ENV === "production";
 
 const baseOption = {
@@ -87,6 +88,46 @@ const generateAccessAndRefreshTokens = async (userId) => {
   }
 };
 
+/**
+ * Helper to extract a friendly error message from various error types
+ * (Mongoose ValidationError, MongoDB duplicate key, etc.)
+ */
+const getFriendlyErrorMessage = (error) => {
+  // Mongoose validation error
+  if (error.name === "ValidationError") {
+    const messages = Object.values(error.errors).map((err) => {
+      if (err.path === "password" && err.kind === "minlength") {
+        return "Password must be at least 8 characters long";
+      }
+      if (err.path === "phoneNo" && err.kind === "minlength") {
+        return "Phone number must be at least 10 digits";
+      }
+      if (err.path === "phoneNo" && err.kind === "maxlength") {
+        return "Phone number must not exceed 15 characters";
+      }
+      return err.message;
+    });
+    return messages.join(". ");
+  }
+
+  // MongoDB duplicate key error
+  if (error.code === 11000) {
+    const field = Object.keys(error.keyPattern)[0];
+    const fieldNames = {
+      email: "Email",
+      phoneNo: "Phone number",
+    };
+    return `${fieldNames[field] || field} is already registered`;
+  }
+
+  // Generic - return the error message if safe, otherwise default
+  if (error.message && !error.message.includes("Internal Server Error")) {
+    return error.message;
+  }
+
+  return "Something went wrong. Please try again later.";
+};
+
 // ------------------ AUTH CONTROLLERS ------------------
 
 const registerUser = async (req, res) => {
@@ -99,21 +140,43 @@ const registerUser = async (req, res) => {
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res.status(400).json(new ApiError(400, "Invalid email format"));
-    }
-
-    if (password.length < 8) {
       return res
         .status(400)
-        .json(new ApiError(400, "Password must be 6 characters long"));
+        .json(new ApiError(400, "Invalid email format"));
     }
 
-    const userExist = await User.findOne({ $or: [{ email }, { phoneNo }] });
+    // Validate phone number length first (10 digits for India)
+    const cleanedPhone = phoneNo.replace(/\D/g, "");
+    if (cleanedPhone.length !== 10) {
+      return res
+        .status(400)
+        .json(
+          new ApiError(400, "Phone number must be exactly 10 digits")
+        );
+    }
+
+    if (!isValidPhoneNumber(phoneNo, "IN")) {
+      return res
+        .status(400)
+        .json(new ApiError(400, "Invalid phone number"));
+    }
+
+    if (!password || password.length < 8) {
+      return res
+        .status(400)
+        .json(
+          new ApiError(400, "Password must be at least 8 characters long")
+        );
+    }
+
+    const userExist = await User.findOne({
+      $or: [{ email }, { phoneNo }],
+    });
 
     if (userExist) {
       return res
         .status(400)
-        .json(new ApiResponse(400, userExist, "User already exists"));
+        .json(new ApiError(400, "User already exists with this email or phone number"));
     }
 
     const user = await User.create({
@@ -152,7 +215,9 @@ const registerUser = async (req, res) => {
     });
 
     if (!createdUser) {
-      return res.status(500).json(new ApiError(500, "Unable to create user"));
+      return res
+        .status(500)
+        .json(new ApiError(500, "Unable to create user. Please try again."));
     }
 
     return res
@@ -163,12 +228,13 @@ const registerUser = async (req, res) => {
         new ApiResponse(
           200,
           { user: createdUser, accessToken, refreshToken },
-          "User created successfully"
+          "Account created successfully! Welcome to EventsBridge."
         )
       );
   } catch (error) {
-    console.error(`Error in registering user: ${error}`);
-    return res.status(500).json(new ApiError(500, "Internal Server Error"));
+    console.error(`Error in registering user:`, error);
+    const message = getFriendlyErrorMessage(error);
+    return res.status(400).json(new ApiError(400, message));
   }
 };
 
@@ -179,31 +245,68 @@ const loginUser = async (req, res) => {
     if (!email && !phoneNo) {
       return res
         .status(400)
-        .json(new ApiError(400, "Email or phone number required"));
+        .json(new ApiError(400, "Please provide an email or phone number to login"));
     }
 
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res.status(400).json(new ApiError(400, "Invalid email format"));
-    }
-
-    if (phoneNo && !isValidPhoneNumber(phoneNo, "IN")) {
-      return res.status(400).json(new ApiError(400, "Invalid phone number"));
-    }
-
-    if (!password || password.length < 8) {
       return res
         .status(400)
-        .json(new ApiError(400, "Password must be 8 characters long"));
+        .json(new ApiError(400, "Invalid email format"));
+    }
+
+    if (phoneNo) {
+      // Validate phone number length first
+      const cleanedPhone = phoneNo.replace(/\D/g, "");
+      if (cleanedPhone.length !== 10) {
+        return res
+          .status(400)
+          .json(
+            new ApiError(400, "Invalid phone number. Please enter a valid 10-digit phone number")
+          );
+      }
+
+      if (!isValidPhoneNumber(phoneNo, "IN")) {
+        return res
+          .status(400)
+          .json(new ApiError(400, "Invalid phone number"));
+      }
+    }
+
+    if (!password) {
+      return res
+        .status(400)
+        .json(new ApiError(400, "Password is required"));
+    }
+
+    if (password.length < 8) {
+      return res
+        .status(400)
+        .json(
+          new ApiError(400, "Password must be at least 8 characters long")
+        );
     }
 
     const user = await User.findOne({ $or: [{ email }, { phoneNo }] });
     if (!user) {
-      return res.status(404).json(new ApiError(404, "User not found"));
+      if (phoneNo) {
+        return res
+          .status(400)
+          .json(
+            new ApiError(400, "No account found with this phone number. Please check and try again.")
+          );
+      }
+      return res
+        .status(404)
+        .json(
+          new ApiError(404, "No account found with this email. Please sign up first.")
+        );
     }
 
     const isMatch = await user.isPasswordCorrect(password);
     if (!isMatch) {
-      return res.status(400).json(new ApiError(400, "Incorrect password"));
+      return res
+        .status(400)
+        .json(new ApiError(400, "Incorrect password. Please try again."));
     }
 
     // Generate profile picture if user doesn't have one
@@ -228,12 +331,13 @@ const loginUser = async (req, res) => {
         new ApiResponse(
           200,
           { user: loggedInUser, accessToken, refreshToken },
-          "User logged in successfully"
+          "Welcome back! You are now logged in."
         )
       );
   } catch (error) {
     console.error("Login error:", error);
-    return res.status(500).json(new ApiError(500, "Internal Server Error"));
+    const message = getFriendlyErrorMessage(error);
+    return res.status(400).json(new ApiError(400, message));
   }
 };
 
@@ -251,10 +355,10 @@ const logoutUser = async (req, res) => {
       .clearCookie("refreshToken", refreshTokenOption)
       .clearCookie("accessToken", accessTokenOption)
       .clearCookie("refreshToken", refreshTokenOption)
-      .json(new ApiResponse(200, {}, "User logged out successfully"));
+      .json(new ApiResponse(200, {}, "Logged out successfully"));
   } catch (error) {
     console.error("Logout error:", error);
-    return res.status(500).json(new ApiError(500, "Internal Server Error"));
+    return res.status(500).json(new ApiError(500, "Something went wrong while logging out"));
   }
 };
 
@@ -285,6 +389,16 @@ const googleAuth = async (req, res) => {
         return res
           .status(400)
           .json(new ApiError(400, "Phone number is required for new users"));
+      }
+
+      // Validate phone number length first
+      const cleanedPhone = phoneNo.replace(/\D/g, "");
+      if (cleanedPhone.length !== 10) {
+        return res
+          .status(400)
+          .json(
+            new ApiError(400, "Phone number must be exactly 10 digits")
+          );
       }
 
       // Validate phone number format
@@ -335,6 +449,16 @@ const googleAuth = async (req, res) => {
     } else {
       // For existing users, update phone number if provided
       if (phoneNo && phoneNo !== user.phoneNo) {
+        // Validate phone number length first
+        const cleanedPhone = phoneNo.replace(/\D/g, "");
+        if (cleanedPhone.length !== 10) {
+          return res
+            .status(400)
+            .json(
+              new ApiError(400, "Phone number must be exactly 10 digits")
+            );
+        }
+
         // Validate phone number format
         if (!isValidPhoneNumber(phoneNo, "IN")) {
           return res
@@ -356,7 +480,6 @@ const googleAuth = async (req, res) => {
         user.phoneNo = phoneNo;
       }
 
-      // Update profile photo logic
       // Update profile photo logic
       if (picture && picture.trim() !== "") {
         // If Google has a valid picture, use it
@@ -383,7 +506,7 @@ const googleAuth = async (req, res) => {
     if (!safeUser) {
       return res
         .status(500)
-        .json(new ApiError(500, "Unable to fetch safeUser"));
+        .json(new ApiError(500, "Unable to fetch user details"));
     }
     // 4. respond
     return res
@@ -394,14 +517,13 @@ const googleAuth = async (req, res) => {
         new ApiResponse(
           200,
           { user: safeUser, accessToken, refreshToken, isNewUser },
-          isNewUser ? "Google signup successful" : "Google login successful"
+          isNewUser ? "Google signup successful! Welcome to EventsBridge." : "Google login successful! Welcome back."
         )
       );
   } catch (error) {
     console.error("Google Auth Error:", error);
-    return res
-      .status(500)
-      .json(new ApiError(500, "Google authentication failed"));
+    const message = getFriendlyErrorMessage(error);
+    return res.status(400).json(new ApiError(400, message));
   }
 };
 
@@ -432,6 +554,12 @@ const updateUserProfile = async (req, res) => {
       { new: true, runValidators: true }
     ).select("fullName email phoneNo profilePhoto eventsBooked");
 
+    if (!updatedUser) {
+      return res
+        .status(500)
+        .json(new ApiError(500, "Unable to update profile. Please try again."));
+    }
+
     return res
       .status(200)
       .json(
@@ -443,7 +571,8 @@ const updateUserProfile = async (req, res) => {
       );
   } catch (error) {
     console.error("Update profile error:", error);
-    return res.status(500).json(new ApiError(500, "Internal Server Error"));
+    const message = getFriendlyErrorMessage(error);
+    return res.status(400).json(new ApiError(400, message));
   }
 };
 
@@ -496,7 +625,8 @@ const updateUserAvatar = async (req, res) => {
       );
   } catch (error) {
     console.error("Update avatar error:", error);
-    return res.status(500).json(new ApiError(500, "Internal Server Error"));
+    const message = getFriendlyErrorMessage(error);
+    return res.status(400).json(new ApiError(400, message));
   }
 };
 
@@ -541,7 +671,8 @@ const removeProfilePhoto = async (req, res) => {
       );
   } catch (error) {
     console.error("Remove profile photo error:", error);
-    return res.status(500).json(new ApiError(500, "Internal Server Error"));
+    const message = getFriendlyErrorMessage(error);
+    return res.status(400).json(new ApiError(400, message));
   }
 };
 
@@ -552,34 +683,71 @@ const sendPasswordResetLink = async (req, res) => {
     const { email } = req.body;
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res.status(400).json(new ApiError(400, "Invalid email"));
+      return res.status(400).json(new ApiError(400, "Please provide a valid email address"));
     }
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json(new ApiError(404, "User not found"));
+    if (!user) return res.status(404).json(new ApiError(404, "No account found with this email"));
 
     const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+
+    const emailResult = await sendEmail({
+      to: user.email,
+      subject: "Password Reset Request - EventsBridge",
+      html: `
+        <p>You requested a password reset.</p>
+        <p>Click the button below to reset your password. This link is valid for 1 hour.</p>
+        <div style="text-align:center; margin:24px 0;">
+          <a href="${resetUrl}" 
+             style="background:#0d6efd; color:white; padding:12px 32px; 
+                    border-radius:6px; text-decoration:none; display:inline-block;
+                    font-size:16px; font-weight:bold;">
+            Reset Password
+          </a>
+        </div>
+        <p>If you did not request this, please ignore this email.</p>
+        <p style="color:#888; font-size:12px;">If the button doesn't work, copy and paste this link into your browser:<br/>${resetUrl}</p>
+      `,
+    });
+
+    if (!emailResult.success) {
+      console.error("Failed to send password reset email:", emailResult.error);
+      // Clean up - remove any existing stale reset tokens for this user
+      if (user.resetPasswordToken) {
+        user.resetPasswordToken = undefined;
+        user.resetPasswordTokenExpires = undefined;
+        await user.save({ validateBeforeSave: false });
+      }
+      return res.status(500).json(
+        new ApiError(500, "Unable to send password reset email. Our email service is temporarily unavailable. Please try again later.")
+      );
+    }
+
+    // Only save the reset token after successful email send
     user.resetPasswordToken = resetToken;
     user.resetPasswordTokenExpires = Date.now() + 3600000; // 1 hour
     await user.save();
 
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
-    });
-
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: user.email,
-      subject: "Password Reset Request",
-      html: `<p>You requested a password reset. Click <a href="${resetUrl}">here</a> to reset your password.</p>`,
-    });
-
-    return res.status(200).json(new ApiResponse(200, null, "Reset email sent"));
+    return res.status(200).json(
+      new ApiResponse(200, null, "Password reset link has been sent to your email. Please check your inbox.")
+    );
   } catch (error) {
     console.error("sendPasswordResetLink error:", error);
-    return res.status(500).json(new ApiError(500, "Internal Server Error"));
+    // Clean up on error - remove any reset token that might have been set
+    try {
+      const user = await User.findOne({ email: req.body.email });
+      if (user && user.resetPasswordToken) {
+        user.resetPasswordToken = undefined;
+        user.resetPasswordTokenExpires = undefined;
+        await user.save({ validateBeforeSave: false });
+      }
+    } catch (cleanupError) {
+      console.error("Error cleaning up reset token:", cleanupError);
+    }
+    return res.status(500).json(
+      new ApiError(500, "Something went wrong while sending the reset link. Please try again later.")
+    );
   }
 };
 
@@ -594,6 +762,14 @@ const resetPassword = async (req, res) => {
         .json(new ApiError(400, "Missing token or password"));
     }
 
+    if (newPassword.length < 8) {
+      return res
+        .status(400)
+        .json(
+          new ApiError(400, "Password must be at least 8 characters long")
+        );
+    }
+
     const user = await User.findOne({
       resetPasswordToken: resetToken,
       resetPasswordTokenExpires: { $gt: Date.now() },
@@ -602,7 +778,7 @@ const resetPassword = async (req, res) => {
     if (!user)
       return res
         .status(400)
-        .json(new ApiError(400, "Invalid or expired token"));
+        .json(new ApiError(400, "Invalid or expired reset link"));
 
     user.password = newPassword;
     user.resetPasswordToken = undefined;
@@ -614,7 +790,8 @@ const resetPassword = async (req, res) => {
       .json(new ApiResponse(200, null, "Password reset successfully"));
   } catch (error) {
     console.error("resetPassword error:", error);
-    return res.status(500).json(new ApiError(500, "Internal Server Error"));
+    const message = getFriendlyErrorMessage(error);
+    return res.status(400).json(new ApiError(400, message));
   }
 };
 
@@ -626,6 +803,14 @@ const changePassword = async (req, res) => {
       return res
         .status(400)
         .json(new ApiError(400, "Old and new passwords required"));
+    }
+
+    if (newPassword.length < 8) {
+      return res
+        .status(400)
+        .json(
+          new ApiError(400, "Password must be at least 8 characters long")
+        );
     }
 
     const user = await User.findById(req.user._id);
@@ -647,39 +832,70 @@ const changePassword = async (req, res) => {
       .json(new ApiResponse(200, null, "Password changed successfully"));
   } catch (error) {
     console.error("changePassword error:", error);
-    return res.status(500).json(new ApiError(500, "Internal Server Error"));
+    const message = getFriendlyErrorMessage(error);
+    return res.status(400).json(new ApiError(400, message));
   }
 };
 
-const verifyLogin = async (req, res) => {
-  const { phoneNo } = req.body;
+// Phone-based login (without OTP - for direct phone login)
+const phoneLogin = async (req, res) => {
+  try {
+    const { phoneNo } = req.body;
 
-  if (!phoneNo || !isValidPhoneNumber(phoneNo, "IN")) {
-    return res.status(400).json(new ApiError(400, "Invalid phone number"));
-  }
+    if (!phoneNo) {
+      return res
+        .status(400)
+        .json(new ApiError(400, "Phone number is required"));
+    }
 
-  const user = await User.findOne({ phoneNo });
-  if (!user) return res.status(404).json(new ApiError(404, "User not found"));
+    // Validate phone number length first
+    const cleanedPhone = phoneNo.replace(/\D/g, "");
+    if (cleanedPhone.length !== 10) {
+      return res
+        .status(400)
+        .json(
+          new ApiError(400, "Invalid phone number format. Please enter a valid 10-digit phone number")
+        );
+    }
 
-  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
-    user._id
-  );
+    if (!isValidPhoneNumber(phoneNo, "IN")) {
+      return res
+        .status(400)
+        .json(new ApiError(400, "Invalid phone number format"));
+    }
 
-  const loggedInUser = await User.findById(user._id).select(
-    "-password -refreshToken"
-  );
+    const user = await User.findOne({ phoneNo });
+    if (!user)
+      return res
+        .status(404)
+        .json(
+          new ApiError(404, "No account found with this phone number. Please sign up first.")
+        );
 
-  return res
-    .status(200)
-    .cookie("accessToken", accessToken, accessTokenOption)
-    .cookie("refreshToken", refreshToken, refreshTokenOption)
-    .json(
-      new ApiResponse(
-        200,
-        { loggedInUser, accessToken, refreshToken },
-        "Login successful"
-      )
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
+      user._id
     );
+
+    const loggedInUser = await User.findById(user._id).select(
+      "-password -refreshToken"
+    );
+
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, accessTokenOption)
+      .cookie("refreshToken", refreshToken, refreshTokenOption)
+      .json(
+        new ApiResponse(
+          200,
+          { loggedInUser, accessToken, refreshToken },
+          "Login successful"
+        )
+      );
+  } catch (error) {
+    console.error("Phone login error:", error);
+    const message = getFriendlyErrorMessage(error);
+    return res.status(400).json(new ApiError(400, message));
+  }
 };
 
 // ------------------ TOKEN AUTH CONTROLLER ------------------
@@ -775,15 +991,23 @@ const noNeedToLogin = async (req, res) => {
       .json(new ApiResponse(401, null, "Session expired, please login"));
   } catch (error) {
     console.error("noNeedToLogin error:", error);
-    return res.status(500).json(new ApiError(500, "Internal Server Error"));
+    return res.status(500).json(new ApiError(500, "Something went wrong while verifying session"));
   }
 };
 
 const getUserEmail = async (req, res) => {
-  const user = await User.findById(req.user._id);
-  return res
-    .status(200)
-    .json(new ApiResponse(200, user, "Email fetched successfully"));
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json(new ApiError(404, "User not found"));
+    }
+    return res
+      .status(200)
+      .json(new ApiResponse(200, user, "Email fetched successfully"));
+  } catch (error) {
+    console.error("getUserEmail error:", error);
+    return res.status(500).json(new ApiError(500, "Something went wrong"));
+  }
 };
 
 const getUserProfile = async (req, res) => {
@@ -807,7 +1031,7 @@ const getUserProfile = async (req, res) => {
       .json(new ApiResponse(200, { user }, "Profile fetched successfully"));
   } catch (error) {
     console.error("Fetch profile error:", error);
-    return res.status(500).json(new ApiError(500, "Internal Server Error"));
+    return res.status(500).json(new ApiError(500, "Something went wrong while fetching profile"));
   }
 };
 
@@ -825,5 +1049,5 @@ export {
   getUserEmail,
   getUserProfile,
   googleAuth,
-  verifyLogin,
+  phoneLogin,
 };

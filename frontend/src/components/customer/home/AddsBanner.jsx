@@ -3,6 +3,7 @@ import axios from "axios";
 import { FaInfo } from "react-icons/fa";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
+import clsx from 'clsx'
 import "slick-carousel/slick/slick-theme.css";
 
 const AddsBanner = () => {

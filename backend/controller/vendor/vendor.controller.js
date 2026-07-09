@@ -539,7 +539,7 @@ const getSearchSuggestions = async (req, res) => {
           $or: [
             { serviceName: { $regex: searchTerm, $options: "i" } },
             { serviceCategory: { $regex: searchTerm, $options: "i" } },
-            { locationOffered: { $regex: searchTerm, $options: "i" } },
+            { locationOffered: { $elemMatch: { $regex: searchTerm, $options: "i" } } },
           ],
         },
       },
@@ -575,11 +575,15 @@ const getSearchSuggestions = async (req, res) => {
         categories.add(match.serviceCategory);
       }
 
-      if (
-        match.locationOffered &&
-        match.locationOffered.toLowerCase().includes(searchTerm)
-      ) {
-        locations.add(match.locationOffered);
+      if (match.locationOffered && Array.isArray(match.locationOffered)) {
+        for (const location of match.locationOffered) {
+          if (
+            location &&
+            location.toLowerCase().includes(searchTerm)
+          ) {
+            locations.add(location);
+          }
+        }
       }
     }
 
