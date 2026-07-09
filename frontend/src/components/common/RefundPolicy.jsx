@@ -35,49 +35,60 @@ export default function RefundPolicy({
               for bookings, products, or services purchased through our
               platform.
             </p>
+            <p className="mb-4">
+              EventsBridge operates as a platform that connects customers with
+              independent third-party vendors. As such,{" "}
+              <strong>
+                refund and cancellation terms for the advance payment made at
+                the time of booking are determined by the individual vendor
+                providing the service
+              </strong>
+              , and may vary from vendor to vendor. Each vendor's specific
+              refund and cancellation policy will be clearly displayed on their
+              service/profile page, or communicated to the customer at the time
+              of booking.
+            </p>
             <p>
-              The advance payment made at the time of booking is refundable to
-              the user on a partial basis, depending on the number of days
-              remaining before the scheduled event. The refund structure is as
-              follows:
+              Customers are strongly advised to carefully review a vendor's
+              specific refund and cancellation terms before confirming payment
+              and completing a booking. By proceeding with a booking, the
+              customer agrees to be bound by that vendor's stated refund
+              policy, in addition to the general terms below.
+            </p>
+
+            <h2 className="my-3 text-lg sm:text-xl font-semibold text-[var(--accent)] mt-6">
+              General Terms Applicable Across the Platform
+            </h2>
+            <p className="mb-2">
+              Regardless of the specific vendor's cancellation window or refund
+              percentage, the following general terms apply to all eligible
+              refunds processed through EventsBridge, unless a vendor's
+              individual policy expressly states otherwise:
             </p>
 
             <ul className="list-disc pl-5 sm:pl-6 mt-6 space-y-4 sm:space-y-5">
               <li>
-                If the cancellation occurs{" "}
-                <strong>
-                  more than fifteen (15) days prior to the event date
-                </strong>
-                , fifty percent (50%) of the advance amount will be refunded,
-                excluding applicable payment gateway charges.
-              </li>
-              <li>
-                If the cancellation occurs{" "}
-                <strong>
-                  between ten (10) and fifteen (15) days prior to the event date
-                </strong>
-                , twenty percent (20%) of the advance amount will be refunded,
-                excluding applicable payment gateway charges.
-              </li>
-              <li>
-                If the cancellation occurs{" "}
-                <strong>
-                  between five (5) and ten (10) days prior to the event date
-                </strong>
-                {/* , fifty percent (50%) of the advance amount will be refunded, */}
-                , excluding applicable payment gateway charges.
-              </li>
-              <li>
-                If the cancellation occurs{" "}
-                <strong>less than five (5) days prior to the event date</strong>
-                , the advance amount is non-refundable, except in cases
-                involving valid, provable reasons as determined by the platform.
+                Any refund amount payable will{" "}
+                <strong>exclude applicable payment gateway charges</strong>,
+                which are non-refundable.
               </li>
               <li>
                 All eligible refunds shall be processed within{" "}
                 <strong>five to seven (5–7)</strong> working days during
                 standard operational hours{" "}
-                <strong>(9:00 AM to 10:00 PM)</strong>.
+                <strong>(9:00 AM to 10:00 PM)</strong>, once approved.
+              </li>
+              <li>
+                Refunds, where applicable, will be credited back to the{" "}
+                <strong>original mode of payment</strong> used at the time of
+                booking.
+              </li>
+              <li>
+                In case of a disagreement or dispute regarding a vendor's
+                refund decision, customers may reach out to EventsBridge
+                support, and the platform will make reasonable efforts to
+                facilitate a fair resolution between the customer and the
+                vendor.
               </li>
             </ul>
           </section>

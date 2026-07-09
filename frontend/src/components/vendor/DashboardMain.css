@@ -1,15 +1,30 @@
 .dashboard-hamburger {
-  font-size: 25px;
+  font-size: 20px;
   font-weight: bold;
   border: none;
-  color: #6a1b9a;
+  color: #fff;
   cursor: pointer;
-  margin-left: 0.2rem;
-  z-index: 30;
+  z-index: 10000;
   position: fixed;
-  left: 220px;
-  padding-left: 0.5rem;
-  background: none;
+  top: 10px;
+  left: 12px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4338ca, #6d28d9);
+  box-shadow: 0 4px 14px rgba(67, 56, 202, 0.4);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.dashboard-hamburger:active { transform: scale(0.94); }
+.dashboard-hamburger.open {
+  background: linear-gradient(135deg, #b91c1c, #dc2626);
+}
+
+/* Tap-outside-to-close overlay behind the mobile sidebar */
+.dashboard-sidebar-backdrop {
   display: none;
 }
 
@@ -312,16 +327,63 @@
 @media (max-width: 768px) {
   .dashboard-hamburger {
     display: flex;
-    left: 0;
-    top: 64px;
   }
+
+  .dashboard-sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    z-index: 15;
+  }
+
   .dashboard-container-box {
-    margin-top: 40px;
+    overflow-x: hidden;
+  }
+
+  .main-contain {
+    overflow-x: hidden;
+  }
+
+  /* Reserve space on the left so the title never sits under the hamburger */
+  .main-topbar {
+    padding: 14px 16px 12px 62px;
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .main-topbar-title {
+    font-size: 18px;
+  }
+
+  .main-topbar-actions {
+    gap: 8px;
+  }
+
+  .topbar-greeting {
+    font-size: 12px;
+    padding: 6px 10px;
   }
 }
 
 @media (max-width: 460px) {
-  .dashboard-container-box {
-    margin-top: 40px;
+  .main-topbar {
+    padding: 12px 12px 10px 58px;
+  }
+
+  .main-topbar-title {
+    font-size: 16px;
+  }
+
+  .main-topbar-sub {
+    font-size: 11px;
+  }
+
+  .topbar-greeting {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
