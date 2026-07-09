@@ -59,6 +59,16 @@ app.use(cookieParser());
     console.error("❌ Agenda init failed:", err);
   }
 })();
+
+// ✅ Cleanup expired reset tokens on server startup
+(async () => {
+  try {
+    const { cleanupExpiredResetTokens } = await import("./utilities/sendEmail.js");
+    await cleanupExpiredResetTokens();
+  } catch (err) {
+    console.error("❌ Cleanup expired tokens failed:", err);
+  }
+})();
 //rads api for testing
 // Cached API with Redis
 app.get("/api/slow-api", async (req, res) => {

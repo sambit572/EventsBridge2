@@ -114,8 +114,8 @@ const VendorRegister = () => {
       return false;
     }
 
-    if (form.password.length < 6) {
-      setError("Password must be at least 6 characters!");
+    if (form.password.length < 8) {
+      setError("Password must be at least 8 characters long");
       return false;
     }
     setError("");

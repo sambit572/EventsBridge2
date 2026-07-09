@@ -10,6 +10,13 @@ export const sendEmail = async ({ to, subject, html, attachments }) => {
       );
     }
 
+    // Validate email credentials exist
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      throw new Error(
+        "Email service not configured. Please check EMAIL_USER and EMAIL_PASS environment variables."
+      );
+    }
+
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -43,6 +50,35 @@ export const sendEmail = async ({ to, subject, html, attachments }) => {
     return { success: true, messageId: result.messageId };
   } catch (err) {
     console.error("❌ Error sending email:", err);
-    return { success: false, error: err.message };
+    
+    // Provide more specific error messages for common issues
+    let errorMessage = err.message;
+    if (err.code === "EAUTH" || err.responseCode === 535) {
+      errorMessage = "Invalid email credentials. Please check EMAIL_USER and EMAIL_PASS in environment variables.";
+    } else if (err.code === "ENOTFOUND" || err.code === "ETIMEDOUT" || err.code === "ECONNECTION") {
+      errorMessage = "Unable to connect to email server. Please contact support for assistance.";
+    }
+    
+    return { success: false, error: errorMessage };
+  }
+};
+
+/**
+ * Cleanup function to remove expired reset tokens from all users
+ * This can be called periodically via cron job or on server startup
+ */
+export const cleanupExpiredResetTokens = async () => {
+  try {
+    // Dynamic import to avoid circular dependency
+    const { User } = await import("../model/user/user.model.js");
+    const result = await User.updateMany(
+      { resetPasswordTokenExpires: { $lt: new Date() } },
+      { $unset: { resetPasswordToken: 1, resetPasswordTokenExpires: 1 } }
+    );
+    console.log(`✅ Cleaned up ${result.modifiedCount} expired reset tokens`);
+    return { success: true, modifiedCount: result.modifiedCount };
+  } catch (error) {
+    console.error("❌ Error cleaning up expired reset tokens:", error);
+    return { success: false, error: error.message };
   }
 };
