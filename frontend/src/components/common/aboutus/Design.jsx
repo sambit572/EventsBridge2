@@ -1,6 +1,6 @@
 import React from "react";
 import "./Design.css";
-import chatIcon from "../../../assets/serverLogo.webp";
+import chatIcon from "../../../assets/EventsBridgeOnlyLogo.png";
 import offers from "../../../assets/aboutUs/offer_img.webp";
 import wedding from "../../../assets/aboutUs/WEDDING.webp";
 import party from "../../../assets/aboutUs/PARTY.webp";

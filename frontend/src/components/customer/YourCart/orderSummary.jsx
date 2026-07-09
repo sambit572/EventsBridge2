@@ -507,7 +507,7 @@ const OrderSummary = () => {
                         />
                       </svg>
                       {orderSummary.finalTotal > 0
-                        ? "PLACE ORDER"
+                        ? "PAY ADVANCE"
                         : "COMPLETE NEGOTIATIONS FIRST"}
                     </button>
 

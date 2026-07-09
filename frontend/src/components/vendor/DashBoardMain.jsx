@@ -114,6 +114,11 @@ function DashBoardMain() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    if (window.innerWidth <= 768) setIsSidebarOpen(false);
+  };
+
   const handleResponse = (action) => {
     if (!popupData?._id) return;
     socket.emit("vendor_response", {
@@ -159,6 +164,14 @@ function DashBoardMain() {
         {isSidebarOpen ? "✕" : "☰"}
       </button>
 
+      {/* Tap-outside-to-close backdrop (mobile only, styled via CSS) */}
+      {isSidebarOpen && (
+        <div
+          className="dashboard-sidebar-backdrop"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar - Settings button will be removed inside DashBoardSideBar.jsx */}
       <DashBoardSideBar
         isOpen={isSidebarOpen}
@@ -167,7 +180,7 @@ function DashBoardMain() {
         setVendorShowPasswordModal={setVendorShowPasswordModal}
         setIsVerified={setIsVerified}
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleTabChange}
       />
 
       {/* Main content */}
