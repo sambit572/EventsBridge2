@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import { User } from "../../model/user/user.model.js";
 import { ApiError } from "../../utilities/ApiError.js";
 import { ApiResponse } from "../../utilities/ApiResponse.js";
-import { isValidPhoneNumber } from "libphonenumber-js";
+import { isValidIndianPhone } from "../../utilities/validatePhone.js";
 import {
   uploadOnCloudinary,
   deleteFromCloudinary,
@@ -145,20 +145,11 @@ const registerUser = async (req, res) => {
         .json(new ApiError(400, "Invalid email format"));
     }
 
-    // Validate phone number length first (10 digits for India)
-    const cleanedPhone = phoneNo.replace(/\D/g, "");
-    if (cleanedPhone.length !== 10) {
+    // Validate Indian mobile number (exactly 10 digits, starting with 6-9)
+    if (!isValidIndianPhone(phoneNo)) {
       return res
         .status(400)
-        .json(
-          new ApiError(400, "Phone number must be exactly 10 digits")
-        );
-    }
-
-    if (!isValidPhoneNumber(phoneNo, "IN")) {
-      return res
-        .status(400)
-        .json(new ApiError(400, "Invalid phone number"));
+        .json(new ApiError(400, "Please enter a valid Indian mobile number."));
     }
 
     if (!password || password.length < 8) {
@@ -255,20 +246,11 @@ const loginUser = async (req, res) => {
     }
 
     if (phoneNo) {
-      // Validate phone number length first
-      const cleanedPhone = phoneNo.replace(/\D/g, "");
-      if (cleanedPhone.length !== 10) {
+      // Validate Indian mobile number (exactly 10 digits, starting with 6-9)
+      if (!isValidIndianPhone(phoneNo)) {
         return res
           .status(400)
-          .json(
-            new ApiError(400, "Invalid phone number. Please enter a valid 10-digit phone number")
-          );
-      }
-
-      if (!isValidPhoneNumber(phoneNo, "IN")) {
-        return res
-          .status(400)
-          .json(new ApiError(400, "Invalid phone number"));
+          .json(new ApiError(400, "Please enter a valid Indian mobile number."));
       }
     }
 
@@ -391,21 +373,11 @@ const googleAuth = async (req, res) => {
           .json(new ApiError(400, "Phone number is required for new users"));
       }
 
-      // Validate phone number length first
-      const cleanedPhone = phoneNo.replace(/\D/g, "");
-      if (cleanedPhone.length !== 10) {
+      // Validate Indian mobile number (exactly 10 digits, starting with 6-9)
+      if (!isValidIndianPhone(phoneNo)) {
         return res
           .status(400)
-          .json(
-            new ApiError(400, "Phone number must be exactly 10 digits")
-          );
-      }
-
-      // Validate phone number format
-      if (!isValidPhoneNumber(phoneNo, "IN")) {
-        return res
-          .status(400)
-          .json(new ApiError(400, "Invalid phone number format"));
+          .json(new ApiError(400, "Please enter a valid Indian mobile number."));
       }
 
       // Check if phone number already exists
@@ -449,21 +421,11 @@ const googleAuth = async (req, res) => {
     } else {
       // For existing users, update phone number if provided
       if (phoneNo && phoneNo !== user.phoneNo) {
-        // Validate phone number length first
-        const cleanedPhone = phoneNo.replace(/\D/g, "");
-        if (cleanedPhone.length !== 10) {
+        // Validate Indian mobile number (exactly 10 digits, starting with 6-9)
+        if (!isValidIndianPhone(phoneNo)) {
           return res
             .status(400)
-            .json(
-              new ApiError(400, "Phone number must be exactly 10 digits")
-            );
-        }
-
-        // Validate phone number format
-        if (!isValidPhoneNumber(phoneNo, "IN")) {
-          return res
-            .status(400)
-            .json(new ApiError(400, "Invalid phone number format"));
+            .json(new ApiError(400, "Please enter a valid Indian mobile number."));
         }
 
         // Check if phone number already exists for another user
@@ -848,20 +810,11 @@ const phoneLogin = async (req, res) => {
         .json(new ApiError(400, "Phone number is required"));
     }
 
-    // Validate phone number length first
-    const cleanedPhone = phoneNo.replace(/\D/g, "");
-    if (cleanedPhone.length !== 10) {
+    // Validate Indian mobile number (exactly 10 digits, starting with 6-9)
+    if (!isValidIndianPhone(phoneNo)) {
       return res
         .status(400)
-        .json(
-          new ApiError(400, "Invalid phone number format. Please enter a valid 10-digit phone number")
-        );
-    }
-
-    if (!isValidPhoneNumber(phoneNo, "IN")) {
-      return res
-        .status(400)
-        .json(new ApiError(400, "Invalid phone number format"));
+        .json(new ApiError(400, "Please enter a valid Indian mobile number."));
     }
 
     const user = await User.findOne({ phoneNo });

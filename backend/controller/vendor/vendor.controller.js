@@ -2,7 +2,7 @@ import Vendor from "../../model/vendor/vendor.model.js";
 import { ApiError } from "../../utilities/ApiError.js";
 import { ApiResponse } from "../../utilities/ApiResponse.js";
 import fs from "fs/promises";
-import { isValidPhoneNumber } from "libphonenumber-js";
+import { isValidIndianPhone } from "../../utilities/validatePhone.js";
 import { uploadOnCloudinary } from "../../utilities/cloudinary.js";
 import { validateEmailDomain } from "../../utilities/verifyDNS.js";
 import { sendEmail } from "../../utilities/sendEmail.js";
@@ -49,6 +49,13 @@ const registerVendor = async (req, res) => {
             "All required fields (full name, email, phone number, password) must be provided."
           )
         );
+    }
+
+    // Validate Indian mobile number (exactly 10 digits, starting with 6-9)
+    if (!isValidIndianPhone(phoneNumber)) {
+      return res
+        .status(400)
+        .json(new ApiError(400, "Please enter a valid Indian mobile number."));
     }
 
     const isValidDns = await validateEmailDomain(email);
