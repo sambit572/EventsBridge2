@@ -185,10 +185,10 @@ const StepsSection = () => {
 
         /* The card itself */
         .step-card {
-          background: linear-gradient(145deg, #0f172a 0%, #1e1b4b 45%, #2e1065 100%);
-          border: 1.5px solid rgba(139, 92, 246, 0.35);
+          background: linear-gradient(150deg, #fff8e1 0%, #fde68a 50%, #f4c430 100%);
+          border: 1.5px solid rgba(180, 131, 21, 0.35);
           border-radius: 20px;
-          box-shadow: 0 8px 28px rgba(79, 29, 149, 0.28), 0 2px 6px rgba(0,0,0,0.18);
+          box-shadow: 0 8px 28px rgba(244, 196, 48, 0.35), 0 2px 6px rgba(0, 31, 63, 0.12);
           padding: 28px 16px 24px;
           display: flex;
           flex-direction: column;
@@ -209,8 +209,8 @@ const StepsSection = () => {
         }
 
         .step-card:hover {
-          box-shadow: 0 18px 48px rgba(124, 58, 237, 0.45), 0 4px 12px rgba(244,196,48,0.2);
-          border-color: rgba(244, 196, 48, 0.6);
+          box-shadow: 0 18px 48px rgba(244, 196, 48, 0.5), 0 4px 12px rgba(0, 31, 63, 0.22);
+          border-color: rgba(0, 31, 63, 0.4);
           transform: translateY(-6px) scale(1.03);
         }
 
@@ -223,8 +223,8 @@ const StepsSection = () => {
           width: 28px;
           height: 28px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #f4c430, #f59e0b);
-          color: #0f172a;
+          background: linear-gradient(135deg, #1e293b, #001f3f);
+          color: #fde68a;
           font-size: 0.7rem;
           font-weight: 700;
           display: flex;
@@ -233,7 +233,7 @@ const StepsSection = () => {
           margin-bottom: 10px;
           flex-shrink: 0;
           letter-spacing: 0.5px;
-          box-shadow: 0 2px 8px rgba(244, 196, 48, 0.5);
+          box-shadow: 0 2px 8px rgba(0, 31, 63, 0.45);
         }
 
         /* Icon circle */
@@ -241,8 +241,8 @@ const StepsSection = () => {
           width: 62px;
           height: 62px;
           border-radius: 50%;
-          background: linear-gradient(135deg, rgba(139,92,246,0.3) 0%, rgba(59,130,246,0.25) 100%);
-          box-shadow: 0 2px 12px rgba(139,92,246,0.3);
+          background: linear-gradient(135deg, #1e293b 0%, #001f3f 100%);
+          box-shadow: 0 2px 12px rgba(0, 31, 63, 0.35);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -250,7 +250,7 @@ const StepsSection = () => {
           flex-shrink: 0;
           font-size: 1.6rem;
           transition: transform 0.3s ease;
-          border: 1px solid rgba(139,92,246,0.2);
+          border: 1px solid rgba(244, 196, 48, 0.4);
         }
 
         .step-card:hover .step-icon-wrap {
@@ -261,14 +261,14 @@ const StepsSection = () => {
           font-family: 'Playfair Display', serif;
           font-size: 0.9rem;
           font-weight: 700;
-          color: #f4c430;
+          color: #001f3f;
           margin-bottom: 8px;
           line-height: 1.3;
         }
 
         .step-text {
           font-size: 0.78rem;
-          color: #c4b5fd;
+          color: #5b4a1a;
           line-height: 1.6;
           font-weight: 400;
         }
@@ -285,14 +285,14 @@ const StepsSection = () => {
           width: 6px;
           height: 6px;
           border-radius: 50%;
-          background: rgba(244,196,48,0.5);
+          background: rgba(0, 31, 63, 0.35);
           flex-shrink: 0;
         }
         .connector-line {
           flex: 1;
           max-width: 190px;
           height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(244,196,48,0.4), transparent);
+          background: linear-gradient(90deg, transparent, rgba(0, 31, 63, 0.3), transparent);
         }
 
         /* ── MOBILE: single column, no stagger ── */
