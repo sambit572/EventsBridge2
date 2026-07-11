@@ -443,11 +443,21 @@ export const calculateOrderSummary = (items, orderType = "single") => {
     };
   }
 
-  // Calculate total using proposedPrice from negotiations
+  // Calculate total using finalPrice (vendor accepted) or proposedPrice (customer offered)
   const finalTotal = items.reduce((acc, item) => {
-    const itemPrice = item.proposedPrice || 0;
+    const itemPrice = item.finalPrice ?? item.proposedPrice ?? 0;
     return acc + itemPrice;
   }, 0);
+  // Check if all items have vendorDecision "accepted"
+  const allAccepted = items.every(
+    (item) => item.vendorDecision === "accepted"
+  );
+  // Check if any item is still pending
+  const hasPending = items.some(
+    (item) => item.vendorDecision === "pending" || !item.vendorDecision
+  );
+  // Determine negotiation status
+  const negotiationStatus = hasPending ? "pending" : allAccepted ? "accepted" : "rejected";
 
   // Calculate 10% platform discount
   const platformDiscountAmount = Math.round(finalTotal * 0.1);
@@ -464,6 +474,7 @@ export const calculateOrderSummary = (items, orderType = "single") => {
     grandTotal,
     itemCount: items.length,
     orderType,
+    negotiationStatus,
   };
 };
 

@@ -155,6 +155,21 @@ try {
 
         console.log("✅ Vendor response saved:", negotiation);
 
+        // Notify the customer (bookedByUserId) about the vendor decision
+        const customerSocketId = socket.handshake?.query?.customerSocketMap?.[negotiation.bookedByUserId?.toString()];
+        // Emit to customer's room if they're connected
+        apiNameSpace.to(negotiation.bookedByUserId?.toString()).emit("negotiation-status-update", {
+          serviceId: negotiation.serviceId,
+          vendorId: negotiation.vendorId,
+          vendorDecision: negotiation.vendorDecision,
+          finalPrice: negotiation.finalPrice,
+          proposedPrice: negotiation.proposedPrice,
+          status: negotiation.vendorDecision === "accepted" ? "accepted" : "rejected",
+          message: negotiation.vendorDecision === "accepted" 
+            ? `Vendor has accepted your negotiation with final price ₹${negotiation.finalPrice || negotiation.proposedPrice}`
+            : "Vendor has rejected your negotiation."
+        });
+
         // Send next pending negotiation for this vendor
         const nextPending = await Negotiation.findOne({
           vendorId,
