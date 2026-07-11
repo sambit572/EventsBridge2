@@ -95,7 +95,9 @@ const OrderSummary = () => {
       .toUpperCase()}`;
 
     // Generate UPI URI
-    const upiUri = `upi://pay?pa=merchant@paytm&pn=EventVendor&am=${Math.round(
+    const upiUri = `upi://pay?pa=7008912849@idfcbank&pn=${encodeURIComponent(
+      "EVENTSBRIDGE TECHNOLOGY PRIVATE LIMITED"
+    )}&am=${Math.round(
       orderSummary.grandTotal * 0.2
     )}&cu=INR&tn=Order-${orderId}`;
 

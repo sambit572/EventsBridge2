@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import "./DashBoardSideBar.css";
 import VerifyIntroModal from "./VerifyIntroModal.jsx";
 import ThankYouModal from "./ThankYouModal.jsx";
@@ -19,7 +20,7 @@ import {
   MdPeople,
 } from "react-icons/md";
 import { MdVerified } from "react-icons/md";
-import { IoClose, IoShieldCheckmark } from "react-icons/io5";
+import { IoClose, IoShieldCheckmark, IoArrowBack } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
 
 const NAV_ITEMS = [
@@ -49,6 +50,7 @@ function DashBoardSideBar({
   setVendorShowPasswordModal,
   activeTab,
   setActiveTab,
+  closeSidebar,
 }) {
   const dispatch = useDispatch();
   const vendor = useSelector((state) => state.vendor.vendor);
@@ -169,6 +171,14 @@ const handleVerificationRequest = async () => {
     alert(message);
   }
 };
+
+  /* Closes the pricing modal AND the mobile sidebar drawer, returning the
+     user fully back to the dashboard (hamburger/3-line state). */
+  const handleVerifyBack = () => {
+    setShowVerifyModal(false);
+    if (closeSidebar) closeSidebar();
+  };
+
   return (
     <aside className={`dash-sidebar ${isOpen ? "open" : ""}`}>
       {/* Replaced Logo with Profile Card at the top */}
@@ -368,19 +378,23 @@ const handleVerificationRequest = async () => {
         </div>
       )}
       {/* Verify Intro modal — "Why verify" step with the lamp */}
-      {showVerifyIntro && (
+      {showVerifyIntro && createPortal(
         <VerifyIntroModal
           onClose={() => setShowVerifyIntro(false)}
           onAgree={() => {
             setShowVerifyIntro(false);
             setShowVerifyModal(true);
           }}
-        />
+        />,
+        document.body
       )}
       {/* Verify My Service modal */}
-      {showVerifyModal && (
+      {showVerifyModal && createPortal(
         <div className="sb-overlay" onClick={() => setShowVerifyModal(false)}>
           <div className="sb-verify-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="sb-verify-back" onClick={handleVerifyBack} title="Back">
+              <IoArrowBack size={20} />
+            </button>
             <button className="sb-verify-close" onClick={() => setShowVerifyModal(false)}>
               <IoClose size={20} />
             </button>
@@ -425,12 +439,14 @@ const handleVerificationRequest = async () => {
            Submit Verification Request
           </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Thank you modal — shown after a successful verification request */}
-      {showThankYou && (
-        <ThankYouModal onClose={() => setShowThankYou(false)} />
+      {showThankYou && createPortal(
+        <ThankYouModal onClose={() => setShowThankYou(false)} />,
+        document.body
       )}
     </aside>
   );

@@ -119,7 +119,7 @@ const QRPayment = () => {
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-white">
             <div className="flex items-center justify-between mb-4">
-              <h1 className="text-3xl font-bold">Scan & Pay</h1>
+              <h1 className="text-3xl font-bold">Advance Payment</h1>
               {expiresAt && timeRemaining > 0 && (
                 <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-2">
                   <svg
@@ -157,7 +157,8 @@ const QRPayment = () => {
                 <div className="bg-white p-6 rounded-2xl shadow-lg mb-4 relative">
                   <QRCodeSVG
                     value={
-                      upiUri || "upi://pay?pa=merchant@upi&pn=Merchant&am=0"
+                      upiUri ||
+                      "upi://pay?pa=7008912849@idfcbank&pn=EVENTSBRIDGE%20TECHNOLOGY%20PRIVATE%20LIMITED&am=0"
                     }
                     size={240}
                     level="H"
