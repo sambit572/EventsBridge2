@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import clsx from "clsx";
@@ -8,21 +8,31 @@ import { BACKEND_URL } from "../../../utils/constant.js";
 const OrderSummary = () => {
   const { userDetailsId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [orderType, setOrderType] = useState("single");
   const [negotiationStatus, setNegotiationStatus] = useState("pending"); // "pending" | "accepted" | "rejected"
+  const [paymentStatus, setPaymentStatus] = useState("PENDING"); // "PENDING" | "PAID" | "FAILED"
+
+  // ✅ Get payment status from navigation state (passed from Profile)
+  const navigationPaymentStatus = location.state?.paymentStatus || "PENDING";
+  
+  // ✅ Also check bookingData from navigation (more reliable)
+  const bookingData = location.state?.bookingData;
+  const bookingPaymentStatus = bookingData?.paymentStatus || "PENDING";
 
   const fetchCartItems = useCallback(async () => {
     if (!userDetailsId) return;
 
     setLoading(true);
     try {
+      console.log("🔄 Fetching cart from:", `${BACKEND_URL}/cart/${userDetailsId}`);
       const response = await axios.get(
         `${BACKEND_URL}/cart/${userDetailsId}`,
         { withCredentials: true }
       );
-      console.log("Cart fetch response:", response.data);
+      console.log("✅ Cart fetch response:", response.data);
       const { orderType, items } = response.data.data;
 
       if (items && items.length > 0) {
@@ -41,17 +51,27 @@ const OrderSummary = () => {
         setNegotiationStatus(
           hasPendingNegotiation ? "pending" : allAccepted ? "accepted" : "rejected"
         );
+
+        // ✅ Check payment status from items (backend data) OR navigation state
+        const paymentStatusValue = items[0]?.paymentStatus || navigationPaymentStatus || "PENDING";
+        setPaymentStatus(paymentStatusValue.toUpperCase());
       } else {
         setItems([]);
       }
     } catch (error) {
-      console.error("Failed to fetch cart items:", error);
-      toast.error("Could not load your cart.");
+      console.error("❌ Failed to fetch cart items:", error);
+      console.error("❌ Error details:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        url: error.config?.url
+      });
+      toast.error(`Could not load your cart: ${error.response?.data?.message || error.message}`);
       setItems([]);
     } finally {
       setLoading(false);
     }
-  }, [userDetailsId]);
+  }, [userDetailsId, BACKEND_URL]);
 
   useEffect(() => {
     fetchCartItems();
@@ -73,7 +93,7 @@ const OrderSummary = () => {
       0
     );
 
-    const platformDiscountAmount = Math.round(finalTotal * 0.1);
+    const platformDiscountAmount = Math.round(finalTotal * 0.2);
     const totalAfterDiscount = finalTotal - platformDiscountAmount;
 
     const grandTotal = totalAfterDiscount;
@@ -186,7 +206,23 @@ const OrderSummary = () => {
   }
 
   // Determine if Pay button should be enabled
-  const canPay = negotiationStatus === "accepted" && orderSummary.finalTotal > 0;
+  // Only allow payment if negotiation is accepted AND payment is not already PAID
+  const isPaid = paymentStatus === "PAID" || navigationPaymentStatus === "PAID" || bookingPaymentStatus === "PAID";
+  const canPay = negotiationStatus === "accepted" && orderSummary.finalTotal > 0 && !isPaid;
+  
+  // Debug logging
+  console.log("🔍 Payment Button State:", {
+    negotiationStatus,
+    paymentStatus,
+    navigationPaymentStatus,
+    bookingPaymentStatus,
+    isPaid,
+    canPay,
+    finalTotal: orderSummary.finalTotal,
+    itemsLength: items.length,
+    firstItemPayment: items[0]?.paymentStatus,
+    bookingDataId: bookingData?._id
+  });
 
   return (
     <div className={clsx('min-h-screen', 'bg-gradient-to-br', 'from-slate-50', 'to-gray-100', 'py-8', 'px-4', 'mt-16')}>
@@ -460,7 +496,7 @@ const OrderSummary = () => {
 
                     <div className={clsx('flex', 'justify-between', 'items-center', 'py-2')}>
                       <span className="text-gray-600">
-                        Platform Discount (10%)
+                        Platform Discount (20%)
                       </span>
                       <span className={clsx('font-semibold', 'text-red-500')}>
                         - ₹
@@ -536,7 +572,9 @@ const OrderSummary = () => {
                           d="M13 10V3L4 14h7v7l9-11h-7z"
                         />
                       </svg>
-                      {canPay
+                      {isPaid
+                        ? "✓ PAYMENT COMPLETED"
+                        : canPay
                         ? "PAY ADVANCE"
                         : negotiationStatus === "pending"
                         ? "⏳ WAITING FOR VENDOR ACCEPTANCE"

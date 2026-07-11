@@ -1,4 +1,5 @@
 import { UserDetails } from "../../model/user/userDetails.model.js";
+import { UserBookingHistory } from "../../model/user/userBookinghistory.model.js";
 import { Cart } from "../../model/user/cart.model.js";
 import { Service } from "../../model/vendor/service.model.js";
 import { Negotiation } from "../../model/common/Negotiation.model.js";
@@ -387,6 +388,7 @@ export const getCartWithUserDetails = async (req, res) => {
 
     console.log(`Checking for negotiations for services:`, validServiceIds);
     console.log(`With bookedByUserId:`, validUserId);
+    console.log(`userDetailsId:`, userDetailsId);
 
     // ✅ FIX: Fetch ONLY the most recent negotiation for each service (not all old ones)
     // This prevents old accepted negotiations from showing up for repeat bookings
@@ -398,6 +400,16 @@ export const getCartWithUserDetails = async (req, res) => {
           model: "Service",
         })
     );
+    
+    // ✅ Also fetch UserBookingHistory to get paymentStatus
+    let userBookingHistory = null;
+    try {
+      userBookingHistory = await UserBookingHistory.findOne({ userDetailsId });
+      console.log("📋 UserBookingHistory found:", userBookingHistory?._id, "paymentStatus:", userBookingHistory?.paymentStatus);
+    } catch (error) {
+      console.warn("⚠️ Could not fetch UserBookingHistory:", error.message);
+      // Continue without payment status
+    }
 
     const negotiations = await Promise.all(negotiationPromises);
 
@@ -416,36 +428,70 @@ export const getCartWithUserDetails = async (req, res) => {
         );
     }
 
-    // ✅ FIX: Filter out old negotiations that are already accepted/paid
-    // Only show pending or recently rejected negotiations
-    const activeItems = items.filter((item) => {
-      // Keep only if vendorDecision is pending or if it's very recent (within last 24 hours)
-      const isPending = item.vendorDecision === "pending";
-      const isRecent = Date.now() - new Date(item.createdAt).getTime() < 24 * 60 * 60 * 1000; // 24 hours
-      return isPending || (!item.vendorDecision && isRecent);
+    // ✅ FIX: For order summary, show ALL items (including accepted ones)
+    // The frontend will handle showing the correct UI based on negotiation status
+    // We only filter out items that are very old (> 7 days) AND have a decision
+    const recentCutoff = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 days
+    const validItems = items.filter((item) => {
+      const itemDate = new Date(item.createdAt).getTime();
+      const hasDecision = item.vendorDecision === "accepted" || item.vendorDecision === "rejected";
+      // Always show pending negotiations
+      // For accepted/rejected, only show if within last 7 days
+      if (item.vendorDecision === "pending" || !item.vendorDecision) {
+        return true;
+      }
+      return hasDecision && itemDate > recentCutoff;
     });
 
-    if (activeItems.length === 0) {
-      console.log("No active negotiations found - all are old/processed.");
+    // ✅ DEBUG: Log payment status from API
+    console.log("📊 Cart API Response - Payment Status:", validItems.map(item => ({
+      id: item._id,
+      vendorDecision: item.vendorDecision,
+      paymentStatus: item.paymentStatus,
+      finalPrice: item.finalPrice
+    })));
+    
+    // ✅ Determine orderType
+    const orderType = validItems.length > 1 ? "multiple" : "single";
+    
+    // ✅ Add paymentStatus from UserBookingHistory to each item
+    if (userBookingHistory) {
+      const paymentStatus = userBookingHistory.paymentStatus || "PENDING";
+      const itemsWithPaymentStatus = validItems.map(item => ({
+        ...item.toObject(),
+        paymentStatus: paymentStatus
+      }));
+      
+      console.log("✅ Added paymentStatus to items:", paymentStatus);
+      
+      return res.status(200).json(
+        new ApiResponse(
+          200,
+          { orderType, items: itemsWithPaymentStatus },
+          "Order items fetched successfully."
+        )
+      );
+    }
+
+    if (validItems.length === 0) {
+      console.log("No valid items found for order summary.");
       return res
         .status(200)
         .json(
           new ApiResponse(
             200,
             { orderType: "empty", items: [] },
-            "No active negotiations found. Please start a new negotiation."
+            "No items found for this order."
           )
         );
     }
-
-    const orderType = items.length > 1 ? "multiple" : "single";
 
     return res
       .status(200)
       .json(
         new ApiResponse(
           200,
-          { orderType, items },
+          { orderType, items: validItems },
           "Order items fetched successfully."
         )
       );
@@ -484,8 +530,8 @@ export const calculateOrderSummary = (items, orderType = "single") => {
   // Determine negotiation status
   const negotiationStatus = hasPending ? "pending" : allAccepted ? "accepted" : "rejected";
 
-  // Calculate 10% platform discount
-  const platformDiscountAmount = Math.round(finalTotal * 0.1);
+  // Calculate 20% platform discount
+  const platformDiscountAmount = Math.round(finalTotal * 0.2);
   const totalAfterDiscount = finalTotal - platformDiscountAmount;
 
   // Calculate taxes on the price after discount
@@ -527,7 +573,7 @@ export const getCartItemCount = async (req, res) => {
       )
     );
   } catch (error) {
-    console.error("Get cart count error:", error);
+    console.error("Get cart error:", error);
     return res.status(500).json(new ApiError(500, "Internal Server Error"));
   }
 };

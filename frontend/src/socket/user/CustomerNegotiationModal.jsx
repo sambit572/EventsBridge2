@@ -14,8 +14,7 @@ const CustomerNegotiationModal = () => {
   const [selectedServiceIndex, setSelectedServiceIndex] = useState(0);
   const [showTimer, setShowTimer] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15 * 60);
-  const [proceededWithoutNegotiation, setProceededWithoutNegotiation] =
-    useState(false);
+  const [proceededWithoutNegotiation, setProceededWithoutNegotiation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [dataLoading, setDataLoading] = useState(true);

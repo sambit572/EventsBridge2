@@ -210,7 +210,7 @@ const [reviewMessage, setReviewMessage] = useState("");
 
   /* -------------------- HANDLE BOOKING CLICK -------------------- */
   const handleBookingClick = (booking) => {
-    const { reDirectTo, userDetailsId } = booking;
+    const { reDirectTo, userDetailsId, paymentStatus } = booking;
     console.log("Booking clicked:", booking);
 
     switch (reDirectTo) {
@@ -219,8 +219,13 @@ const [reviewMessage, setReviewMessage] = useState("");
         navigate(`/pop-up/${userDetailsId?._id}`);
         break;
       case 2:
-        // Navigate to order summary page
-        navigate(`/order-summary/${userDetailsId?._id}`);
+        // Navigate to order summary page with payment status
+        navigate(`/order-summary/${userDetailsId?._id}`, {
+          state: {
+            paymentStatus: paymentStatus || "PENDING",
+            bookingData: booking
+          }
+        });
         break;
       default:
         console.error("Invalid reDirectTo value:", reDirectTo);
