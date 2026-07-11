@@ -1,13 +1,17 @@
 import { Order } from "../../model/payment/order.model.js";
 
 
-// Placeholder for UPI link/QR generation
+// UPI link/QR generation using EventsBridge's official UPI ID
+const MERCHANT_UPI_ID = "7008912849@idfcbank";
+const MERCHANT_NAME = "EVENTSBRIDGE TECHNOLOGY PRIVATE LIMITED";
+
 const generateUpiLink = (orderId, amount, currency) => {
-  // In a real scenario, this would call a payment gateway SDK.
   console.log(
     `Generating UPI link for Order ${orderId} with amount ${amount} ${currency}`
   );
-  return `upi://pay?pa=merchant@upi&pn=MerchantName&am=${amount}&tid=${orderId}&cu=${currency}`;
+  return `upi://pay?pa=${MERCHANT_UPI_ID}&pn=${encodeURIComponent(
+    MERCHANT_NAME
+  )}&am=${amount}&tid=${orderId}&cu=${currency}`;
 };
 
 export const createOrder = async (req, res) => {

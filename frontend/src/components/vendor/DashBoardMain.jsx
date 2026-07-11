@@ -156,14 +156,6 @@ function DashBoardMain() {
         </div>
       )}
 
-      {/* Mobile hamburger */}
-      <button
-        className={`dashboard-hamburger ${isSidebarOpen ? "open" : ""}`}
-        onClick={() => setIsSidebarOpen((prev) => !prev)}
-      >
-        {isSidebarOpen ? "✕" : "☰"}
-      </button>
-
       {/* Tap-outside-to-close backdrop (mobile only, styled via CSS) */}
       {isSidebarOpen && (
         <div
@@ -181,17 +173,27 @@ function DashBoardMain() {
         setIsVerified={setIsVerified}
         activeTab={activeTab}
         setActiveTab={handleTabChange}
+        closeSidebar={() => setIsSidebarOpen(false)}
       />
 
       {/* Main content */}
       <div className="main-contain">
         {/* Top bar */}
         <div className="main-topbar">
-          <div>
-            <h1 className="main-topbar-title">{tabTitles[activeTab]}</h1>
-            <p className="main-topbar-sub">
-              {new Date().toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
-            </p>
+          <div className="main-topbar-left">
+            {/* Mobile hamburger */}
+            <button
+              className={`dashboard-hamburger ${isSidebarOpen ? "open" : ""}`}
+              onClick={() => setIsSidebarOpen((prev) => !prev)}
+            >
+              {isSidebarOpen ? "✕" : "☰"}
+            </button>
+            <div>
+              <h1 className="main-topbar-title">{tabTitles[activeTab]}</h1>
+              <p className="main-topbar-sub">
+                {new Date().toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+              </p>
+            </div>
           </div>
           <div className="main-topbar-actions">
             <button className="topbar-icon-btn" title="Notifications">
