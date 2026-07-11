@@ -101,15 +101,15 @@ const OrderSummary = () => {
       .substr(2, 9)
       .toUpperCase()}`;
 
-    const upiUri = `upi://pay?pa=merchant@paytm&pn=EventVendor&am=${Math.round(
-      orderSummary.grandTotal * 0.2
-    )}&cu=INR&tn=Order-${orderId}`;
+    // ✅ Use the full grand total (vendor-accepted price) instead of dummy price
+    const fullAmount = Math.round(orderSummary.grandTotal);
+    const upiUri = `upi://pay?pa=merchant@paytm&pn=EventVendor&am=${fullAmount}&cu=INR&tn=Order-${orderId}`;
 
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
 
     navigate("/qr-payment", {
       state: {
-        amount: Math.round(orderSummary.grandTotal * 0.2),
+        amount: fullAmount, // Send full amount, not 20%
         upiUri: upiUri,
         merchantRef: merchantRef,
         orderId: orderId,

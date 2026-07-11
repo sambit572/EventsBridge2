@@ -388,12 +388,15 @@ export const getCartWithUserDetails = async (req, res) => {
     console.log(`Checking for negotiations for services:`, validServiceIds);
     console.log(`With bookedByUserId:`, validUserId);
 
-    // Fetch negotiations in parallel for all services and the given user
+    // ✅ FIX: Fetch ONLY the most recent negotiation for each service (not all old ones)
+    // This prevents old accepted negotiations from showing up for repeat bookings
     const negotiationPromises = validServiceIds.map((serviceId) =>
-      Negotiation.findOne({ serviceId, bookedByUserId: validUserId }).populate({
-        path: "serviceId",
-        model: "Service",
-      })
+      Negotiation.findOne({ serviceId, bookedByUserId: validUserId })
+        .sort({ createdAt: -1 }) // Get the MOST RECENT negotiation only
+        .populate({
+          path: "serviceId",
+          model: "Service",
+        })
     );
 
     const negotiations = await Promise.all(negotiationPromises);
@@ -409,6 +412,28 @@ export const getCartWithUserDetails = async (req, res) => {
             200,
             { orderType: "empty", items: [] },
             "No negotiated items found for this order."
+          )
+        );
+    }
+
+    // ✅ FIX: Filter out old negotiations that are already accepted/paid
+    // Only show pending or recently rejected negotiations
+    const activeItems = items.filter((item) => {
+      // Keep only if vendorDecision is pending or if it's very recent (within last 24 hours)
+      const isPending = item.vendorDecision === "pending";
+      const isRecent = Date.now() - new Date(item.createdAt).getTime() < 24 * 60 * 60 * 1000; // 24 hours
+      return isPending || (!item.vendorDecision && isRecent);
+    });
+
+    if (activeItems.length === 0) {
+      console.log("No active negotiations found - all are old/processed.");
+      return res
+        .status(200)
+        .json(
+          new ApiResponse(
+            200,
+            { orderType: "empty", items: [] },
+            "No active negotiations found. Please start a new negotiation."
           )
         );
     }
