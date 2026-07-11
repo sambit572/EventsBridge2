@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import clsx from "clsx";
 import { BACKEND_URL } from "../../../utils/constant.js";
 
 const OrderSummary = () => {
@@ -113,6 +114,7 @@ const OrderSummary = () => {
         merchantRef: merchantRef,
         orderId: orderId,
         expiresAt: expiresAt,
+        userDetailsId: userDetailsId,
       },
     });
   };

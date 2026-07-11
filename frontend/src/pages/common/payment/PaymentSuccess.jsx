@@ -1,28 +1,87 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import axios from "axios";
+import clsx from "clsx";
+import { BACKEND_URL } from "../../../utils/constant.js";
 
 export const PaymentSuccess = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { transactionId, orderId, merchantRef, amount } = location.state || {};
+  const { transactionId, orderId, merchantRef, amount, userDetailsId } = location.state || {};
+
+  const updatePaymentStatusOnBackend = async () => {
+    try {
+      // Get userDetailsId from localStorage or navigate state
+      const userDetailsId = location.state?.userDetailsId || localStorage.getItem("lastUserDetailsId");
+      
+      if (!userDetailsId) {
+        console.error("❌ No userDetailsId found for payment update");
+        toast.error("Unable to update payment status. Please contact support.");
+        return;
+      }
+      
+      console.log("🔄 Updating payment status for userDetailsId:", userDetailsId);
+      
+      // Wait a bit to ensure the payment is fully processed
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const response = await axios.put(
+          `${BACKEND_URL}/user-bookings/update-payment-status`,
+          {
+            userDetailsId,
+            paymentStatus: "PAID",
+            transactionId,
+            amount: amount, // Send the paid amount
+          },
+          { withCredentials: true }
+        );
+      
+      console.log("✅ Payment status update response:", response.data);
+      
+      if (response.data && response.data.success) {
+        console.log("✅ Payment status updated to PAID successfully");
+        
+        // ✅ Store in localStorage so Profile can detect the update
+        localStorage.setItem("lastPaymentUpdate", Date.now().toString());
+        localStorage.setItem("lastUserDetailsId", userDetailsId);
+        
+        // Show success message
+        toast.success("Payment status updated successfully!");
+      } else {
+        throw new Error(response.data?.message || "Update failed");
+      }
+    } catch (error) {
+      console.error("⚠️ Failed to update payment status:", error);
+      const errorMsg = error.response?.data?.message || error.message || "Unknown error";
+      toast.error(`Payment verified but status update failed: ${errorMsg}`);
+    }
+  };
 
   useEffect(() => {
     // Show success toast on mount
     toast.success("Payment completed successfully!");
+    
+    // Update payment status in backend and wait for completion
+    updatePaymentStatusOnBackend().then(() => {
+      console.log("✅ Payment status update completed");
+    }).catch((error) => {
+      console.error("❌ Payment status update failed:", error);
+      toast.error("Payment verified but status update failed. Please contact support if status doesn't update.");
+    });
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 flex items-center justify-center py-8 px-4">
-      <div className="max-w-lg w-full">
+    <div className={clsx('min-h-screen', 'bg-gradient-to-br', 'from-green-50', 'via-white', 'to-emerald-50', 'flex', 'items-center', 'justify-center', 'py-8', 'px-4')}>
+      <div className={clsx('max-w-lg', 'w-full')}>
         <div id="receipt-print-area">
-          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+          <div className={clsx('bg-white', 'rounded-3xl', 'shadow-2xl', 'overflow-hidden', 'border', 'border-gray-100')}>
             {/* Success Animation */}
-            <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-8 text-center">
-              <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+            <div className={clsx('bg-gradient-to-r', 'from-green-600', 'to-emerald-600', 'p-8', 'text-center')}>
+              <div className={clsx('w-24', 'h-24', 'bg-white', 'rounded-full', 'flex', 'items-center', 'justify-center', 'mx-auto', 'mb-4', 'animate-bounce')}>
                 <svg
-                  className="w-12 h-12 text-green-600"
+                  className={clsx('w-12', 'h-12', 'text-green-600')}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -35,7 +94,7 @@ export const PaymentSuccess = () => {
                   />
                 </svg>
               </div>
-              <h1 className="text-3xl font-bold text-white mb-2">
+              <h1 className={clsx('text-3xl', 'font-bold', 'text-white', 'mb-2')}>
                 Payment Successful!
               </h1>
               <p className="text-green-100">
@@ -45,42 +104,42 @@ export const PaymentSuccess = () => {
 
             {/* Payment Details */}
             <div className="p-8">
-              <div className="bg-gradient-to-br from-gray-50 to-green-50 rounded-2xl p-6 mb-6 border border-green-100">
-                <div className="text-center mb-4">
-                  <p className="text-sm text-gray-600 mb-1">Amount Paid</p>
-                  <p className="text-4xl font-bold text-green-600">
+              <div className={clsx('bg-gradient-to-br', 'from-gray-50', 'to-green-50', 'rounded-2xl', 'p-6', 'mb-6', 'border', 'border-green-100')}>
+                <div className={clsx('text-center', 'mb-4')}>
+                  <p className={clsx('text-sm', 'text-gray-600', 'mb-1')}>Amount Paid</p>
+                  <p className={clsx('text-4xl', 'font-bold', 'text-green-600')}>
                     ₹{amount?.toLocaleString() || "0"}
                   </p>
                 </div>
 
-                <div className="space-y-3 pt-4 border-t border-green-200">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600 font-medium">
+                <div className={clsx('space-y-3', 'pt-4', 'border-t', 'border-green-200')}>
+                  <div className={clsx('flex', 'justify-between', 'items-center')}>
+                    <span className={clsx('text-gray-600', 'font-medium')}>
                       Transaction ID
                     </span>
-                    <span className="font-mono font-bold text-gray-900 text-right break-all">
+                    <span className={clsx('font-mono', 'font-bold', 'text-gray-900', 'text-right', 'break-all')}>
                       {transactionId || "N/A"}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600 font-medium">Order ID</span>
-                    <span className="font-mono font-semibold text-gray-900">
+                  <div className={clsx('flex', 'justify-between', 'items-center')}>
+                    <span className={clsx('text-gray-600', 'font-medium')}>Order ID</span>
+                    <span className={clsx('font-mono', 'font-semibold', 'text-gray-900')}>
                       {orderId || "N/A"}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600 font-medium">
+                  <div className={clsx('flex', 'justify-between', 'items-center')}>
+                    <span className={clsx('text-gray-600', 'font-medium')}>
                       Merchant Ref
                     </span>
-                    <span className="font-mono font-semibold text-gray-900">
+                    <span className={clsx('font-mono', 'font-semibold', 'text-gray-900')}>
                       {merchantRef || "N/A"}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600 font-medium">
+                  <div className={clsx('flex', 'justify-between', 'items-center')}>
+                    <span className={clsx('text-gray-600', 'font-medium')}>
                       Date & Time
                     </span>
-                    <span className="font-semibold text-gray-900">
+                    <span className={clsx('font-semibold', 'text-gray-900')}>
                       {new Date().toLocaleString("en-IN", {
                         day: "2-digit",
                         month: "short",
@@ -94,10 +153,10 @@ export const PaymentSuccess = () => {
               </div>
 
               {/* Success Message */}
-              <div className="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-4 mb-6">
-                <div className="flex items-start gap-3">
+              <div className={clsx('bg-blue-50', 'border-l-4', 'border-blue-500', 'rounded-lg', 'p-4', 'mb-6')}>
+                <div className={clsx('flex', 'items-start', 'gap-3')}>
                   <svg
-                    className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5"
+                    className={clsx('w-5', 'h-5', 'text-blue-500', 'flex-shrink-0', 'mt-0.5')}
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -108,10 +167,10 @@ export const PaymentSuccess = () => {
                     />
                   </svg>
                   <div>
-                    <p className="text-blue-800 font-semibold mb-1">
+                    <p className={clsx('text-blue-800', 'font-semibold', 'mb-1')}>
                       Payment Confirmed
                     </p>
-                    <p className="text-sm text-blue-700">
+                    <p className={clsx('text-sm', 'text-blue-700')}>
                       A confirmation email has been sent to your registered
                       email address.
                     </p>
@@ -123,10 +182,10 @@ export const PaymentSuccess = () => {
               <div className="space-y-3">
                 <button
                   onClick={() => navigate("/dashboard")}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2"
+                  className={clsx('w-full', 'bg-gradient-to-r', 'from-blue-600', 'to-purple-600', 'hover:from-blue-700', 'hover:to-purple-700', 'text-white', 'font-bold', 'py-4', 'rounded-xl', 'shadow-lg', 'hover:shadow-xl', 'transform', 'hover:-translate-y-0.5', 'transition-all', 'duration-200', 'flex', 'items-center', 'justify-center', 'gap-2')}
                 >
                   <svg
-                    className="w-5 h-5"
+                    className={clsx('w-5', 'h-5')}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -143,10 +202,10 @@ export const PaymentSuccess = () => {
 
                 <button
                   onClick={() => window.print()}
-                  className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
+                  className={clsx('w-full', 'bg-gray-100', 'hover:bg-gray-200', 'text-gray-700', 'font-semibold', 'py-3', 'rounded-xl', 'transition-all', 'duration-200', 'flex', 'items-center', 'justify-center', 'gap-2')}
                 >
                   <svg
-                    className="w-5 h-5"
+                    className={clsx('w-5', 'h-5')}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -166,12 +225,12 @@ export const PaymentSuccess = () => {
         </div>
 
         {/* Additional Info */}
-        <div className="mt-6 text-center">
-          <p className="text-gray-600 text-sm">
+        <div className={clsx('mt-6', 'text-center')}>
+          <p className={clsx('text-gray-600', 'text-sm')}>
             Need help? Contact our support team at{" "}
             <a
               href="mailto:support@example.com"
-              className="text-blue-600 hover:text-blue-700 font-semibold"
+              className={clsx('text-blue-600', 'hover:text-blue-700', 'font-semibold')}
             >
               support@example.com
             </a>
