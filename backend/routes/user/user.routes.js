@@ -4,6 +4,8 @@ import {
   registerUser,
   loginUser,
   logoutUser,
+  userLoginOtp,
+  verifyUserLoginOtp,
   sendPasswordResetLink,
   updateUserProfile,
   updateUserAvatar,
@@ -28,6 +30,8 @@ const router = Router();
 router.get("/no-need-to-login", noNeedToLogin);
 router.post("/signup", registerUser);
 router.post("/login", loginUser);
+router.post("/send-otp", userLoginOtp);
+router.post("/verify-login-otp", verifyUserLoginOtp);
 router.post("/logout", logoutUser);
 router.post("/auth/google", googleAuth);
 router.post("/forgot-password", sendPasswordResetLink);

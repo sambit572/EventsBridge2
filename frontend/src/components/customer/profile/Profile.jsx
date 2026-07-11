@@ -69,7 +69,7 @@ const [reviewMessage, setReviewMessage] = useState("");
   const handlePasswordChangeSubmit = async () => {
     if (newPassword !== confirmPassword)
       return setErrorMsg("Passwords do not match");
-
+     setErrorMsg("");
     try {
       const response = await axios.post(
         `${BACKEND_URL}/user/change-password`,
@@ -81,6 +81,11 @@ const [reviewMessage, setReviewMessage] = useState("");
         setShowSuccessPopup(true);
         setTimeout(() => setShowSuccessPopup(false), 3000);
         setShowPasswordModal(false);
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        setErrorMsg("");
+       
       }
     } catch (error) {
       setErrorMsg(

@@ -1,10 +1,9 @@
 // Login.jsx
 import { GoogleLogin } from "@react-oauth/google";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 
-import OTPVerification from "./OTPVerification.jsx";
+import OTPVerificationEmail from "./OtpVerificationEmail.jsx";
 import SuccessBlock from "./SuccessBlock.jsx";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -15,162 +14,116 @@ import { RxCross2 } from "react-icons/rx";
 import Spinner from "./../../components/common/Spinner";
 import { Seo } from "../../seo/seo.js";
 import EventsBridgeLogo from "../../assets/EventsBridgeOnlyLogo.png";
-let firebaseAuthCache = null;
+  
 
-async function loadFirebaseAuth() {
-  if (!firebaseAuthCache) {
-    const [{ getFirebaseAuth }, authModule] = await Promise.all([
-      import("../../utils/firebase.js"), // your new firebaseAuth file
-      import("firebase/auth"),
-    ]);
 
-    const auth = await getFirebaseAuth();
-
-    firebaseAuthCache = {
-      auth,
-      RecaptchaVerifier: authModule.RecaptchaVerifier,
-      signInWithPhoneNumber: authModule.signInWithPhoneNumber,
-    };
-  }
-
-  return firebaseAuthCache;
-}
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Login = ({ onClose, onSwitchToRegister }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState("form");
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [googleCredential, setGoogleCredential] = useState(null);
+  const [sendingOtp, setSendingOtp] = useState(false);
   const [formData, setFormData] = useState({
-    phoneNo: "",
     email: "",
     password: "",
+    email_pass:"",
   });
   const [errorMsg, setErrorMsg] = useState("");
-  const recaptchaVerifierRef = useRef(null);
-
-  // Initialize reCAPTCHA
-  useEffect(() => {
-    let cancelled = false;
-
-    (async () => {
-      try {
-        const { auth, RecaptchaVerifier } = await loadFirebaseAuth();
-
-        if (cancelled || recaptchaVerifierRef.current) return;
-
-        const verifier = new RecaptchaVerifier(
-          auth,
-          "recaptcha-container",
-          {
-            size: "invisible",
-            callback: (response) => {
-              console.log("Enterprise reCAPTCHA passed", response);
-            },
-            "expired-callback": () => {
-              verifier.clear();
-              recaptchaVerifierRef.current = null;
-            },
-          },
-          { type: "recaptcha-enterprise" }
-        );
-
-        await verifier.render();
-        recaptchaVerifierRef.current = verifier;
-      } catch (err) {
-        setErrorMsg("Enterprise reCAPTCHA failed to load.");
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  async function handleGetOTP(e) {
-    e.preventDefault();
-    setIsLoading(true);
-    setErrorMsg("");
+ 
+  async function handleLogin(e) {
+  e.preventDefault();
 
-    const phone = formData.phoneNo.replace(/\D/g, "");
-    const phoneNumber = "+91" + phone;
+  setIsLoading(true);
+  setErrorMsg("");
 
-    if (!recaptchaVerifierRef.current) {
-      setIsLoading(false);
-      return setErrorMsg("ReCAPTCHA is not ready. Please wait...");
-    }
+  if (!formData.email_pass || !formData.password) {
+    setIsLoading(false);
+    return setErrorMsg("Please enter your email and password.");
+  }
 
-    if (!/^\+91\d{10}$/.test(phoneNumber)) {
-      setIsLoading(false);
-      return setErrorMsg("Invalid Indian phone number.");
-    }
+  try {
+    const res = await axios.post(
+      `${BACKEND_URL}/user/login`,
+      {
+        email_pass: formData.email_pass.toLowerCase(),
+        password: formData.password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
 
-    try {
-      const { auth, signInWithPhoneNumber } = await loadFirebaseAuth();
+    const { user } = res.data.data;
 
-      const confirmationResult = await signInWithPhoneNumber(
-        auth,
-        phoneNumber,
-        recaptchaVerifierRef.current
-      );
+    dispatch(setUser(user));
 
-      window.confirmationResult = confirmationResult;
-      setStep("otp");
-    } catch (err) {
-      console.error("OTP error:", err);
-      recaptchaVerifierRef.current?.clear();
-      recaptchaVerifierRef.current = null;
-      setErrorMsg("OTP send failed. Check number or reCAPTCHA.");
-    }
+    localStorage.setItem("currentlyLoggedIn", "true");
+    localStorage.setItem(
+      "userFirstName",
+      user.fullName?.split(" ")[0] || ""
+    );
+    localStorage.setItem(
+      "userLastName",
+      user.fullName?.split(" ")[1] || ""
+    );
 
+    window.dispatchEvent(new Event("userLoggedIn"));
+
+    setStep("success");
+  } catch (err) {
+    const msg =
+      err.response?.data?.message || "Login failed. Please try again.";
+
+    setErrorMsg(
+      msg === "User does not exist"
+        ? "Please register before logging in."
+        : msg
+    );
+  } finally {
     setIsLoading(false);
   }
+}
 
-  async function handleLogin(e) {
-    e.preventDefault();
-    setErrorMsg("");
+ async function handleSendEmailOTP(e) {
+  e.preventDefault();
+ setSendingOtp(true);
+  setIsLoading(true);
+  setErrorMsg("");
 
-    if (!formData.email && !formData.phoneNo) {
-      return setErrorMsg("Enter email or phone to log in.");
-    }
-
-    try {
-      const res = await axios.post(
-        `${BACKEND_URL}/user/login`,
-        {
-          email: formData.email,
-          phoneNo: formData.phoneNo,
-          password: formData.password,
-        },
-        { withCredentials: true }
-      );
-
-      const { user } = res.data.data;
-      dispatch(setUser(user));
-      localStorage.setItem("currentlyLoggedIn", "true");
-      localStorage.setItem("userFirstName", user.fullName.split(" ")[0]);
-      localStorage.setItem("userLastName", user.fullName.split(" ")[1]);
-      window.dispatchEvent(new Event("userLoggedIn"));
-      setStep("success");
-    } catch (err) {
-      const msg = err.response?.data?.message || err.message;
-      setErrorMsg(
-        msg === "User does not exist"
-          ? "Please register before login."
-          : `Login failed: ${msg}`
-      );
-    }
+  if (!formData.email) {
+    setIsLoading(false);
+    setSendingOtp(false);
+    return setErrorMsg("Please enter your email.");
   }
 
-  const handleGoogleSuccess = async (credentialResponse) => {
+  try {
+    await axios.post(
+      `${BACKEND_URL}/user/send-otp`,
+      {
+        emailOtp: formData.email.toLowerCase(),
+      }
+    );
+
+    setStep("otp");
+  } catch (err) {
+    setErrorMsg(
+      err.response?.data?.message || "Failed to send OTP."
+    );
+  }
+  finally {
+    setIsLoading(false);
+    setSendingOtp(false);
+  }
+}
+ const handleGoogleSuccess = async (credentialResponse) => {
     try {
       const { data } = await axios.post(
         `${BACKEND_URL}/user/auth/google`,
@@ -185,47 +138,11 @@ const Login = ({ onClose, onSwitchToRegister }) => {
       window.dispatchEvent(new Event("userLoggedIn"));
       setStep("success");
     } catch (err) {
-      if (
-        err.response?.data?.message === "Phone number is required for new users"
-      ) {
-        setGoogleCredential(credentialResponse.credential);
-        setStep("google-phone");
-      } else {
-        setErrorMsg("Google login failed. Try again.");
-      }
-    }
+  setErrorMsg(
+    err.response?.data?.message || "Google login failed. Try again."
+  );
+}
   };
-
-  const handleGooglePhoneSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMsg("");
-
-    const phone = formData.phoneNo.replace(/\D/g, "");
-    const phoneNumber = "+91" + phone;
-
-    if (!formData.phoneNo || !/^\+91\d{10}$/.test(phoneNumber)) {
-      return setErrorMsg("Invalid Indian phone number.");
-    }
-
-    try {
-      const { data } = await axios.post(
-        `${BACKEND_URL}/user/auth/google`,
-        { token: googleCredential, phoneNo: phoneNumber },
-        { withCredentials: true }
-      );
-      const { user } = data.data;
-      dispatch(setUser(user));
-      localStorage.setItem("currentlyLoggedIn", "true");
-      localStorage.setItem("userFirstName", user.fullName.split(" ")[0]);
-      window.dispatchEvent(new Event("userLoggedIn"));
-      setStep("success");
-    } catch (err) {
-      setErrorMsg(
-        err.response?.data?.message || "Google signup failed. Try again."
-      );
-    }
-  };
-
   const styles = `
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
@@ -555,48 +472,14 @@ const Login = ({ onClose, onSwitchToRegister }) => {
 
     if (step === "otp")
       return (
-        <OTPVerification
-          phoneNum={formData.phoneNo}
-          onClose={onClose}
-          setStep={setStep}
-          type="user"
-        />
+       <OTPVerificationEmail
+  emailOtp={formData.email}
+  onClose={onClose}
+  setStep={setStep}
+  type="user"
+/>
       );
 
-    if (step === "google-phone") {
-      return (
-        <div style={{ width: "100%" }}>
-          <div className="ul-title" style={{ fontSize: 20 }}>
-            Almost There!
-          </div>
-          <div className="ul-subtitle">
-            Please enter your phone number to complete your Google registration.
-          </div>
-          <form onSubmit={handleGooglePhoneSubmit}>
-            <div className="ul-field">
-              <input
-                type="text"
-                name="phoneNo"
-                id="ul-google-phone"
-                placeholder="Phone number"
-                value={formData.phoneNo}
-                onChange={handleChange}
-                required
-              />
-              <label htmlFor="ul-google-phone">Phone number</label>
-            </div>
-            {errorMsg && <p className="ul-error">{errorMsg}</p>}
-            <button type="submit" className="ul-login-btn">
-              <div className="ul-shimmer" />
-              <span>Complete Registration</span>
-            </button>
-            <p className="ul-signup">
-              <span onClick={() => setStep("form")}>Back to Login</span>
-            </p>
-          </form>
-        </div>
-      );
-    }
 
     return (
       <div style={{ width: "100%" }}>
@@ -619,29 +502,29 @@ const Login = ({ onClose, onSwitchToRegister }) => {
         </div>
 
         {/* Phone OTP section */}
-        <div className="ul-method-label">via phone</div>
-        <div className="ul-phone-row">
-          <div className="ul-phone-top">
-            <select className="ul-flag-select" aria-label="Country code">
-              <option>🇮🇳 +91</option>
-              <option>🇺🇸 +1</option>
-              <option>🇬🇧 +44</option>
-            </select>
-            <input
-              type="number"
-              name="phoneNo"
-              placeholder="Mobile number"
-              value={formData.phoneNo}
-              onChange={handleChange}
-              className="ul-phone-input"
-              aria-label="Mobile number"
-            />
-          </div>
-          <button type="button" onClick={handleGetOTP} className="ul-otp-btn">
-            <div className="ul-shimmer" />
-            Send OTP
-          </button>
-        </div>
+        <div className="ul-method-label">via Email</div>
+        <div className="ul-field">
+           <input
+    type="email"
+    name="email"
+    id="otp-email"
+    placeholder="Email Address"
+    value={formData.email}
+    onChange={handleChange}
+  />
+  <label htmlFor="otp-email">Email Address</label>
+</div>
+
+<button
+  type="button"
+  onClick={handleSendEmailOTP}
+  className="ul-otp-btn"
+  disabled={sendingOtp}
+>
+  <div className="ul-shimmer" />
+  {sendingOtp ? "Sending OTP..." : "Send OTP"}
+</button>
+      
 
         <div className="ul-divider">
           <div className="ul-divider-line" />
@@ -655,10 +538,10 @@ const Login = ({ onClose, onSwitchToRegister }) => {
           <div className="ul-field">
             <input
               type="email"
-              name="email"
+              name="email_pass"
               id="ul-email"
               placeholder="Email Address"
-              value={formData.email}
+              value={formData.email_pass}
               onChange={handleChange}
             />
             <label htmlFor="ul-email">Email Address</label>
@@ -783,7 +666,6 @@ const Login = ({ onClose, onSwitchToRegister }) => {
 
           {/* RIGHT PANEL */}
           <div className="ul-right">
-            <div id="recaptcha-container"></div>
 
             {onClose && (
               <button className="ul-close" onClick={onClose} aria-label="Close">

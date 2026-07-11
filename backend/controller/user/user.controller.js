@@ -12,12 +12,13 @@ import {
   deleteFromCloudinary,
 } from "../../utilities/cloudinary.js";
 import { sendEmail } from "../../utilities/sendEmail.js";
+import client from "../../db/redisClient.js";
 
 const isProd = process.env.NODE_ENV === "production";
 
 const baseOption = {
   httpOnly: true,
-  secure: isProd ? "true" : "false", // true in prod, false in dev
+  secure: isProd,
   sameSite: isProd ? "None" : "Lax",
   path: "/",
 };
@@ -231,28 +232,21 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    const { email, phoneNo, password } = req.body;
+    const { email_pass,password  } = req.body;
 
-    if (!email && !phoneNo) {
+    if (!email_pass) {
       return res
         .status(400)
-        .json(new ApiError(400, "Please provide an email or phone number to login"));
+        .json(new ApiError(400, "Please provide an email  to login"));
     }
 
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (email_pass && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email_pass)) {
       return res
         .status(400)
         .json(new ApiError(400, "Invalid email format"));
     }
 
-    if (phoneNo) {
-      // Validate Indian mobile number (exactly 10 digits, starting with 6-9)
-      if (!isValidIndianPhone(phoneNo)) {
-        return res
-          .status(400)
-          .json(new ApiError(400, "Please enter a valid Indian mobile number."));
-      }
-    }
+   
 
     if (!password) {
       return res
@@ -262,21 +256,14 @@ const loginUser = async (req, res) => {
 
     if (password.length < 8) {
       return res
-        .status(400)
+        .status(400)  
         .json(
           new ApiError(400, "Password must be at least 8 characters long")
         );
     }
 
-    const user = await User.findOne({ $or: [{ email }, { phoneNo }] });
+  const user = await User.findOne({email: email_pass.toLowerCase(),});
     if (!user) {
-      if (phoneNo) {
-        return res
-          .status(400)
-          .json(
-            new ApiError(400, "No account found with this phone number. Please check and try again.")
-          );
-      }
       return res
         .status(404)
         .json(
@@ -322,7 +309,131 @@ const loginUser = async (req, res) => {
     return res.status(400).json(new ApiError(400, message));
   }
 };
+// OTP send through Email for User login
+const userLoginOtp = async (req, res) => {
+  try {
+    const { emailOtp } = req.body;
 
+    if (!emailOtp) {
+      return res
+        .status(400)
+        .json(new ApiError(400, "Email is required"));
+    }
+
+    const email = emailOtp.toLowerCase();
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json(new ApiError(404, "No account found with this email."));
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    await client.set(`user-login-otp:${email}`, otp, {
+      EX: 300, // 5 minutes
+    });
+
+    await sendEmail({
+      to: email,
+      subject: "OTP for User Login",
+      html: `
+        <h3>Your Login OTP</h3>
+        <p>Your OTP is <b>${otp}</b></p>
+        <p>This OTP is valid for <b>5 minutes</b>.</p>
+      `,
+    });
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, null, "OTP sent successfully."));
+  } catch (error) {
+    console.error("userLoginOtp:", error);
+
+    return res
+      .status(500)
+      .json(new ApiError(500, "Failed to send OTP. Please try again."));
+  }
+};
+const verifyUserLoginOtp = async (req, res) => {
+  try {
+    const { emailOtp, otp } = req.body;
+
+    if (!emailOtp || !otp) {
+      return res
+        .status(400)
+        .json(new ApiError(400, "Email and OTP are required."));
+    }
+
+    const email = emailOtp.toLowerCase();
+
+    const savedOtp = await client.get(`user-login-otp:${email}`);
+
+    if (!savedOtp) {
+      return res
+        .status(400)
+        .json(new ApiError(400, "OTP has expired or is invalid."));
+    }
+
+    if (savedOtp !== otp) {
+      return res
+        .status(400)
+        .json(new ApiError(400, "Incorrect OTP."));
+    }
+
+    await client.del(`user-login-otp:${email}`);
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json(new ApiError(404, "User not found."));
+    }
+
+    // Generate profile picture if missing
+    if (!user.profilePhoto) {
+      user.profilePhoto = generateProfilePicture(user.fullName);
+      await user.save({ validateBeforeSave: false });
+    }
+
+    const { accessToken, refreshToken } =
+      await generateAccessAndRefreshTokens(user._id);
+
+    const loggedInUser = await User.findById(user._id).select(
+      "-password -refreshToken"
+    );
+
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, accessTokenOption)
+      .cookie("refreshToken", refreshToken, refreshTokenOption)
+      .json(
+        new ApiResponse(
+          200,
+          {
+            user: loggedInUser,
+            accessToken,
+            refreshToken,
+          },
+          "Welcome back! You are now logged in."
+        )
+      );
+  } catch (error) {
+    console.error("verifyUserLoginOtp:", error);
+
+    return res
+      .status(500)
+      .json(
+        new ApiError(
+          500,
+          "Something went wrong while verifying the OTP."
+        )
+      );
+  }
+};
 const logoutUser = async (req, res) => {
   try {
     if (req.user?._id) {
@@ -333,8 +444,6 @@ const logoutUser = async (req, res) => {
 
     return res
       .status(200)
-      .clearCookie("accessToken", accessTokenOption)
-      .clearCookie("refreshToken", refreshTokenOption)
       .clearCookie("accessToken", accessTokenOption)
       .clearCookie("refreshToken", refreshTokenOption)
       .json(new ApiResponse(200, {}, "Logged out successfully"));
@@ -792,6 +901,8 @@ const changePassword = async (req, res) => {
     return res
       .status(200)
       .json(new ApiResponse(200, null, "Password changed successfully"));
+       
+
   } catch (error) {
     console.error("changePassword error:", error);
     const message = getFriendlyErrorMessage(error);
@@ -1003,4 +1114,6 @@ export {
   getUserProfile,
   googleAuth,
   phoneLogin,
+  verifyUserLoginOtp,
+  userLoginOtp,
 };
