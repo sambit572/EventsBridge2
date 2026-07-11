@@ -330,12 +330,15 @@ const CustomerNegotiationModal = () => {
             item.cateringDetails;
           proposedPrice = proposedPrices[item.cartItemId];
 
-          const minValidation = totalPrice * 0.5;
-          if (proposedPrice < minValidation) {
+          // ✅ Validate price is within range (for catering, it's fixed price)
+          if (proposedPrice < totalPrice) {
             throw new Error(
-              `❗ Price for ${packageName} too low. Minimum: ₹${Math.floor(
-                minValidation
-              )}`
+              `❗ Price for ${packageName} cannot be less than listed price ₹${totalPrice}`
+            );
+          }
+          if (proposedPrice > totalPrice * 1.5) {
+            throw new Error(
+              `❗ Price for ${packageName} cannot exceed 150% of listed price (max: ₹${Math.floor(totalPrice * 1.5)})`
             );
           }
 
@@ -374,13 +377,20 @@ const CustomerNegotiationModal = () => {
           if (!proposedPrice || Number(proposedPrice) <= 0)
             throw new Error("❗ Please enter a valid price for this service.");
 
-          const minValidation = (service.minPrice || 0) * 0.5;
-          if (Number(proposedPrice) < minValidation)
+          // ✅ Validate price is within the listed price range
+          const minPrice = service.minPrice || 0;
+          const maxPrice = service.maxPrice || 0;
+          
+          if (Number(proposedPrice) < minPrice) {
             throw new Error(
-              `❗ Price for ${
-                service.serviceName
-              } too low. Minimum: ₹${Math.floor(minValidation)}`
+              `❗ Price cannot be less than minimum listed price ₹${minPrice}`
             );
+          }
+          if (Number(proposedPrice) > maxPrice) {
+            throw new Error(
+              `❗ Price cannot exceed maximum listed price ₹${maxPrice}`
+            );
+          }
 
           console.log("Service data for negotiation data:", service);
           negotiationData = {
