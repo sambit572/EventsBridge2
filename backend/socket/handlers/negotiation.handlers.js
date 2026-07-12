@@ -155,6 +155,45 @@ try {
 
         console.log("✅ Vendor response saved:", negotiation);
 
+        // Update UserBookingHistory status directly via DB (no API call needed - already in backend)
+        try {
+          const { UserBookingHistory } = await import("../../model/user/userBookinghistory.model.js");
+          
+          // Find the booking by userId (bookedByUserId)
+          const booking = await UserBookingHistory.findOne({ userId: negotiation.bookedByUserId });
+          
+          if (booking) {
+            const newStatus = negotiation.vendorDecision === "accepted" ? "CONFIRMED" : "CANCELLED";
+            const finalAmount = negotiation.finalPrice || negotiation.proposedPrice;
+            
+            await UserBookingHistory.findByIdAndUpdate(booking._id, {
+              bookingStatus: newStatus,
+              amount: finalAmount,
+            });
+            
+            console.log(`✅ UserBookingHistory updated: status=${newStatus}, amount=${finalAmount}, userDetailsId=${booking.userDetailsId}`);
+          } else {
+            console.log("⚠️ No UserBookingHistory found for userId:", negotiation.bookedByUserId);
+          }
+        } catch (updateError) {
+          console.error("⚠️ Failed to update booking history:", updateError.message);
+        }
+
+        // Notify the customer (bookedByUserId) about the vendor decision
+        const customerSocketId = socket.handshake?.query?.customerSocketMap?.[negotiation.bookedByUserId?.toString()];
+        // Emit to customer's room if they're connected
+        apiNameSpace.to(negotiation.bookedByUserId?.toString()).emit("negotiation-status-update", {
+          serviceId: negotiation.serviceId,
+          vendorId: negotiation.vendorId,
+          vendorDecision: negotiation.vendorDecision,
+          finalPrice: negotiation.finalPrice,
+          proposedPrice: negotiation.proposedPrice,
+          status: negotiation.vendorDecision === "accepted" ? "accepted" : "rejected",
+          message: negotiation.vendorDecision === "accepted" 
+            ? `Vendor has accepted your negotiation with final price ₹${negotiation.finalPrice || negotiation.proposedPrice}`
+            : "Vendor has rejected your negotiation."
+        });
+
         // Send next pending negotiation for this vendor
         const nextPending = await Negotiation.findOne({
           vendorId,
