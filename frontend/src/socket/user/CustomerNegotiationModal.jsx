@@ -14,8 +14,7 @@ const CustomerNegotiationModal = () => {
   const [selectedServiceIndex, setSelectedServiceIndex] = useState(0);
   const [showTimer, setShowTimer] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15 * 60);
-  const [proceededWithoutNegotiation, setProceededWithoutNegotiation] =
-    useState(false);
+  const [proceededWithoutNegotiation, setProceededWithoutNegotiation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [dataLoading, setDataLoading] = useState(true);
@@ -238,6 +237,7 @@ const CustomerNegotiationModal = () => {
         "serviceName",
         "serviceId",
         "bookedByUserId",
+        "userDetailsId",
         "bookedByUser",
         "bookedByUserEmail",
         "bookedByUserPhoneNumber",
@@ -330,12 +330,15 @@ const CustomerNegotiationModal = () => {
             item.cateringDetails;
           proposedPrice = proposedPrices[item.cartItemId];
 
-          const minValidation = totalPrice * 0.5;
-          if (proposedPrice < minValidation) {
+          // ✅ Validate price is within range (for catering, it's fixed price)
+          if (proposedPrice < totalPrice) {
             throw new Error(
-              `❗ Price for ${packageName} too low. Minimum: ₹${Math.floor(
-                minValidation
-              )}`
+              `❗ Price for ${packageName} cannot be less than listed price ₹${totalPrice}`
+            );
+          }
+          if (proposedPrice > totalPrice * 1.5) {
+            throw new Error(
+              `❗ Price for ${packageName} cannot exceed 150% of listed price (max: ₹${Math.floor(totalPrice * 1.5)})`
             );
           }
 
@@ -352,6 +355,7 @@ const CustomerNegotiationModal = () => {
 
             serviceName: service.serviceName,
             bookedByUserId: bookingDetails.bookedById,
+            userDetailsId, 
             bookedByUser: bookingDetails.bookedBy,
             bookedByUserEmail: bookingDetails.userEmail,
             bookedByUserPhoneNumber: bookingDetails.phone,
@@ -374,13 +378,20 @@ const CustomerNegotiationModal = () => {
           if (!proposedPrice || Number(proposedPrice) <= 0)
             throw new Error("❗ Please enter a valid price for this service.");
 
-          const minValidation = (service.minPrice || 0) * 0.5;
-          if (Number(proposedPrice) < minValidation)
+          // ✅ Validate price is within the listed price range
+          const minPrice = service.minPrice || 0;
+          const maxPrice = service.maxPrice || 0;
+          
+          if (Number(proposedPrice) < minPrice) {
             throw new Error(
-              `❗ Price for ${
-                service.serviceName
-              } too low. Minimum: ₹${Math.floor(minValidation)}`
+              `❗ Price cannot be less than minimum listed price ₹${minPrice}`
             );
+          }
+          if (Number(proposedPrice) > maxPrice) {
+            throw new Error(
+              `❗ Price cannot exceed maximum listed price ₹${maxPrice}`
+            );
+          }
 
           console.log("Service data for negotiation data:", service);
           negotiationData = {
@@ -393,6 +404,7 @@ const CustomerNegotiationModal = () => {
             serviceType: service.serviceCategory,
 
             serviceName: service.serviceName,
+              userDetailsId, 
             bookedByUserId: bookingDetails.bookedById,
             bookedByUser: bookingDetails.bookedBy,
             bookedByUserEmail: bookingDetails.userEmail,
@@ -807,18 +819,7 @@ const CustomerNegotiationModal = () => {
           <>
             {/* Actions — Proceed Without Negotiation on the left,
                 Send to Vendor on the right */}
-            <div className="mt-5 flex flex-col-reverse sm:flex-row gap-3">
-              <button
-                className="flex-1 py-3.5 px-6 text-sm sm:text-base rounded-xl border-none cursor-pointer font-bold uppercase tracking-wider transition-colors duration-300 bg-slate-200 text-slate-700 hover:bg-slate-300 disabled:bg-slate-400"
-                onClick={handleProceedWithoutNegotiation}
-                disabled={isLoading}
-              >
-                {isLoading
-                  ? "Processing..."
-                  : `Proceed Without Negotiation${
-                      isMultipleServiceGroups() ? " (All)" : ""
-                    }`}
-              </button>
+            <div className="mt-5 ">
 
               <button
                 className="flex-1 py-3.5 px-6 text-sm sm:text-base rounded-xl border-none cursor-pointer font-bold uppercase tracking-wider transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl bg-blue-600 text-white shadow-md hover:bg-blue-700 disabled:bg-slate-400 disabled:shadow-none disabled:transform-none"

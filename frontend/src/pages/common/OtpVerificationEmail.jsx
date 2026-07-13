@@ -4,15 +4,18 @@ import { BACKEND_URL } from "../../utils/constant";
 import "./OTPVerification.css";
 import { useDispatch } from "react-redux";
 import { setVendor } from "../../redux/VendorSlice";
+import { setUser } from "../../redux/UserSlice";
 
 const OTPVerificationEmail = ({
-   emailOtp,
+  emailOtp,
   setStep,
   onClose,
+  type ,
 }) => {
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
 
   const verifyOtp = async (e) => {
@@ -26,8 +29,13 @@ const OTPVerificationEmail = ({
       setLoading(true);
       setError("");
 
+      const endpoint =
+        type === "vendor"
+          ? `${BACKEND_URL}/vendors/verify-login-otp`
+          : `${BACKEND_URL}/user/verify-login-otp`;
+
       const res = await axios.post(
-        `${BACKEND_URL}/vendors/verify-login-otp`,
+        endpoint,
         {
           emailOtp,
           otp,
@@ -36,49 +44,50 @@ const OTPVerificationEmail = ({
           withCredentials: true,
         }
       );
-      const vendor = res.data.data.loggedInVendor;
-      dispatch(setVendor(vendor));
-      const profilePic = vendor.profilePicture || "";
 
-if (profilePic) {
-  localStorage.setItem("VendorProfilePic", profilePic);
-}
-      localStorage.setItem("VendorCurrentlyLoggedIn","true");
+      if (type === "vendor") {
+        const vendor = res.data.data.loggedInVendor;
 
-localStorage.setItem(
-  "VendorFullName",
-  vendor.fullName
-);
+        dispatch(setVendor(vendor));
 
-const firstName = vendor.fullName.split(" ")[0];
+        const profilePic = vendor.profilePicture || "";
 
-localStorage.setItem(
-  "VendorFirstName",
-  firstName
-);
+        if (profilePic) {
+          localStorage.setItem("VendorProfilePic", profilePic);
+        }
 
-localStorage.setItem(
-  "VendorInitial",
-  firstName.charAt(0).toUpperCase()
-);
+        localStorage.setItem("VendorCurrentlyLoggedIn", "true");
+        localStorage.setItem("VendorFullName", vendor.fullName);
 
-localStorage.setItem(
-  "vendorId",
-  vendor._id
-);
+        const firstName = vendor.fullName.split(" ")[0];
 
-window.dispatchEvent(
-  new Event("userLoggedIn")
-);
+        localStorage.setItem("VendorFirstName", firstName);
+        localStorage.setItem(
+          "VendorInitial",
+          firstName.charAt(0).toUpperCase()
+        );
+        localStorage.setItem("vendorId", vendor._id);
+      } else {
+       const user = res.data.data.user;
 
-      if (res.status===200) {
-         setStep("success");
+        dispatch(setUser(user));
 
+        localStorage.setItem("currentlyLoggedIn", "true");
+
+        const firstName = user.fullName.split(" ")[0];
+        const lastName = user.fullName.split(" ")[1] || "";
+
+        localStorage.setItem("userFirstName", firstName);
+        localStorage.setItem("userLastName", lastName);
+      }
+
+      window.dispatchEvent(new Event("userLoggedIn"));
+
+      if (res.status === 200) {
+        setStep("success");
       }
     } catch (err) {
-      setError(
-        err.response?.data?.message || "OTP verification failed"
-      );
+      setError(err.response?.data?.message || "OTP verification failed");
     } finally {
       setLoading(false);
     }
@@ -88,9 +97,7 @@ window.dispatchEvent(
     <div className="otp-container">
       <h2>Email Verification</h2>
 
-      <p>
-        Enter the OTP sent to emailid
-      </p>
+      <p>Enter the OTP sent to your email.</p>
 
       <form onSubmit={verifyOtp}>
         <input

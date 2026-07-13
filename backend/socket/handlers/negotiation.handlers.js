@@ -1,6 +1,8 @@
 // registerNegotiationHandler.js
 import { Negotiation } from "../../model/common/Negotiation.model.js";
 import { sendEmail } from "../../utilities/sendEmail.js";
+import Booking from "../../model/common/booking.model.js";
+import { UserBookingHistory } from "../../model/user/userBookinghistory.model.js";
 
 export default async function registerNegotiationHandler(
   apiNameSpace,
@@ -13,15 +15,36 @@ export default async function registerNegotiationHandler(
     console.log("📩 Negotiation request received:", data);
 
     try {
-      // Save to DB with vendorDecision as pending
-      const res = await Negotiation.create({
-        ...data,
-        vendorDecision: "pending",
-      });
+   const res = await Negotiation.create({
+  ...data,
+  vendorDecision: "pending",
+});
 
-      console.log("✅ Negotiation request saved to DB:", res);
+await Booking.create({
+    vendor: data.vendorId,
+    service: data.serviceId,
+    user: data.bookedByUserId,
 
-      // Send email to vendor
+    startDate: new Date(data.date.startDate),
+    endDate: new Date(data.date.endDate),
+
+     userDetailsId: data.userDetailsId,
+
+    amount:
+        data.proposedPrice > 0
+            ? data.proposedPrice
+            : data.originalPriceRange.min,
+
+    bookingStatus: "PENDING",
+
+    location: data.venueLocation,
+
+    negotiationId: res._id,
+});
+console.log("✅ Booking created");
+
+console.log("✅ Negotiation request saved to DB:", res);
+
 try {
   await sendEmail({
     to: data.vendorEmail,
@@ -154,6 +177,80 @@ try {
         }
 
         console.log("✅ Vendor response saved:", negotiation);
+        
+// Update Booking
+try {
+  const updatedBooking = await Booking.findOneAndUpdate(
+    {
+      negotiationId: negotiation._id,
+    },
+    {
+      bookingStatus:
+        negotiation.vendorDecision === "accepted"
+          ? "CONFIRMED"
+          : "CANCELLED",
+
+      amount:
+        negotiation.finalPrice ?? negotiation.proposedPrice,
+    },
+    { new: true }
+  );
+
+  if (updatedBooking) {
+    console.log(
+      `✅ Booking updated: status=${updatedBooking.bookingStatus}, amount=${updatedBooking.amount}`
+    );
+  } else {
+    console.log("⚠️ No Booking found for negotiation:", negotiation._id);
+  }
+} catch (error) {
+  console.error("❌ Failed to update Booking:", error);
+}
+        // Update UserBookingHistory status directly via DB (no API call needed - already in backend)
+        try {
+  const updatedHistory = await UserBookingHistory.findOneAndUpdate(
+    {
+      userId: negotiation.bookedByUserId,
+    },
+    {
+      bookingStatus:
+        negotiation.vendorDecision === "accepted"
+          ? "CONFIRMED"
+          : "CANCELLED",
+
+      amount:
+        negotiation.finalPrice ?? negotiation.proposedPrice,
+    },
+    { new: true }
+  );
+
+  if (updatedHistory) {
+    console.log(
+      `✅ UserBookingHistory updated: status=${updatedHistory.bookingStatus}, amount=${updatedHistory.amount}`
+    );
+  } else {
+    console.log("⚠️ No UserBookingHistory found.");
+  }
+} catch (error) {
+  console.error("❌ Failed to update UserBookingHistory:", error);
+}
+          
+          
+
+        // Notify the customer (bookedByUserId) about the vendor decision
+        const customerSocketId = socket.handshake?.query?.customerSocketMap?.[negotiation.bookedByUserId?.toString()];
+        // Emit to customer's room if they're connected
+        apiNameSpace.to(negotiation.bookedByUserId?.toString()).emit("negotiation-status-update", {
+          serviceId: negotiation.serviceId,
+          vendorId: negotiation.vendorId,
+          vendorDecision: negotiation.vendorDecision,
+          finalPrice: negotiation.finalPrice,
+          proposedPrice: negotiation.proposedPrice,
+          status: negotiation.vendorDecision === "accepted" ? "accepted" : "rejected",
+          message: negotiation.vendorDecision === "accepted" 
+            ? `Vendor has accepted your negotiation with final price ₹${negotiation.finalPrice || negotiation.proposedPrice}`
+            : "Vendor has rejected your negotiation."
+        });
 
         // Send next pending negotiation for this vendor
         const nextPending = await Negotiation.findOne({

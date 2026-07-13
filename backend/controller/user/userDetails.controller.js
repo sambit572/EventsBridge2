@@ -1,6 +1,7 @@
 import { UserDetails } from "../../model/user/userDetails.model.js";
 import { ApiError } from "../../utilities/ApiError.js";
 import { ApiResponse } from "../../utilities/ApiResponse.js";
+import { isValidIndianPhone } from "../../utilities/validatePhone.js";
 import mongoose from "mongoose";
 
 export const saveDetails = async (req, res) => {
@@ -43,14 +44,16 @@ export const saveDetails = async (req, res) => {
       return res.status(400).json(new ApiError(400, "Missing required fields"));
     }
 
-    // Optional: Validate phone/pincode formats
-    if (!/^\d{10}$/.test(phone)) {
-      return res.status(400).json(new ApiError(400, "Invalid phone number"));
-    }
-    if (altPhone && !/^\d{10}$/.test(altPhone)) {
+    // Validate Indian mobile number (exactly 10 digits, starting with 6-9)
+    if (!isValidIndianPhone(phone)) {
       return res
         .status(400)
-        .json(new ApiError(400, "Invalid alternate phone number"));
+        .json(new ApiError(400, "Please enter a valid Indian mobile number."));
+    }
+    if (altPhone && !isValidIndianPhone(altPhone)) {
+      return res
+        .status(400)
+        .json(new ApiError(400, "Please enter a valid Indian mobile number for alternate phone."));
     }
     if (!/^\d{6}$/.test(pincode)) {
       return res.status(400).json(new ApiError(400, "Invalid pincode"));

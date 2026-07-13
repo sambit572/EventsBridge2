@@ -50,6 +50,13 @@ function DashBoardMain() {
   const [finalPrice, setFinalPrice] = useState("");
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
+  // ✅ NEW: Pre-fill final price with proposed price when popup opens
+  useEffect(() => {
+    if (popupData?.proposedPrice) {
+      setFinalPrice(popupData.proposedPrice.toString());
+    }
+  }, [popupData?.proposedPrice]);
+
   const handleConfirmPassword = async () => {
     try {
       const res = await axios.post(

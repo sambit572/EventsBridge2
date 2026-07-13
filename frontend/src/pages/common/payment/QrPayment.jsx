@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
 import { extractUpiTransactionId } from "../../../utils/payment/extractUpiTransactionId.js";
-
+import clsx from "clsx";
 import toast from "react-hot-toast";
 
 const QRPayment = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { amount, upiUri, merchantRef, orderId, expiresAt } =
+  const { amount, upiUri, merchantRef, orderId, expiresAt, userDetailsId } =
     location.state || {};
 
   const [transactionId, setTransactionId] = useState("");
@@ -97,6 +97,7 @@ const QRPayment = () => {
           orderId,
           merchantRef,
           amount,
+          userDetailsId, // Pass the actual userDetailsId from location state
         },
       });
     } catch (err) {
@@ -113,17 +114,17 @@ const QRPayment = () => {
   const seconds = timeRemaining % 60;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+    <div className={clsx('min-h-screen', 'bg-gradient-to-br', 'from-blue-50', 'via-white', 'to-purple-50', 'py-8', 'px-4')}>
+      <div className={clsx('max-w-2xl', 'mx-auto')}>
+        <div className={clsx('bg-white', 'rounded-3xl', 'shadow-2xl', 'overflow-hidden', 'border', 'border-gray-100')}>
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-white">
             <div className="flex items-center justify-between mb-4">
-              <h1 className="text-3xl font-bold">Scan & Pay</h1>
+              <h1 className="text-3xl font-bold">Advance Payment</h1>
               {expiresAt && timeRemaining > 0 && (
-                <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-2">
+                <div className={clsx('bg-white', 'bg-opacity-20', 'backdrop-blur-sm', 'rounded-full', 'px-4', 'py-2', 'flex', 'items-center', 'gap-2')}>
                   <svg
-                    className="w-5 h-5"
+                    className={clsx('w-5', 'h-5')}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -135,15 +136,15 @@ const QRPayment = () => {
                       d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <span className="font-mono font-semibold">
+                  <span className={clsx('font-mono', 'font-semibold')}>
                     {String(minutes).padStart(2, "0")}:
                     {String(seconds).padStart(2, "0")}
                   </span>
                 </div>
               )}
             </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-5xl font-bold">
+            <div className={clsx('flex', 'items-baseline', 'gap-2')}>
+              <span className={clsx('text-5xl', 'font-bold')}>
                 ₹{amount?.toLocaleString() || "0"}
               </span>
               <span className="text-blue-100">to pay</span>
@@ -152,21 +153,22 @@ const QRPayment = () => {
 
           {/* QR Code Section */}
           <div className="p-8">
-            <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-8 mb-8 border-2 border-dashed border-blue-200">
-              <div className="flex flex-col items-center">
-                <div className="bg-white p-6 rounded-2xl shadow-lg mb-4 relative">
+            <div className={clsx('bg-gradient-to-br', 'from-gray-50', 'to-blue-50', 'rounded-2xl', 'p-8', 'mb-8', 'border-2', 'border-dashed', 'border-blue-200')}>
+              <div className={clsx('flex', 'flex-col', 'items-center')}>
+                <div className={clsx('bg-white', 'p-6', 'rounded-2xl', 'shadow-lg', 'mb-4', 'relative')}>
                   <QRCodeSVG
                     value={
-                      upiUri || "upi://pay?pa=merchant@upi&pn=Merchant&am=0"
+                      upiUri ||
+                      "upi://pay?pa=7008912849@idfcbank&pn=EVENTSBRIDGE%20TECHNOLOGY%20PRIVATE%20LIMITED&am=0"
                     }
                     size={240}
                     level="H"
                     includeMargin={true}
                   />
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="bg-white rounded-full p-2 shadow-md">
+                  <div className={clsx('absolute', 'inset-0', 'flex', 'items-center', 'justify-center', 'pointer-events-none')}>
+                    <div className={clsx('bg-white', 'rounded-full', 'p-2', 'shadow-md')}>
                       <svg
-                        className="w-8 h-8 text-blue-600"
+                        className={clsx('w-8', 'h-8', 'text-blue-600')}
                         fill="currentColor"
                         viewBox="0 0 24 24"
                       >
@@ -175,34 +177,34 @@ const QRPayment = () => {
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 text-center font-medium">
+                <p className={clsx('text-gray-600', 'text-center', 'font-medium')}>
                   Scan with any UPI app to pay
                 </p>
-                <div className="flex items-center gap-4 mt-4">
+                <div className={clsx('flex', 'items-center', 'gap-4', 'mt-4')}>
                   <img
                     src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg"
                     alt="UPI"
-                    className="h-8 opacity-80"
+                    className={clsx('h-8', 'opacity-80')}
                   />
                 </div>
               </div>
             </div>
 
             {/* Order Details */}
-            <div className="bg-gray-50 rounded-2xl p-6 mb-8">
-              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+            <div className={clsx('bg-gray-50', 'rounded-2xl', 'p-6', 'mb-8')}>
+              <h3 className={clsx('text-sm', 'font-semibold', 'text-gray-500', 'uppercase', 'tracking-wide', 'mb-3')}>
                 Order Details
               </h3>
               <div className="space-y-2">
-                <div className="flex justify-between items-center">
+                <div className={clsx('flex', 'justify-between', 'items-center')}>
                   <span className="text-gray-600">Order ID</span>
-                  <span className="font-mono font-semibold text-gray-900">
+                  <span className={clsx('font-mono', 'font-semibold', 'text-gray-900')}>
                     {orderId || "N/A"}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className={clsx('flex', 'justify-between', 'items-center')}>
                   <span className="text-gray-600">Merchant Reference</span>
-                  <span className="font-mono font-semibold text-gray-900">
+                  <span className={clsx('font-mono', 'font-semibold', 'text-gray-900')}>
                     {merchantRef || "N/A"}
                   </span>
                 </div>
@@ -212,9 +214,9 @@ const QRPayment = () => {
             {/* Form Section */}
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="relative">
-                <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-blue-600 font-bold">1</span>
+                <h3 className={clsx('text-lg', 'font-bold', 'text-gray-800', 'mb-4', 'flex', 'items-center', 'gap-2')}>
+                  <div className={clsx('w-8', 'h-8', 'bg-blue-100', 'rounded-full', 'flex', 'items-center', 'justify-center')}>
+                    <span className={clsx('text-blue-600', 'font-bold')}>1</span>
                   </div>
                   Manual Transaction ID (Optional)
                 </h3>
@@ -224,11 +226,11 @@ const QRPayment = () => {
                     value={transactionId}
                     onChange={(e) => setTransactionId(e.target.value)}
                     placeholder="Enter 8-15 digit UPI Transaction ID"
-                    className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all font-mono text-lg"
+                    className={clsx('w-full', 'px-4', 'py-4', 'border-2', 'border-gray-200', 'rounded-xl', 'focus:ring-4', 'focus:ring-blue-100', 'focus:border-blue-500', 'outline-none', 'transition-all', 'font-mono', 'text-lg')}
                     disabled={loading}
                   />
                   <svg
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+                    className={clsx('absolute', 'right-4', 'top-1/2', '-translate-y-1/2', 'w-5', 'h-5', 'text-gray-400')}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -244,21 +246,21 @@ const QRPayment = () => {
               </div>
 
               <div className="relative">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                      <span className="text-purple-600 font-bold">2</span>
+                <div className={clsx('flex', 'items-center', 'justify-between', 'mb-4')}>
+                  <h3 className={clsx('text-lg', 'font-bold', 'text-gray-800', 'flex', 'items-center', 'gap-2')}>
+                    <div className={clsx('w-8', 'h-8', 'bg-purple-100', 'rounded-full', 'flex', 'items-center', 'justify-center')}>
+                      <span className={clsx('text-purple-600', 'font-bold')}>2</span>
                     </div>
                     Upload Payment Receipt
                   </h3>
                   {!transactionId && (
-                    <span className="text-xs bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-semibold">
+                    <span className={clsx('text-xs', 'bg-yellow-100', 'text-yellow-700', 'px-3', 'py-1', 'rounded-full', 'font-semibold')}>
                       Recommended
                     </span>
                   )}
                 </div>
 
-                <label className="relative block">
+                <label className={clsx('relative', 'block')}>
                   <input
                     type="file"
                     accept="image/*"
@@ -266,11 +268,11 @@ const QRPayment = () => {
                     className="hidden"
                     disabled={loading}
                   />
-                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 hover:border-purple-400 hover:bg-purple-50 transition-all cursor-pointer group">
-                    <div className="flex flex-col items-center">
-                      <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <div className={clsx('border-2', 'border-dashed', 'border-gray-300', 'rounded-xl', 'p-8', 'hover:border-purple-400', 'hover:bg-purple-50', 'transition-all', 'cursor-pointer', 'group')}>
+                    <div className={clsx('flex', 'flex-col', 'items-center')}>
+                      <div className={clsx('w-16', 'h-16', 'bg-purple-100', 'rounded-full', 'flex', 'items-center', 'justify-center', 'mb-4', 'group-hover:scale-110', 'transition-transform')}>
                         <svg
-                          className="w-8 h-8 text-purple-600"
+                          className={clsx('w-8', 'h-8', 'text-purple-600')}
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -285,17 +287,17 @@ const QRPayment = () => {
                       </div>
                       {fileName ? (
                         <div className="text-center">
-                          <p className="text-green-600 font-semibold mb-1">
+                          <p className={clsx('text-green-600', 'font-semibold', 'mb-1')}>
                             ✓ File uploaded
                           </p>
-                          <p className="text-sm text-gray-600">{fileName}</p>
+                          <p className={clsx('text-sm', 'text-gray-600')}>{fileName}</p>
                         </div>
                       ) : (
                         <div className="text-center">
-                          <p className="text-gray-700 font-semibold mb-1">
+                          <p className={clsx('text-gray-700', 'font-semibold', 'mb-1')}>
                             Click to upload receipt
                           </p>
-                          <p className="text-sm text-gray-500">
+                          <p className={clsx('text-sm', 'text-gray-500')}>
                             PNG, JPG up to 10MB
                           </p>
                         </div>
@@ -306,9 +308,9 @@ const QRPayment = () => {
               </div>
 
               {error && (
-                <div className="bg-red-50 border-l-4 border-red-500 rounded-lg p-4 flex items-start gap-3">
+                <div className={clsx('bg-red-50', 'border-l-4', 'border-red-500', 'rounded-lg', 'p-4', 'flex', 'items-start', 'gap-3')}>
                   <svg
-                    className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5"
+                    className={clsx('w-5', 'h-5', 'text-red-500', 'flex-shrink-0', 'mt-0.5')}
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -318,7 +320,7 @@ const QRPayment = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <p className="text-red-700 font-medium">{error}</p>
+                  <p className={clsx('text-red-700', 'font-medium')}>{error}</p>
                 </div>
               )}
 
@@ -334,7 +336,7 @@ const QRPayment = () => {
                 {loading ? (
                   <>
                     <svg
-                      className="animate-spin h-6 w-6"
+                      className={clsx('animate-spin', 'h-6', 'w-6')}
                       fill="none"
                       viewBox="0 0 24 24"
                     >
@@ -358,7 +360,7 @@ const QRPayment = () => {
                   <>
                     <span>Verify Payment</span>
                     <svg
-                      className="w-6 h-6"
+                      className={clsx('w-6', 'h-6')}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -378,12 +380,12 @@ const QRPayment = () => {
         </div>
 
         {/* Info Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-          <div className="bg-white rounded-2xl p-4 shadow-md border border-gray-100">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+        <div className={clsx('grid', 'grid-cols-1', 'md:grid-cols-2', 'gap-4', 'mt-6')}>
+          <div className={clsx('bg-white', 'rounded-2xl', 'p-4', 'shadow-md', 'border', 'border-gray-100')}>
+            <div className={clsx('flex', 'items-center', 'gap-3')}>
+              <div className={clsx('w-10', 'h-10', 'bg-green-100', 'rounded-full', 'flex', 'items-center', 'justify-center', 'flex-shrink-0')}>
                 <svg
-                  className="w-5 h-5 text-green-600"
+                  className={clsx('w-5', 'h-5', 'text-green-600')}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -397,16 +399,16 @@ const QRPayment = () => {
                 </svg>
               </div>
               <div>
-                <p className="font-semibold text-gray-800">100% Secure</p>
-                <p className="text-sm text-gray-600">Encrypted transaction</p>
+                <p className={clsx('font-semibold', 'text-gray-800')}>100% Secure</p>
+                <p className={clsx('text-sm', 'text-gray-600')}>Encrypted transaction</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-2xl p-4 shadow-md border border-gray-100">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+          <div className={clsx('bg-white', 'rounded-2xl', 'p-4', 'shadow-md', 'border', 'border-gray-100')}>
+            <div className={clsx('flex', 'items-center', 'gap-3')}>
+              <div className={clsx('w-10', 'h-10', 'bg-blue-100', 'rounded-full', 'flex', 'items-center', 'justify-center', 'flex-shrink-0')}>
                 <svg
-                  className="w-5 h-5 text-blue-600"
+                  className={clsx('w-5', 'h-5', 'text-blue-600')}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -420,10 +422,10 @@ const QRPayment = () => {
                 </svg>
               </div>
               <div>
-                <p className="font-semibold text-gray-800">
+                <p className={clsx('font-semibold', 'text-gray-800')}>
                   Instant Confirmation
                 </p>
-                <p className="text-sm text-gray-600">Real-time verification</p>
+                <p className={clsx('text-sm', 'text-gray-600')}>Real-time verification</p>
               </div>
             </div>
           </div>
