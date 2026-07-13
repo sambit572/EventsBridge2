@@ -5,6 +5,7 @@ import axios from "axios";
 import clsx from "clsx";
 import { BACKEND_URL } from "../../../utils/constant.js";
 
+
 export const PaymentSuccess = () => {
   const navigate = useNavigate();
   const location = useLocation();

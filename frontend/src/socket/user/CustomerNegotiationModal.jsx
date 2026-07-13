@@ -237,6 +237,7 @@ const CustomerNegotiationModal = () => {
         "serviceName",
         "serviceId",
         "bookedByUserId",
+        "userDetailsId",
         "bookedByUser",
         "bookedByUserEmail",
         "bookedByUserPhoneNumber",
@@ -354,6 +355,7 @@ const CustomerNegotiationModal = () => {
 
             serviceName: service.serviceName,
             bookedByUserId: bookingDetails.bookedById,
+            userDetailsId, 
             bookedByUser: bookingDetails.bookedBy,
             bookedByUserEmail: bookingDetails.userEmail,
             bookedByUserPhoneNumber: bookingDetails.phone,
@@ -402,6 +404,7 @@ const CustomerNegotiationModal = () => {
             serviceType: service.serviceCategory,
 
             serviceName: service.serviceName,
+              userDetailsId, 
             bookedByUserId: bookingDetails.bookedById,
             bookedByUser: bookingDetails.bookedBy,
             bookedByUserEmail: bookingDetails.userEmail,
@@ -816,18 +819,7 @@ const CustomerNegotiationModal = () => {
           <>
             {/* Actions — Proceed Without Negotiation on the left,
                 Send to Vendor on the right */}
-            <div className="mt-5 flex flex-col-reverse sm:flex-row gap-3">
-              <button
-                className="flex-1 py-3.5 px-6 text-sm sm:text-base rounded-xl border-none cursor-pointer font-bold uppercase tracking-wider transition-colors duration-300 bg-slate-200 text-slate-700 hover:bg-slate-300 disabled:bg-slate-400"
-                onClick={handleProceedWithoutNegotiation}
-                disabled={isLoading}
-              >
-                {isLoading
-                  ? "Processing..."
-                  : `Proceed Without Negotiation${
-                      isMultipleServiceGroups() ? " (All)" : ""
-                    }`}
-              </button>
+            <div className="mt-5 ">
 
               <button
                 className="flex-1 py-3.5 px-6 text-sm sm:text-base rounded-xl border-none cursor-pointer font-bold uppercase tracking-wider transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl bg-blue-600 text-white shadow-md hover:bg-blue-700 disabled:bg-slate-400 disabled:shadow-none disabled:transform-none"

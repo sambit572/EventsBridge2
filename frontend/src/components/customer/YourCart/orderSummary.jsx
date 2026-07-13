@@ -81,7 +81,6 @@ const OrderSummary = () => {
     if (!items.length) {
       return {
         finalTotal: 0,
-        platformDiscountAmount: 0,
         totalAfterDiscount: 0,
         grandTotal: 0,
       };
@@ -93,14 +92,13 @@ const OrderSummary = () => {
       0
     );
 
-    const platformDiscountAmount = Math.round(finalTotal * 0.2);
-    const totalAfterDiscount = finalTotal - platformDiscountAmount;
+ 
+    const totalAfterDiscount = finalTotal ;
 
     const grandTotal = totalAfterDiscount;
 
     return {
       finalTotal,
-      platformDiscountAmount,
       totalAfterDiscount,
       grandTotal,
     };
@@ -129,7 +127,7 @@ const OrderSummary = () => {
 
     navigate("/qr-payment", {
       state: {
-        amount: fullAmount, // Send full amount, not 20%
+        amount: Math.round(orderSummary.grandTotal*0.2),
         upiUri: upiUri,
         merchantRef: merchantRef,
         orderId: orderId,
@@ -494,15 +492,7 @@ const OrderSummary = () => {
                       </span>
                     </div>
 
-                    <div className={clsx('flex', 'justify-between', 'items-center', 'py-2')}>
-                      <span className="text-gray-600">
-                        Platform Discount (20%)
-                      </span>
-                      <span className={clsx('font-semibold', 'text-red-500')}>
-                        - ₹
-                        {orderSummary.platformDiscountAmount.toLocaleString()}
-                      </span>
-                    </div>
+                   
 
                     <div className={clsx('border-t-2', 'border-gray-200', 'pt-4')}>
                       <div className={clsx('flex', 'justify-between', 'items-center')}>
@@ -516,37 +506,6 @@ const OrderSummary = () => {
                     </div>
                   </div>
 
-                  {orderSummary.platformDiscountAmount > 0 && (
-                    <div className={clsx('bg-green-50', 'border', 'border-green-200', 'rounded-2xl', 'p-4', 'mb-6')}>
-                      <div className={clsx('flex', 'items-center')}>
-                        <div className={clsx('w-8', 'h-8', 'bg-green-500', 'rounded-full', 'flex', 'items-center', 'justify-center', 'mr-3')}>
-                          <svg
-                            className={clsx('w-4', 'h-4', 'text-white')}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                        </div>
-                        <div>
-                          <p className={clsx('text-green-800', 'font-semibold')}>
-                            Great Savings!
-                          </p>
-                          <p className={clsx('text-green-700', 'text-sm')}>
-                            You saved ₹
-                            {orderSummary.platformDiscountAmount.toLocaleString()}{" "}
-                            on this order
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
 
                   {/* Action Buttons */}
                   <div className="space-y-3">

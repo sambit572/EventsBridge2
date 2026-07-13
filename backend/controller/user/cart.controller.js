@@ -8,6 +8,7 @@ import { ApiResponse } from "../../utilities/ApiResponse.js";
 import mongoose from "mongoose";
 import client from "../../db/redisClient.js";
 import { getIO } from "../../socket/index.js";
+import Booking from "../../model/common/booking.model.js";
 
 export const addToCart = async (req, res) => {
   try {
@@ -403,6 +404,7 @@ export const getCartWithUserDetails = async (req, res) => {
     
     // ✅ Also fetch UserBookingHistory to get paymentStatus
     let userBookingHistory = null;
+    let booking = null;
     try {
       userBookingHistory = await UserBookingHistory.findOne({ userDetailsId });
       console.log("📋 UserBookingHistory found:", userBookingHistory?._id, "paymentStatus:", userBookingHistory?.paymentStatus);
@@ -410,6 +412,20 @@ export const getCartWithUserDetails = async (req, res) => {
       console.warn("⚠️ Could not fetch UserBookingHistory:", error.message);
       // Continue without payment status
     }
+    // ✅ Also fetch Booking to get paymentStatus
+try {
+  booking = await Booking.findOne({ userDetailsId });
+
+  console.log(
+    "📋 Booking found:",
+    booking?._id,
+    "paymentStatus:",
+    booking?.paymentStatus
+  );
+} catch (error) {
+  console.warn("⚠️ Could not fetch Booking:", error.message);
+}
+
 
     const negotiations = await Promise.all(negotiationPromises);
 
@@ -455,23 +471,46 @@ export const getCartWithUserDetails = async (req, res) => {
     const orderType = validItems.length > 1 ? "multiple" : "single";
     
     // ✅ Add paymentStatus from UserBookingHistory to each item
-    if (userBookingHistory) {
-      const paymentStatus = userBookingHistory.paymentStatus || "PENDING";
-      const itemsWithPaymentStatus = validItems.map(item => ({
-        ...item.toObject(),
-        paymentStatus: paymentStatus
-      }));
-      
-      console.log("✅ Added paymentStatus to items:", paymentStatus);
-      
-      return res.status(200).json(
-        new ApiResponse(
-          200,
-          { orderType, items: itemsWithPaymentStatus },
-          "Order items fetched successfully."
-        )
-      );
-    }
+   
+  // First preference: Booking
+if (booking) {
+  const paymentStatus = booking.paymentStatus || "PENDING";
+
+  const itemsWithPaymentStatus = validItems.map(item => ({
+    ...item.toObject(),
+    paymentStatus,
+  }));
+
+  console.log("✅ Added Booking paymentStatus:", paymentStatus);
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      { orderType, items: itemsWithPaymentStatus },
+      "Order items fetched successfully."
+    )
+  );
+}
+
+// Second preference: UserBookingHistory
+if (userBookingHistory) {
+  const paymentStatus = userBookingHistory.paymentStatus || "PENDING";
+
+  const itemsWithPaymentStatus = validItems.map(item => ({
+    ...item.toObject(),
+    paymentStatus,
+  }));
+
+  console.log("✅ Added UserBookingHistory paymentStatus:", paymentStatus);
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      { orderType, items: itemsWithPaymentStatus },
+      "Order items fetched successfully."
+    )
+  );
+}
 
     if (validItems.length === 0) {
       console.log("No valid items found for order summary.");
@@ -508,7 +547,6 @@ export const calculateOrderSummary = (items, orderType = "single") => {
   if (!items || !items.length) {
     return {
       finalTotal: 0,
-      platformDiscountAmount: 0,
       totalAfterDiscount: 0,
       grandTotal: 0,
     };
@@ -531,8 +569,8 @@ export const calculateOrderSummary = (items, orderType = "single") => {
   const negotiationStatus = hasPending ? "pending" : allAccepted ? "accepted" : "rejected";
 
   // Calculate 20% platform discount
-  const platformDiscountAmount = Math.round(finalTotal * 0.2);
-  const totalAfterDiscount = finalTotal - platformDiscountAmount;
+  
+  const totalAfterDiscount = finalTotal ;
 
   // Calculate taxes on the price after discount
  
@@ -540,7 +578,6 @@ export const calculateOrderSummary = (items, orderType = "single") => {
   
   return {
     finalTotal,
-    platformDiscountAmount,
     totalAfterDiscount,
     grandTotal,
     itemCount: items.length,
