@@ -148,6 +148,11 @@ const QRPayment = () => {
               </span>
               <span className="text-blue-100">to pay</span>
             </div>
+            <div className="mt-3">
+              <span className="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm text-white text-xs font-semibold tracking-wide uppercase px-3 py-1.5 rounded-full border border-white/20">
+                20% of Total Amount
+              </span>
+            </div>
           </div>
 
           {/* QR Code Section */}
@@ -157,8 +162,7 @@ const QRPayment = () => {
                 <div className="bg-white p-6 rounded-2xl shadow-lg mb-4 relative">
                   <QRCodeSVG
                     value={
-                      upiUri ||
-                      "upi://pay?pa=7008912849@idfcbank&pn=EVENTSBRIDGE%20TECHNOLOGY%20PRIVATE%20LIMITED&am=0"
+                      upiUri || "upi://pay?pa=merchant@upi&pn=Merchant&am=0"
                     }
                     size={240}
                     level="H"
