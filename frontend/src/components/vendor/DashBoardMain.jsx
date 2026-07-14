@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Seo } from "../../seo/seo";
 import DashBoardSideBar from "./DashBoardSideBar.jsx";
 import DashboardServices from "./DashboardServices.jsx";
 import DashBoardBooking from "./DashBoardBooking.jsx";
@@ -147,6 +148,13 @@ function DashBoardMain() {
 };
 
   return (
+    <>
+    <Seo
+        title={"Vendor Dashboard | Manage Bookings, Leads & Business Growth | EventsBridge"}
+        description={
+          "Manage your event business with the EventsBridge Vendor Dashboard. Track bookings, leads, negotiations, earnings, analytics, customer enquiries and grow your business across Odisha and India."
+        }
+      />
     <div className="dashboard-container-box">
       {/* Success Popup */}
       {showSuccessPopup && (
@@ -313,6 +321,7 @@ function DashBoardMain() {
         )}
       </div>
     </div>
+    </>
   );
 }
 

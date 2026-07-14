@@ -48,7 +48,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 33.6px;
+  font-size: 40.32px;
   cursor: pointer;
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: 800;
@@ -323,13 +323,13 @@
 
 @media (max-width: 680px) {
   .navbar { padding: 0 14px; height: 52px; top: 0; }
-  .logo { font-size: 24px; margin-right: 0; }
+  .logo { font-size: 28.8px; margin-right: 0; }
   .announcement-bar { font-size: 10px; padding: 6px 12px; }
   .get-started-btn { padding: 7px 12px; font-size: 12px; border-radius: 20px; }
 }
 
 @media (max-width: 460px) {
-  .logo { font-size: 21.6px; }
+  .logo { font-size: 25.92px; }
   .announcement-bar { letter-spacing: 0.4px; font-size: 9px; }
   /* Hide "Sign In" text button — user can still log in via profile icon */
   .signin-btn { display: none; }
@@ -337,6 +337,6 @@
 }
 
 @media (max-width: 360px) {
-  .logo { font-size: 19.2px; }
+  .logo { font-size: 23.04px; }
   .get-started-btn { padding: 6px 10px; font-size: 11px; }
 }

@@ -118,9 +118,9 @@ const QRPayment = () => {
       <div className={clsx('max-w-2xl', 'mx-auto')}>
         <div className={clsx('bg-white', 'rounded-3xl', 'shadow-2xl', 'overflow-hidden', 'border', 'border-gray-100')}>
           {/* Header */}
-          <div className={clsx('bg-gradient-to-r', 'from-blue-600', 'to-purple-600', 'p-8', 'text-white')}>
-            <div className={clsx('flex', 'items-center', 'justify-between', 'mb-4')}>
-              <h1 className={clsx('text-3xl', 'font-bold')}>Scan & Pay</h1>
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-white">
+            <div className="flex items-center justify-between mb-4">
+              <h1 className="text-3xl font-bold">Advance Payment</h1>
               {expiresAt && timeRemaining > 0 && (
                 <div className={clsx('bg-white', 'bg-opacity-20', 'backdrop-blur-sm', 'rounded-full', 'px-4', 'py-2', 'flex', 'items-center', 'gap-2')}>
                   <svg
@@ -148,6 +148,11 @@ const QRPayment = () => {
                 ₹{amount?.toLocaleString() || "0"}
               </span>
               <span className="text-blue-100">to pay</span>
+            </div>
+            <div className="mt-3">
+              <span className="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm text-white text-xs font-semibold tracking-wide uppercase px-3 py-1.5 rounded-full border border-white/20">
+                20% of Total Amount
+              </span>
             </div>
           </div>
 

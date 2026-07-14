@@ -4,7 +4,7 @@ import { FiChevronDown } from "react-icons/fi";
 import AboutUs_1 from "../../assets/aboutUs/about-image.webp";
 import Design from "../../components/common/aboutus/Design";
 import ServiceFeature from "./ServiceFeature";
-import { Seo } from "../../seo/seo.js";
+import { Seo } from "../../seo/seo";
 import frame from "/categories/frame_image.webp";
 
 const Card = ({ title, description, image }) => {
@@ -51,9 +51,9 @@ const AboutUs = () => {
   return (
     <>
       <Seo
-        title={"About EventsBridge"}
+        title={"About EventsBridge | India's Trusted Event Vendor Marketplace & Booking Platform"}
         description={
-          "EventsBridge is your trusted partner for event planning. Discover top vendors, compare transparent prices & book with flexible EMI plans today."
+          "Learn how EventsBridge is transforming event planning in India by connecting customers with verified event vendors. Discover our mission, live price negotiation, EMI booking, transparent pricing and our commitment to making weddings and events affordable for everyone."
         }
       />
       <div className="bg-transparent text-gray-800 px-4 sm:px-6 md:px-10 py-10 space-y-20">

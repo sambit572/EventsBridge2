@@ -12,7 +12,7 @@ import ForgotPass from "./../customer/ForgotPass";
 import { FiEyeOff, FiEye } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import Spinner from "./../../components/common/Spinner";
-import { Seo } from "../../seo/seo.js";
+import { Seo } from "../../seo/seo";
 import EventsBridgeLogo from "../../assets/EventsBridgeOnlyLogo.png";
   
 
