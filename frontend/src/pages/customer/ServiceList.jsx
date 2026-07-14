@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, Suspense } from "react";
 import { Seo } from "../../seo/seo";
+import categoryMeta from "../../seo/categoryMeta.js";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import "./ServiceList.css";
@@ -433,14 +434,16 @@ const ServiceList = ({ onSwitchToLogin }) => {
     return () => window.removeEventListener("resize", checkOverflow);
   }, [currentCategory, subcategoryMap]);
 
+  const currentMeta = categoryMeta[categoryData?.title] || {
+    title:
+      "Book Event Services in Odisha | Wedding Vendors, Catering, Decoration, Photography | EventsBridge",
+    description:
+      "Browse verified event services including photography, catering, decoration, DJs, banquet halls, makeup artists, event planners, bands, luxury cars and entertainment. Compare prices, negotiate live and book with confidence.",
+  };
+
   return (
     <>
-      <Seo
-        title={"Book Event Services in Odisha | Wedding Vendors, Catering, Decoration, Photography | EventsBridge"}
-        description={
-          "Browse verified event services including photography, catering, decoration, DJs, banquet halls, makeup artists, event planners, bands, luxury cars and entertainment. Compare prices, negotiate live and book with confidence."
-        }
-      />
+      <Seo title={currentMeta.title} description={currentMeta.description} />
       {categoryData && (
         <>
           {/* Banner Header */}
