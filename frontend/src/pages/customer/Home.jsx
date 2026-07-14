@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, Suspense } from "react";
 import axios from "axios";
 import "./Home.css";
-import { Seo } from "../../seo/seo.js";
+import { Seo } from "../../seo/seo";
 
 const AddsBanner = React.lazy(() =>
   import("./../../components/customer/home/AddsBanner")
@@ -79,8 +79,8 @@ const Home = () => {
   return (
     <>
       <Seo
-        title="EventsBridge"
-        description="Book and manage events effortlessly with Eventsbridge. Discover venues, plan online events and simplify bookings all in one place."
+        title="EventsBridge | Book Verified Event Vendors in Odisha | Wedding, Catering, Photography, Decoration & More"
+        description="Book trusted event vendors across Odisha with EventsBridge. Compare prices, negotiate directly with vendors, explore verified photographers, caterers, decorators, DJs, banquet halls, makeup artists and more. Secure bookings with transparent pricing and flexible EMI options for weddings, birthdays, corporate events and every special occasion."
       />
       <div className="home">
 

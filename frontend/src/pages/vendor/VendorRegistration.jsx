@@ -278,9 +278,9 @@ const VendorRegister = () => {
   return (
     <>
       <Seo
-        title={"Register as a Vendor"}
+        title={"Vendor Registration | Grow Your Event Business with EventsBridge | Get More Bookings"}
         description={
-          "Register as a vendor on Eventsbridge and connect with our platform. Sign up to offer your services and grow your business via our event platform."
+          "Join EventsBridge and connect with thousands of customers searching for photographers, decorators, caterers, DJs, makeup artists, banquet halls and event planners. Register your business today and receive high-quality leads with zero hidden charges."
         }
       />
       <div>

@@ -9,9 +9,9 @@ const TermsAndConditions = ({
   return (
     <>
       <Seo
-        title={"Terms & Conditions"}
+        title={"Terms & Conditions | EventsBridge Event Booking Platform"}
         description={
-          "Read the Eventsbridge terms and conditions. Understand our policies on bookings, vendor agreements, user obligations, and event services."
+          "Read the EventsBridge Terms & Conditions covering bookings, vendor services, customer responsibilities, payments, cancellations, refunds, platform usage and legal policies."
         }
       />
       <div className="tc-container">
