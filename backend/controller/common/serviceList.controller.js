@@ -121,6 +121,8 @@ export const getServicesByCategory = async (req, res) => {
           vendorId: 1,
           vendorName: "$vendorDetails.fullName",
           vendorEmail: "$vendorDetails.email",
+         vendorVerificationStatus: "$vendorDetails.verification.status",
+         vendorTier: "$vendorDetails.verification.plan.tier",
           avgRating: 1, // Ensure avgRating is included
           totalReviews: 1,
           available: 1,
@@ -160,7 +162,7 @@ export const getServiceById = async (req, res) => {
     );
     const service = await Service.findById(id).populate({
       path: "vendorId",
-      select: "fullName email", // fetch only needed fields
+      select: "fullName email verification ", // fetch only needed fields
     });
     console.log("Result from database (Service.findById):", service);
     console.log("---------------------------------------");
@@ -245,6 +247,8 @@ export const getServiceById = async (req, res) => {
       vendorName: service.vendorId?.fullName,
       vendorEmail: service.vendorId?.email,
       vendor: service.vendorId?._id,
+       vendorVerificationStatus: service.vendorId?.verification?.status,
+        vendorTier: service.vendorId?.verification?.plan?.tier,
       whyChooseUs: whyChooseUsPoints,
     };
 

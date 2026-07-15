@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState, Suspense } from "react";
+import { Seo } from "../../seo/seo";
+import categoryMeta from "../../seo/categoryMeta.js";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import "./ServiceList.css";
@@ -16,19 +18,20 @@ import photoBanner from "../../assets/serviceListBanner/photo-ban.webp";
 import foodBanner from "../../assets/serviceListBanner/catering-banner.webp";
 import banquetBanner from "../../assets/serviceListBanner/banquet-banner.webp";
 import danceBanner from "../../assets/serviceListBanner/classical-ban.webp";
-import islamicBanner from "../../assets/serviceListBanner/moulib-ban (2).webp";
-import christianBanner from "../../assets/serviceListBanner/christian-ban.webp";
-import panditBanner from "/categories/pandit.webp";
+import bouncersBanner from "../../assets/serviceListBanner/bouncers-security-ban.webp";
+import starsBanner from "../../assets/serviceListBanner/stars-influencers-ban.webp";
+import panditBanner from "/categories/mehendi-henna-artist.webp";
 import makeupBanner from "../../assets/serviceListBanner/beauty-ban.webp";
 import floralBanner from "../../assets/serviceListBanner/flower-ban.webp";
 import carBanner from "../../assets/serviceListBanner/car-ban.webp";
 import fireworksBanner from "/categories/fireworks.webp";
-import cardBanner from "/categories/marriage-card.webp";
+import cardBanner from "/categories/mascot-artists.webp";
 import magicBanner from "/categories/magician.webp";
 import resortBanner from "/categories/resortBanner.webp";
 // import stageBanner from "../../assets/home/categoriesImages/stage_decor.webp";
 import eventBanner from "/categories/event_company.webp";
 import balloonBanner from "../../assets/serviceListBanner/balloon banner.webp";
+import CategoryData from "../../utils/CatogoryData.jsx";
 
 const ServiceCardSkeleton = () => (
   <div className="serviceCardSkeleton">
@@ -44,9 +47,15 @@ const ServiceList = ({ onSwitchToLogin }) => {
   const location = useLocation();
   const scrollRef = useRef(null);
   // ✅ Get category object from navigation
-  const categoryData = location.state?.category;
+ const { categoryId } = useParams();
+ const categoryName = decodeURIComponent(categoryId);
+ const categoryData =
+  location.state?.category ||
+  CategoryData.find(
+    (cat) => cat.title === decodeURIComponent(categoryId)
+  );
 
-  const { categoryId } = useParams(); // This is the category name passed in URL
+ // This is the category name passed in URL
   console.log("################################");
   console.log(categoryId);
   console.log("################################");
@@ -62,22 +71,22 @@ const ServiceList = ({ onSwitchToLogin }) => {
   const [showArrows, setShowArrows] = useState(false);
 
   const bannerMap = {
-    "DJ Services & Brash Band": djBanner,
+    "DJ & Musical Band": djBanner,
     "Music Concert & Orchestra": musicBanner,
     "Decor & Tenthouse": decorBanner,
     "Photo & Videography": photoBanner,
     "Food & Catering": foodBanner,
     "Banquet Hall & Mandap": banquetBanner,
     "Classical Music & Dance": danceBanner,
-    "Islamic Maulbi": islamicBanner,
-    "Christian Priest": christianBanner,
-    "Hindu Pandit": panditBanner,
+    "Bouncers & Security": bouncersBanner,
+    "Stars & Influencers": starsBanner,
+    "Mehendi & Henna Artist": panditBanner,
     "Beauty Makeover": makeupBanner,
     "Floral Decor": floralBanner,
     "Ceremonial Ride": carBanner,
     "Luxury Ride": carBanner,
     Fireworks: fireworksBanner,
-    "Card Design & Printing": cardBanner,
+    "Mascot Artists": cardBanner,
     "Magic Shows": magicBanner,
     // "Stage Decor": stageBanner,
     "Event Management Company": eventBanner,
@@ -87,7 +96,7 @@ const ServiceList = ({ onSwitchToLogin }) => {
 
   // ✅ Define subcategories for each main category
   const subcategoryMap = {
-    "DJ Services & Brash Band": [
+    "DJ & Musical Band": [
       "All",
       "Wedding DJ",
       "Corporate Event DJ",
@@ -132,29 +141,28 @@ const ServiceList = ({ onSwitchToLogin }) => {
       "Instrumental Performance",
       "Bharatanatyam Dance",
     ],
-    "Islamic Maulbi": [
+    "Bouncers & Security": [
       "All",
-      "Religious Sermon",
-      "Tilawat",
-      "Marriage Ceremonies",
-      "Funeral Services",
+      "Event Security",
+      "VIP Protection",
+      "Crowd Management",
+      "Corporate Security",
       "Special Event",
     ],
-    "Christian Priest": [
+    "Stars & Influencers": [
       "All",
-      "Christening",
-      "Wedding Ceremony",
-      "Funeral Service",
-      "Blessings Prayers",
-      "Church Program",
+      "Celebrity Appearance",
+      "Brand Ambassador",
+      "Social Media Influencer",
+      "Live Performance",
+      "Special Event",
     ],
-    "Hindu Pandit": [
+    "Mehendi & Henna Artist": [
       "All",
-      "Wedding Ceremony",
-      "Puja Ceremony",
-      "Housewarming",
-      "Naming Ceremony",
-      "Shraddh Ceremony",
+      "Bridal Mehendi",
+      "Arabic Mehendi",
+      "Traditional Mehendi",
+      "Indo-Arabic Mehendi",
       "Special Event",
     ],
     "Beauty Makeover": ["All", "Bridal Makeup", "Unisex", "Mehendi Artist"],
@@ -172,11 +180,12 @@ const ServiceList = ({ onSwitchToLogin }) => {
       "Indoor Fireworks",
       "Outdoor Fireworks",
     ],
-    "Card Design & Printing": [
+    "Mascot Artists": [
       "All",
-      "Wedding Invitations",
-      "Birthday Party Invitations",
-      "Corporate Cards",
+      "Birthday Mascots",
+      "Corporate Mascots",
+      "Theme Party Mascots",
+      "Walkabout Characters",
     ],
     "Magic Shows": [
       "All",
@@ -224,9 +233,8 @@ const ServiceList = ({ onSwitchToLogin }) => {
     const fetchServices = async () => {
       try {
         setLoading(true);
-
         const response = await axios.get(
-          `${BACKEND_URL}/common/category/${categoryId}`,
+          `${BACKEND_URL}/common/category/${categoryName}`,
           {
             params: {
               subCategory:
@@ -426,8 +434,16 @@ const ServiceList = ({ onSwitchToLogin }) => {
     return () => window.removeEventListener("resize", checkOverflow);
   }, [currentCategory, subcategoryMap]);
 
+  const currentMeta = categoryMeta[categoryData?.title] || {
+    title:
+      "Book Event Services in Odisha | Wedding Vendors, Catering, Decoration, Photography | EventsBridge",
+    description:
+      "Browse verified event services including photography, catering, decoration, DJs, banquet halls, makeup artists, event planners, bands, luxury cars and entertainment. Compare prices, negotiate live and book with confidence.",
+  };
+
   return (
     <>
+      <Seo title={currentMeta.title} description={currentMeta.description} />
       {categoryData && (
         <>
           {/* Banner Header */}

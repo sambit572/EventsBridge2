@@ -13,6 +13,7 @@ import reviewRoutes from "./routes/common/review.routes.js";
 import test_router from "./routes/agenda/agenda.routes.js";
 import startAgenda from "./agenda/startAgenda.js";
 import "./cronjobs/startCronjobs.js";
+import "./cronjobs/subscriptionEndVendor.js";
 import feedbackRoutes from "./routes/common/feedback.routes.js";
 import serviceRoutes from "./routes/common/serviceList.routes.js";
 import reportRoutes from "./routes/common/report.routes.js";
@@ -21,6 +22,7 @@ import cartRouter from "./routes/user/cart.routes.js";
 import { searchRouter } from "./routes/common/search.routes.js";
 import calendarRoutes from "./routes/common/calendar.routes.js";
 import userBookingHistoryRoutes from "./routes/user/userBookinghistory.routes.js";
+import posterRoutes from "./routes/common/poster.routes.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -31,10 +33,7 @@ const isProduction = process.env.NODE_ENV === "production";
 // ✅ Middleware Setup
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      process.env.FRONTEND_URL,
-    ].filter(Boolean),
+    origin: isProduction ? process.env.FRONTEND_URL : true,
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -62,7 +61,17 @@ app.use(cookieParser());
   }
 })();
 
-// ✅ Test Cached API with Redis (Safe version)
+// ✅ Cleanup expired reset tokens on server startup
+(async () => {
+  try {
+    const { cleanupExpiredResetTokens } = await import("./utilities/sendEmail.js");
+    await cleanupExpiredResetTokens();
+  } catch (err) {
+    console.error("❌ Cleanup expired tokens failed:", err);
+  }
+})();
+//rads api for testing
+// Cached API with Redis
 app.get("/api/slow-api", async (req, res) => {
   const cacheKey = "user:data";
 
@@ -109,6 +118,7 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/cart", cartRouter);
 app.use("/api/calendar", calendarRoutes);
 app.use("/api/user-bookings", userBookingHistoryRoutes);
+app.use("/api/posters", posterRoutes);
 
 // ✅ Health Check Route
 app.get("/", (req, res) => {

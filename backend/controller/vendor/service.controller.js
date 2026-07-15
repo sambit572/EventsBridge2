@@ -547,11 +547,23 @@ export const updateService = async (req, res) => {
       updateData.packages = [];
     }
 
-    const updatedService = await Service.findByIdAndUpdate(
-      serviceId,
-      { $set: updateData },
-      { new: true, omitUndefined: true }
+    // Filter out undefined values from updateData
+    const cleanUpdateData = Object.fromEntries(
+      Object.entries(updateData).filter(([_, value]) => value !== undefined)
     );
+
+    // Update with vendor ownership verification
+    const updatedService = await Service.findOneAndUpdate(
+      { _id: serviceId, vendorId: vendorId },
+      { $set: cleanUpdateData },
+      { new: true }
+    );
+
+    if (!updatedService) {
+      return res
+        .status(404)
+        .json(new ApiError(404, "Service not found or not authorized"));
+    }
 
     try {
       await client.del(`vendor:${vendorId}:services`);
@@ -660,7 +672,13 @@ export const updateAvailability = async (req, res) => {
   try {
     const vendorId = req.vendor._id;
     const serviceId = req.params.id;
-    const { available } = req.body;
+    let { available } = req.body;
+
+    // Handle both boolean and string "true"/"false" values
+    if (typeof available === "string") {
+      if (available.toLowerCase() === "true") available = true;
+      else if (available.toLowerCase() === "false") available = false;
+    }
 
     if (typeof available !== "boolean") {
       return res
@@ -701,11 +719,16 @@ export const updateAvailability = async (req, res) => {
 export const uploadServiceMedia = async (req, res) => {
   console.log("Incoming files for media upload:", req.files);
   try {
-    if (!req.files || req.files.length === 0) {
+    // Check for files in any possible field name
+    const files = req.files || req.body?.files || [];
+    if (!files || files.length === 0) {
       return res
         .status(400)
-        .json(new ApiError(400, "Please upload at least one image or video"));
+        .json(new ApiError(400, "Please upload at least one image or video. The field name should be 'media'"));
     }
+    
+    // Use the files array
+    req.files = files;
 
     const imageUrls = [];
     const videoUrls = [];

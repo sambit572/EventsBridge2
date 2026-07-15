@@ -1,6 +1,7 @@
 import { UserBookingHistory } from "../../model/user/userBookinghistory.model.js";
 import { ApiError } from "../../utilities/ApiError.js";
 import { ApiResponse } from "../../utilities/ApiResponse.js";
+import Booking from "../../model/common/booking.model.js";
 
 export const createUserBookingHistory = async (req, res) => {
   try {
@@ -111,6 +112,158 @@ export const updateUserHistory = async (req, res) => {
 };
 
 /**
+ * Update negotiation status in user booking history
+ */
+export const updateNegotiationStatus = async (req, res) => {
+  try {
+    const { userDetailsId, userId, vendorDecision, finalPrice } = req.body;
+
+    if (!vendorDecision) {
+      return res.status(400).json({
+        success: false,
+        message: "vendorDecision is required.",
+      });
+    }
+
+    // Map vendor decision to booking status
+    let bookingStatus = "PENDING";
+    if (vendorDecision === "accepted") {
+      bookingStatus = "CONFIRMED";
+    } else if (vendorDecision === "rejected") {
+      bookingStatus = "CANCELLED";
+    }
+
+    // Build query - support both userDetailsId and userId
+    let query = {};
+    if (userDetailsId) {
+      query.userDetailsId = userDetailsId;
+    } else if (userId) {
+      query.userId = userId;
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Either userDetailsId or userId is required.",
+      });
+    }
+
+    // Update the UserBookingHistory
+    const updatedHistory = await UserBookingHistory.findOneAndUpdate(
+      query,
+      {
+        bookingStatus,
+        amount: finalPrice || undefined, // Update amount if finalPrice is provided
+      },
+      { new: true }
+    );
+
+    if (!updatedHistory) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking history not found.",
+      });
+    }
+
+    return res.status(200).json(
+      new ApiResponse(200, updatedHistory, "Negotiation status updated successfully.")
+    );
+  } catch (error) {
+    console.error("Error updating negotiation status:", error);
+    return res.status(500).json(new ApiError(500, "Server error"));
+  }
+};
+
+
+export const updatePaymentStatus = async (req, res) => {
+  try {
+    const { userDetailsId, paymentStatus, transactionId, amount } = req.body;
+
+    if (!userDetailsId || !paymentStatus) {
+      return res.status(400).json({
+        success: false,
+        message: "userDetailsId and paymentStatus are required.",
+      });
+    }
+
+    const validStatuses = ["PENDING", "PAID", "FAILED", "REFUNDED"];
+
+    if (!validStatuses.includes(paymentStatus.toUpperCase())) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid payment status.",
+      });
+    }
+
+
+    const updateData = {
+      paymentStatus: paymentStatus.toUpperCase(),
+    };
+
+
+    if (transactionId) {
+      updateData.transactionId = transactionId;
+      updateData.paymentDate = new Date();
+    }
+
+
+    if (amount !== undefined && amount !== null) {
+      updateData.amount = amount;
+    }
+
+
+    // 1. Update UserBookingHistory
+    const updatedHistory = await UserBookingHistory.findOneAndUpdate(
+      { userDetailsId },
+      updateData,
+      { new: true }
+    );
+
+
+    if (!updatedHistory) {
+      return res.status(404).json({
+        success:false,
+        message:"Booking history not found"
+      });
+    }
+
+
+
+    // 2. Update Booking collection also
+    const updatedBooking = await Booking.findOneAndUpdate(
+      { userDetailsId },
+      updateData,
+      { new:true }
+    );
+
+
+    console.log("✅ UserBookingHistory updated:", updatedHistory._id);
+
+    console.log("✅ Booking updated:", updatedBooking?._id);
+
+
+
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          history: updatedHistory,
+          booking: updatedBooking
+        },
+        "Payment status updated successfully"
+      )
+    );
+
+
+  } catch(error){
+
+    console.error("Payment update error:",error);
+
+    return res.status(500).json(
+      new ApiError(500,"Server error")
+    );
+  }
+};
+
+/**
  * Get all bookings for a user (with optional status filter)
  */
 export const getUserBookingHistory = async (req, res) => {
@@ -122,7 +275,7 @@ export const getUserBookingHistory = async (req, res) => {
     const matchStage = { userId };
     if (status) matchStage.bookingStatus = status;
 
-    const bookings = await UserBookingHistory.aggregate([
+    let bookings = await UserBookingHistory.aggregate([
       // Stage 1: Match bookings for the user
       {
         $match: matchStage,
@@ -180,6 +333,16 @@ export const getUserBookingHistory = async (req, res) => {
         $sort: { createdAt: -1 },
       },
     ]);
+
+    // Fallback: if aggregation returns empty, try direct query
+    if (!bookings || bookings.length === 0) {
+      const directBookings = await UserBookingHistory.find(matchStage).sort({ createdAt: -1 });
+      bookings = directBookings.map(b => ({
+        ...b.toObject(),
+        totalServices: 0,
+        userDetailsId: null,
+      }));
+    }
 
     res.status(200).json({
       success: true,

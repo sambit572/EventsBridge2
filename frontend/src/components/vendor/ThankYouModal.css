@@ -1,0 +1,320 @@
+/* ── Thank You modal overlay ── */
+.ty-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 8, 30, 0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: tyFadeIn 0.25s ease;
+}
+
+@keyframes tyFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.ty-modal {
+  position: relative;
+  width: 92%;
+  max-width: 420px;
+  max-height: 88vh;
+  overflow: hidden;
+  background: linear-gradient(160deg, #1e2a78 0%, #3b2f8f 45%, #6d28d9 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 40px 28px 28px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  text-align: center;
+  font-family: Montserrat, sans-serif;
+  animation: tyPopIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes tyPopIn {
+  0% { opacity: 0; transform: scale(0.82) translateY(18px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.ty-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 3;
+}
+
+.ty-close:hover {
+  background: rgba(239, 68, 68, 0.18);
+  color: #f87171;
+  transform: rotate(90deg);
+}
+
+/* ── Confetti ── */
+.ty-confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.ty-confetti-piece {
+  position: absolute;
+  top: -12px;
+  width: 7px;
+  height: 12px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: tyFall 2.6s ease-in-out infinite;
+}
+
+.ty-piece-0 { left: 6%;  background: #f59e0b; animation-delay: 0.1s; }
+.ty-piece-1 { left: 18%; background: #38bdf8; animation-delay: 0.5s; }
+.ty-piece-2 { left: 30%; background: #8b5cf6; animation-delay: 0.05s; }
+.ty-piece-3 { left: 45%; background: #fde68a; animation-delay: 0.7s; }
+.ty-piece-4 { left: 60%; background: #6366f1; animation-delay: 0.3s; }
+.ty-piece-5 { left: 76%; background: #f97316; animation-delay: 0.9s; }
+.ty-piece-6 { left: 90%; background: #38bdf8; animation-delay: 0.45s; }
+
+.ty-confetti-piece:nth-child(8)  { left: 12%; animation-delay: 1.1s; }
+.ty-confetti-piece:nth-child(9)  { left: 24%; animation-delay: 1.4s; }
+.ty-confetti-piece:nth-child(10) { left: 38%; animation-delay: 0.9s; }
+.ty-confetti-piece:nth-child(11) { left: 54%; animation-delay: 1.6s; }
+.ty-confetti-piece:nth-child(12) { left: 68%; animation-delay: 1.2s; }
+.ty-confetti-piece:nth-child(13) { left: 82%; animation-delay: 1.8s; }
+.ty-confetti-piece:nth-child(14) { left: 95%; animation-delay: 1.3s; }
+
+@keyframes tyFall {
+  0%   { opacity: 0; transform: translateY(0) rotate(0deg); }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.8; }
+  100% { opacity: 0; transform: translateY(240px) rotate(300deg); }
+}
+
+/* ── Success check badge ── */
+.ty-check-wrap {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.ty-check-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(34, 197, 94, 0.35);
+  animation: tyRingPulse 2.2s ease-out infinite;
+}
+
+.ty-ring-2 {
+  animation-delay: 0.55s;
+}
+
+@keyframes tyRingPulse {
+  0%   { transform: scale(0.75); opacity: 0.8; }
+  80%  { transform: scale(1.35); opacity: 0; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+.ty-check-badge {
+  position: relative;
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #34d399, #059669);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 6px rgba(52, 211, 153, 0.14), 0 10px 28px rgba(5, 150, 105, 0.45);
+  animation: tyBadgePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+}
+
+@keyframes tyBadgePop {
+  0%   { transform: scale(0); }
+  70%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+.ty-check-svg {
+  width: 38px;
+  height: 38px;
+  overflow: visible;
+}
+
+.ty-check-circle {
+  stroke: rgba(255, 255, 255, 0.35);
+  stroke-width: 2;
+  stroke-dasharray: 145;
+  stroke-dashoffset: 145;
+  animation: tyDrawCircle 0.6s ease-out 0.2s forwards;
+}
+
+.ty-check-mark {
+  stroke: #fff;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 32;
+  stroke-dashoffset: 32;
+  animation: tyDrawCheck 0.45s ease-out 0.55s forwards;
+}
+
+@keyframes tyDrawCircle {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes tyDrawCheck {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ── Text content ── */
+.ty-eyebrow {
+  position: relative;
+  z-index: 2;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: #6ee7b7;
+  margin-bottom: 6px;
+  animation: tyFadeUp 0.5s ease 0.4s both;
+}
+
+.ty-title {
+  position: relative;
+  z-index: 2;
+  font-size: 23px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.2px;
+  margin-bottom: 12px;
+  animation: tyFadeUp 0.5s ease 0.48s both;
+}
+
+.ty-message {
+  position: relative;
+  z-index: 2;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.68);
+  margin-bottom: 20px;
+  padding: 0 4px;
+  animation: tyFadeUp 0.5s ease 0.56s both;
+}
+
+.ty-highlight {
+  color: #fde68a;
+  font-weight: 700;
+}
+
+@keyframes tyFadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ty-call-strip {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 11px 14px;
+  margin-bottom: 22px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  text-align: left;
+  animation: tyFadeUp 0.5s ease 0.64s both;
+}
+
+.ty-call-icon {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  color: #fff;
+  animation: tyRing 2.4s ease-in-out infinite;
+}
+
+@keyframes tyRing {
+  0%, 88%, 100% { transform: rotate(0deg); }
+  90% { transform: rotate(-14deg); }
+  92% { transform: rotate(12deg); }
+  94% { transform: rotate(-10deg); }
+  96% { transform: rotate(6deg); }
+  98% { transform: rotate(0deg); }
+}
+
+/* ── CTA button ── */
+.ty-ok-btn {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(120deg, #6366f1 0%, #8b5cf6 50%, #6366f1 100%);
+  background-size: 200% 100%;
+  color: #fff;
+  font-size: 14.5px;
+  font-weight: 700;
+  font-family: Montserrat, sans-serif;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+  transition: all 0.25s ease;
+  animation: tyFadeUp 0.5s ease 0.72s both;
+}
+
+.ty-ok-btn:hover {
+  background-position: 100% 0;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(99, 102, 241, 0.55);
+}
+
+.ty-ok-btn:active { transform: translateY(0); }
+
+.ty-ok-shine {
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-20deg);
+  animation: tyShineSweep 2.8s ease-in-out infinite;
+}
+
+@keyframes tyShineSweep {
+  0%   { left: -60%; }
+  55%  { left: 130%; }
+  100% { left: 130%; }
+}
+
+@media (max-width: 480px) {
+  .ty-modal { padding: 34px 20px 22px; }
+}

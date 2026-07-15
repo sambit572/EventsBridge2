@@ -8,7 +8,7 @@ import { name } from "agenda/dist/agenda/name.js";
 // EXACT category names matching your CategoryData.jsx
 const categories = [
   {
-    name: "DJ Services & Brash Band",
+    name: "DJ & Musical Band",
     defaultWhyChooseUs: [
       "Bringing electrifying beats and non-stop energy to light up your celebrations",
       "Backup Equipment Always On-Hand",
@@ -78,33 +78,33 @@ const categories = [
     ],
   },
   {
-    name: "Islamic Maulbi", // Exact match
+    name: "Bouncers & Security",
     defaultWhyChooseUs: [
-      "Qualified & experienced Islamic scholars",
-      "Traditional ceremony guidance",
-      "Flexible scheduling arrangements",
-      "Respectful & professional service",
-      "Complete ritual knowledge",
+      "Trained & licensed security professionals",
+      "24/7 event coverage & crowd control",
+      "VIP & guest protection services",
+      "Professional and disciplined team",
+      "Customizable security packages",
     ],
   },
   {
-    name: "Christian Priest",
+    name: "Stars & Influencers",
     defaultWhyChooseUs: [
-      "Ordained & experienced clergy",
-      "Traditional & modern ceremony options",
-      "Personalized service approach",
-      "Professional ceremony guidance",
-      "Flexible scheduling availability",
+      "Access to top Ollywood stars & influencers",
+      "Boost your event's prestige & social reach",
+      "Verified celebrity appearances",
+      "Flexible booking for any event type",
+      "Dedicated coordination & support",
     ],
   },
   {
-    name: "Hindu Pandit",
+    name: "Mehendi & Henna Artist",
     defaultWhyChooseUs: [
-      "Experienced & knowledgeable pandits",
-      "Traditional Sanskrit mantras",
-      "Complete ritual guidance",
-      "Auspicious timing consultation",
-      "Professional ceremony conduct",
+      "Expert in intricate bridal mehendi designs",
+      "Uses natural & skin-safe henna",
+      "Wide variety of design styles",
+      "Quick & precise application",
+      "On-location service available",
     ],
   },
   {
@@ -158,13 +158,13 @@ const categories = [
     ],
   },
   {
-    name: "Card Design & Printing",
+    name: "Mascot Artists",
     defaultWhyChooseUs: [
-      "Creative & unique design options",
-      "High-quality printing materials",
-      "Fast turnaround delivery",
-      "Customizable templates available",
-      "Professional design consultation",
+      "Professionally crafted mascot costumes",
+      "Fun & engaging character performances",
+      "Perfect for all event types",
+      "Highly interactive with crowd",
+      "Safe & comfortable for performers",
     ],
   },
   {

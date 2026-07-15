@@ -3,20 +3,14 @@ import { useNavigate } from "react-router-dom";
 
 const CategoryCard = ({ category }) => {
   const navigate = useNavigate();
-  // console.log("category.title", category.title);
   return (
     <div
       className="courseCard"
-      onClick={() => {
-        const slug = category.title
-          .toLowerCase()
-          .replace(/[^a-z0-9\s-]/g, "")
-          .trim()
-          .replace(/\s+/g, "-");
-        navigate(`/category/${slug}`, {
-          state: { category }, // ✅ pass full category object
-        });
-      }}
+     onClick={() => {
+  navigate(`/category/${encodeURIComponent(category.title)}`, {
+    state: { category },
+  });
+}}
     >
       <span className="brandLabel">EventsBridge</span>
 

@@ -1,104 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import "./TopVerifiedVendors.css";
+import {useNavigate} from "react-router-dom"
 
-const STATIC_VENDORS = [
-  {
-    id: 1,
-    images: [
-      "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1561489413-985b06da5bee?w=400&h=600&fit=crop",
-    ],
-    serviceName: "Royal Wedding Decor",
-    category: "Decoration",
-    rating: 4.9,
-    rank: 1,
-  },
-  {
-    id: 2,
-    images: [
-      "https://images.unsplash.com/photo-1555244162-803834f70033?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=600&fit=crop",
-    ],
-    serviceName: "Spice Garden Catering",
-    category: "Catering",
-    rating: 4.8,
-    rank: 2,
-  },
-  {
-    id: 3,
-    images: [
-      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400&h=600&fit=crop",
-    ],
-    serviceName: "Lens & Light Studio",
-    category: "Photography",
-    rating: 4.8,
-    rank: 3,
-  },
-  {
-    id: 4,
-    images: [
-      "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=400&h=600&fit=crop",
-    ],
-    serviceName: "BeatMaster DJ",
-    category: "DJ & Music",
-    rating: 4.7,
-    rank: 4,
-  },
-  {
-    id: 5,
-    images: [
-      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1487530811015-780f4f8b41b1?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1520763185298-1b434c919102?w=400&h=600&fit=crop",
-    ],
-    serviceName: "Petal Bliss Flowers",
-    category: "Florist",
-    rating: 4.7,
-    rank: 5,
-  },
-  {
-    id: 6,
-    images: [
-      "https://images.unsplash.com/photo-1478146896981-b80fe463b330?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=600&fit=crop",
-    ],
-    serviceName: "Grand Tent House",
-    category: "Tent House",
-    rating: 4.6,
-    rank: 6,
-  },
-  {
-    id: 7,
-    images: [
-      "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=600&fit=crop",
-    ],
-    serviceName: "Glamour Beauty Studio",
-    category: "Makeup & Beauty",
-    rating: 4.6,
-    rank: 7,
-  },
-  {
-    id: 8,
-    images: [
-      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1464207687429-7505649dae38?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1537365587684-f490102e1225?w=400&h=600&fit=crop",
-    ],
-    serviceName: "Elite Banquet Hall",
-    category: "Banquet Hall",
-    rating: 4.5,
-    rank: 8,
-  },
-];
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL; 
 
 const StarRating = ({ rating }) => {
   const full = Math.floor(rating);
@@ -119,9 +23,13 @@ const StarRating = ({ rating }) => {
 };
 
 const VendorCard = ({ vendor }) => {
+  const navigate=useNavigate();
+  const handleverifiedcard=()=>{
+    navigate(`/service/${encodeURIComponent(vendor.category)}/${vendor.id}`);
+  };
   const [current, setCurrent] = useState(0);
   const [hovered, setHovered] = useState(false);
-  const total = vendor.images.length;
+  const total = vendor.images?.length || 0;
 
   const prev = (e) => { e.stopPropagation(); setCurrent((i) => (i === 0 ? total - 1 : i - 1)); };
   const next = (e) => { e.stopPropagation(); setCurrent((i) => (i + 1) % total); };
@@ -129,27 +37,22 @@ const VendorCard = ({ vendor }) => {
   return (
     <div
       className="tvv-card"
+      onClick={handleverifiedcard}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       <div className="tvv-img-wrap">
         <div className="tvv-img-strip" style={{ transform: `translateX(-${current * 100}%)` }}>
-          {vendor.images.map((src, i) => (
+          {vendor.images?.map((src, i) => (
             <img key={i} src={src} alt={`${vendor.serviceName} ${i + 1}`} className="tvv-slide-img" loading="lazy" decoding="async" />
           ))}
         </div>
         <span className="tvv-brand-label">EVENTSBRIDGE</span>
-        {vendor.rank <= 3 && (
-          <div className="tvv-rank-badge">
-            {vendor.rank === 1 ? "🥇" : vendor.rank === 2 ? "🥈" : "🥉"}
-          </div>
-        )}
         <div className="tvv-verified-badge">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
-            <path d="M9 12l2 2 4-4" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <circle cx="12" cy="12" r="10" stroke="#fff" strokeWidth="2"/>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="#1a1100">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
           </svg>
-          Verified
+          Premium
         </div>
         {hovered && total > 1 && <button className="tvv-arrow tvv-arrow-left" onClick={prev}>‹</button>}
         {hovered && total > 1 && <button className="tvv-arrow tvv-arrow-right" onClick={next}>›</button>}
@@ -162,20 +65,45 @@ const VendorCard = ({ vendor }) => {
           </div>
         )}
       </div>
-      <div className="tvv-card-info">
-        <p className="tvv-service-name">{vendor.serviceName}</p>
-        <p className="tvv-category">{vendor.category}</p>
-        <StarRating rating={vendor.rating} />
-      </div>
+     <div className="tvv-card-info">
+  <p className="tvv-service-name">{vendor.serviceName}</p>
+  <p className="tvv-category">{vendor.category}</p>
+  <p className="tvv-vendor-name">{vendor.vendorName}</p>
+ {vendor.rating && (
+  <StarRating rating={vendor.rating} />
+)}
+</div>
     </div>
   );
 };
 
-// Triple the vendors so we have enough buffer for seamless infinite loop
-const LOOPED_VENDORS = [...STATIC_VENDORS, ...STATIC_VENDORS, ...STATIC_VENDORS];
-const N = STATIC_VENDORS.length; // 8
 
 export default function TopVerifiedVendors() {
+   const [vendors, setVendors] = useState([]);
+   useEffect(() => {
+  const fetchVerifiedVendors = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/vendors/top-verified-vendors`);
+
+      const data = await response.json();
+
+      if (data.success) {
+        const formattedVendors = data.vendors.map((vendor, index) => ({
+          ...vendor,
+          rank: index + 1,
+        }));
+
+        setVendors(formattedVendors);
+      }
+    } catch (error) {
+      console.error("Error fetching vendors:", error);
+    }
+  };
+
+  fetchVerifiedVendors();
+}, []);
+const LOOPED_VENDORS = vendors;
+const N = LOOPED_VENDORS.length;
   const trackRef = useRef(null);
   const isPausedRef = useRef(false);
   const isAnimatingRef = useRef(false);
@@ -249,7 +177,9 @@ export default function TopVerifiedVendors() {
     }, 2500);
     return () => clearInterval(timer);
   }, [goNext]);
-
+if (!vendors.length) {
+  return <div>Loading top verified vendors...</div>;
+}
   return (
     <section className="tvv-section">
       <div className="tvv-header">

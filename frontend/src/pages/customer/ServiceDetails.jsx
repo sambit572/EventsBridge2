@@ -11,6 +11,7 @@ import ReviewList from "../../components/customer/ServiceDetails/ReviewList.jsx"
 import ReviewForm from "../../components/customer/ServiceDetails/ReviewForm.jsx";
 import { FaBell } from "react-icons/fa6";
 import { BACKEND_URL } from "../../utils/constant.js";
+import clsx from "clsx";
 import { useSelector, useDispatch } from "react-redux";
 import { setCategoryServices } from "../../redux/categorySlice";
 import { incrementCartCount } from "../../redux/UserSlice.js";
@@ -309,13 +310,13 @@ const Service = ({ onSwitchToLogin }) => {
             onMouseLeave={() => {
               setHovered(false);
             }}
-            className="relative w-full h-[260px] mb-5 sm:h-[400px] lg:h-[430px] overflow-hidden rounded-lg mt-3 sm:mt-0"
+            className={clsx('relative', 'w-full', 'h-[260px]', 'mb-5', 'sm:h-[400px]', 'lg:h-[430px]', 'overflow-hidden', 'rounded-lg', 'mt-3', 'sm:mt-0')}
             onMouseEnter={() => setHovered(true)}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
           >
-            <span className="absolute top-[10px] left-[10px] z-[20] bg-black/50 px-2 py-1 rounded-md text-[11px] text-white font-bold">
+            <span className={clsx('absolute', 'top-[10px]', 'left-[10px]', 'z-[20]', 'bg-black/50', 'px-2', 'py-1', 'rounded-md', 'text-[11px]', 'text-white', 'font-bold')}>
               EventsBridge
             </span>
 
@@ -340,24 +341,78 @@ const Service = ({ onSwitchToLogin }) => {
                         idx === currentIndex ? "opacity-100 z-10" : "opacity-0"
                       }`}
                     >
-                      {/* Blurred background */}
-                      <img
-                        decoding="async"
-                        loading="lazy"
-                        src={media.src}
-                        className="absolute inset-0 w-full h-full object-cover blur-xl scale-110 opacity-40"
-                      />
-
-                      {/* Main clean portrait image */}
+                      {/* Main image covering full width */}
                       <img
                         decoding="async"
                         loading="lazy"
                         src={media.src}
                         alt={`slide-${idx}`}
-                        className={`absolute inset-0 m-auto max-h-full max-w-full object-contain z-10 ${
-                          !isVendorAvailable ? "grayscale brightness-50" : ""
-                        }`}
+                        className="absolute inset-0 w-full h-full object-cover"
                       />
+
+                      {/* Poster Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent z-20 flex items-center">
+                        <div className="w-full max-w-2xl px-6 sm:px-10 py-6">
+                          {/* Badge */}
+                          <div className="inline-block bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">
+                            {service?.category?.name || "FESTIVAL SPECIAL"}
+                          </div>
+
+                          {/* Main Heading */}
+                          <h2 className="text-3xl sm:text-5xl font-black text-white mb-2 leading-tight">
+                            {service?.title || "GRAND LAUNCH"}
+                          </h2>
+
+                          {/* Discount */}
+                          <div className="text-4xl sm:text-6xl font-black text-orange-400 mb-3">
+                            30% OFF
+                          </div>
+
+                          {/* Subtitle */}
+                          <p className="text-base sm:text-lg text-gray-200 mb-4">
+                            {service?.description?.substring(0, 50) || "Unlock Divine Luxury Experiences"}
+                          </p>
+
+                          {/* Features Row */}
+                          <div className="flex flex-wrap gap-3 mb-4">
+                            <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
+                              <p className="text-xs text-gray-300">SALE CAPACITY</p>
+                              <p className="text-sm font-bold text-white">75% Filled</p>
+                            </div>
+                            <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
+                              <p className="text-xs text-gray-300">SECURE PAYMENTS</p>
+                              <p className="text-sm font-bold text-white">100% Safe</p>
+                            </div>
+                            <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
+                              <p className="text-xs text-gray-300">EMI AVAILABLE</p>
+                              <p className="text-sm font-bold text-white">Yes</p>
+                            </div>
+                          </div>
+
+                          {/* Timer Box */}
+                          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 max-w-[200px] border border-white/20">
+                            <p className="text-xs text-gray-300 text-center mb-2">ENDS IN</p>
+                            <div className="text-3xl font-bold text-white text-center">
+                              08:14
+                            </div>
+                            <p className="text-xs text-gray-300 text-center">HRS : MINS</p>
+                          </div>
+                        </div>
+
+                        {/* Right Side CTA */}
+                        <div className="absolute right-6 sm:right-10 top-1/2 -translate-y-1/2">
+                          <button className="bg-orange-400 hover:bg-orange-500 text-black font-bold px-6 py-3 rounded-lg shadow-lg transition-all">
+                            CLAIM OFFER
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Unavailable Overlay */}
+                      {!isVendorAvailable && (
+                        <div className="unavailable-overlay">
+                          <div className="unavailable-text">OUT OF SERVICE</div>
+                        </div>
+                      )}
                     </div>
                   )
                 )}
@@ -371,7 +426,7 @@ const Service = ({ onSwitchToLogin }) => {
                         e.stopPropagation();
                         prevSlide();
                       }}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white sm:hidden z-30"
+                      className={clsx('absolute', 'left-3', 'top-1/2', '-translate-y-1/2', 'rounded-full', 'bg-black/50', 'p-3', 'text-white', 'sm:hidden', 'z-30')}
                     >
                       <FaChevronLeft className="text-lg" />
                     </button>
@@ -380,7 +435,7 @@ const Service = ({ onSwitchToLogin }) => {
                         e.stopPropagation();
                         nextSlide();
                       }}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white sm:hidden z-30"
+                      className={clsx('absolute', 'right-3', 'top-1/2', '-translate-y-1/2', 'rounded-full', 'bg-black/50', 'p-3', 'text-white', 'sm:hidden', 'z-30')}
                     >
                       <FaChevronRight className="text-lg" />
                     </button>
@@ -393,7 +448,7 @@ const Service = ({ onSwitchToLogin }) => {
                             e.stopPropagation();
                             prevSlide();
                           }}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 hidden sm:block z-30"
+                          className={clsx('absolute', 'left-3', 'top-1/2', '-translate-y-1/2', 'rounded-full', 'bg-black/50', 'p-2', 'text-white', 'hover:bg-black/70', 'hidden', 'sm:block', 'z-30')}
                         >
                           <FaChevronLeft />
                         </button>
@@ -402,7 +457,7 @@ const Service = ({ onSwitchToLogin }) => {
                             e.stopPropagation();
                             nextSlide();
                           }}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 hidden sm:block z-30"
+                          className={clsx('absolute', 'right-3', 'top-1/2', '-translate-y-1/2', 'rounded-full', 'bg-black/50', 'p-2', 'text-white', 'hover:bg-black/70', 'hidden', 'sm:block', 'z-30')}
                         >
                           <FaChevronRight />
                         </button>
@@ -413,7 +468,7 @@ const Service = ({ onSwitchToLogin }) => {
 
                 {/* Dots */}
                 {mediaList.length > 1 && (
-                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-30">
+                  <div className={clsx('absolute', 'bottom-3', 'left-1/2', '-translate-x-1/2', 'flex', 'gap-2', 'z-30')}>
                     {mediaList.map((media, idx) => (
                       <button
                         key={idx}
@@ -426,7 +481,7 @@ const Service = ({ onSwitchToLogin }) => {
                         }`}
                       >
                         {media.type === "video" && (
-                          <FaYoutube className="text-red-500 text-xs" />
+                          <FaYoutube className={clsx('text-red-500', 'text-xs')} />
                         )}
                       </button>
                     ))}
@@ -434,13 +489,13 @@ const Service = ({ onSwitchToLogin }) => {
                 )}
               </>
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-gray-300 text-gray-500">
+              <div className={clsx('flex', 'h-full', 'w-full', 'items-center', 'justify-center', 'bg-gray-300', 'text-gray-500')}>
                 {!isVendorAvailable ? (
                   <div className="text-center">
-                    <p className="text-sm font-bold text-red-600">
+                    <p className={clsx('text-sm', 'font-bold', 'text-red-600')}>
                       OUT OF SERVICE
                     </p>
-                    <p className="text-xs text-gray-600">No Image Available</p>
+                    <p className={clsx('text-xs', 'text-gray-600')}>No Image Available</p>
                   </div>
                 ) : (
                   "No Image Available"
@@ -449,11 +504,11 @@ const Service = ({ onSwitchToLogin }) => {
             )}
           </div>
 
-          <div className="flex flex-row items-center justify-center gap-4 sm:flex-row sm:gap-4">
+          <div className={clsx('flex', 'flex-row', 'items-center', 'justify-center', 'gap-4', 'sm:flex-row', 'sm:gap-4')}>
             {isCateringService ? (
               // For catering: Show informational message, buttons handled by CateringPackagesDisplay
-              <div className="w-full text-center py-3 bg-blue-50 border border-blue-200 rounded-full">
-                <p className="text-sm text-blue-800 font-medium">
+              <div className={clsx('w-full', 'text-center', 'py-3', 'bg-blue-50', 'border', 'border-blue-200', 'rounded-full')}>
+                <p className={clsx('text-sm', 'text-blue-800', 'font-medium')}>
                   📋 Select a package below to add to cart
                 </p>
               </div>
@@ -463,17 +518,17 @@ const Service = ({ onSwitchToLogin }) => {
                 {isVendorAvailable ? (
                   <>
                     <button
-                      className="flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-[#001f3f] to-[#004f9f] sm:px-[1rem] lg:px-12 py-3 text-sm font-bold text-white transition-colors duration-300 ease-in-out hover:from-[#002366] hover:to-[#0066cc] active:from-[#000d1a] active:to-[#003366] lg:w-auto lg:min-w-[220px]"
-                      onClick={handleBookNow}
-                    >
-                      BOOK NOW
-                    </button>
-
-                    <button
-                      className="w-full lg:w-auto lg:min-w-[220px] px-4 py-3 rounded-full text-sm font-bold text-white bg-gradient-to-r from-[#fb923c] to-[#ef4444] hover:shadow-lg hover:from-[#fca5a5] hover:to-[#dc2626] focus:outline-none focus:ring-2 focus:ring-orange-300 shadow-md transition-all duration-300"
+                      className={clsx('w-full', 'lg:w-auto', 'lg:min-w-[220px]', 'px-4', 'py-3', 'rounded-full', 'text-sm', 'font-bold', 'text-white', 'bg-gradient-to-r', 'from-[#fb923c]', 'to-[#ef4444]', 'hover:shadow-lg', 'hover:from-[#fca5a5]', 'hover:to-[#dc2626]', 'focus:outline-none', 'focus:ring-2', 'focus:ring-orange-300', 'shadow-md', 'transition-all', 'duration-300')}
                       onClick={handleAddToCart}
                     >
                       ADD TO CART
+                    </button>
+
+                    <button
+                      className={clsx('flex', 'w-full', 'cursor-pointer', 'items-center', 'justify-center', 'rounded-full', 'bg-gradient-to-r', 'from-[#001f3f]', 'to-[#004f9f]', 'sm:px-[1rem]', 'lg:px-12', 'py-3', 'text-sm', 'font-bold', 'text-white', 'transition-colors', 'duration-300', 'ease-in-out', 'hover:from-[#002366]', 'hover:to-[#0066cc]', 'active:from-[#000d1a]', 'active:to-[#003366]', 'lg:w-auto', 'lg:min-w-[220px]')}
+                      onClick={handleBookNow}
+                    >
+                      BOOK NOW
                     </button>
                   </>
                 ) : (
@@ -520,12 +575,12 @@ const Service = ({ onSwitchToLogin }) => {
             <RatingDetails serviceId={serviceId} />
             <hr />
 
-            <div className="flex justify-center">
+            <div className={clsx('flex', 'justify-center')}>
               <button
                 onClick={handleUserReview}
-                className="flex items-center gap-2 mt-5 bg-[#001F3F] hover:bg-[#002366] text-white font-semibold px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 active:scale-95 text-sm sm:text-base md:text-lg"
+                className={clsx('flex', 'items-center', 'gap-2', 'mt-5', 'bg-[#001F3F]', 'hover:bg-[#002366]', 'text-white', 'font-semibold', 'px-5', 'py-2.5', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'transition-all', 'duration-300', 'hover:-translate-y-1', 'active:scale-95', 'text-sm', 'sm:text-base', 'md:text-lg')}
               >
-                <span className="text-lg sm:text-xl">💬</span>
+                <span className={clsx('text-lg', 'sm:text-xl')}>💬</span>
                 Add Feedback
               </button>
             </div>
@@ -536,7 +591,7 @@ const Service = ({ onSwitchToLogin }) => {
       </div>
       <div className="view-dj-section">
         <h2 className="people-also-book">People Also Booked</h2>
-        <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-5 mb-5">
+        <div className={clsx('grid', 'grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-5', 'gap-6', 'mt-5', 'mb-5')}>
           {categoryServices.map((product) => (
             <SimilarProductCard key={product.id} product={product} />
           ))}
@@ -544,11 +599,11 @@ const Service = ({ onSwitchToLogin }) => {
       </div>
 
       {isReviewModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+        <div className={clsx('fixed', 'inset-0', 'bg-black', 'bg-opacity-50', 'flex', 'items-center', 'justify-center', 'p-4', 'z-50')}>
+          <div className={clsx('bg-white', 'rounded-lg', 'shadow-lg', 'w-full', 'max-w-md', 'p-6', 'relative')}>
             <button
               onClick={() => setIsReviewModalOpen(false)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl font-bold"
+              className={clsx('absolute', 'top-3', 'right-3', 'text-gray-500', 'hover:text-gray-800', 'text-xl', 'font-bold')}
             >
               ×
             </button>

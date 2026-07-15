@@ -6,7 +6,6 @@ import Spinner from "./../../components/common/Spinner";
 import ReactCrop, { centerCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { toast } from "react-toastify";
-import { BACKEND_URL } from "../../utils/constant";
 
 const getCroppedImg = (image, crop) => {
   const canvas = document.createElement("canvas");
@@ -129,23 +128,23 @@ function VendorService({ currentStep }) {
   };
 
   const categories = [
-    "DJ Services & Brash Band",
+    "DJ & Musical Band",
     "Music Concert & Orchestra",
     "Decor & Tenthouse",
     "Photo & Videography",
     "Food & Catering",
     "Banquet Hall & Mandap",
     "Classical Music & Dance",
-    "Islamic Maulbi",
-    "Christian Priest",
-    "Hindu Pandit",
+    "Bouncers & Security",
+    "Stars & Influencers",
+    "Mehendi & Henna Artist",
     "Beauty Makeover",
     "Balloon Decor",
     "Floral Decor",
     "Ceremonial Ride",
     "Luxury Ride",
     "Fireworks",
-    "Card Design & Printing",
+    "Mascot Artists",
     "Magic Shows",
     "Event Management Company",
     "Hotel & Resorts",
@@ -203,7 +202,7 @@ function VendorService({ currentStep }) {
   };
   // ✅ Define subcategories for each main category
   const subcategories = {
-    "DJ Services & Brash Band": [
+    "DJ & Musical Band": [
       "Wedding DJ",
       "Corporate Event DJ",
       "Private Party DJ",
@@ -241,27 +240,25 @@ function VendorService({ currentStep }) {
       "Instrumental Performance",
       "Bharatanatyam Dance",
     ],
-    "Islamic Maulbi": [
-      "Religious Sermon",
-      "Tilawat",
-      "Marriage Ceremonies",
-      "Funeral Services",
+    "Bouncers & Security": [
+      "Event Security",
+      "VIP Protection",
+      "Crowd Management",
+      "Corporate Security",
       "Special Event",
     ],
-    "Christian Priest": [
-      "All",
-      "Christening",
-      "Wedding Ceremony",
-      "Funeral Service",
-      "Blessings Prayers",
-      "Church Program",
+    "Stars & Influencers": [
+      "Celebrity Appearance",
+      "Brand Ambassador",
+      "Social Media Influencer",
+      "Live Performance",
+      "Special Event",
     ],
-    "Hindu Pandit": [
-      "Wedding Ceremony",
-      "Puja Ceremony",
-      "Housewarming",
-      "Naming Ceremony",
-      "Shraddh Ceremony",
+    "Mehendi & Henna Artist": [
+      "Bridal Mehendi",
+      "Arabic Mehendi",
+      "Traditional Mehendi",
+      "Indo-Arabic Mehendi",
       "Special Event",
     ],
     "Beauty Makeover": ["Bridal Makeup", "Unisex", "Mehendi Artist"],
@@ -273,10 +270,11 @@ function VendorService({ currentStep }) {
     "Ceremonial Ride": ["Bridal Ride", "Luxury Ride", "Classic Ride"],
     "Luxury Ride": ["Bridal Ride", "Luxury Ride", "Classic Ride"],
     Fireworks: ["Wedding Fireworks", "Indoor Fireworks", "Outdoor Fireworks"],
-    "Card Design & Printing": [
-      "Wedding Invitations",
-      "Birthday Party Invitations",
-      "Corporate Cards",
+    "Mascot Artists": [
+      "Birthday Mascots",
+      "Corporate Mascots",
+      "Theme Party Mascots",
+      "Walkabout Characters",
     ],
     "Magic Shows": [
       "Children’s Magic Shows",
@@ -542,7 +540,7 @@ function VendorService({ currentStep }) {
         formData.append("subCategory", sub);
       });
       selectedLocations.forEach((loc) => {
-        formData.append("locationOffered[]", loc);
+        formData.append("locationOffered", loc);
       });
 
       // selectedLocations.forEach((loc) => {
@@ -584,7 +582,7 @@ function VendorService({ currentStep }) {
       }
 
       const response = await axios.post(
-        `${BACKEND_URL}/vendors/create-service`,
+        `${import.meta.env.VITE_BACKEND_URL}/vendors/create-service`,
         formData,
         {
           headers: {
@@ -1749,24 +1747,22 @@ function VendorService({ currentStep }) {
         <div
           style={{
             display: "flex",
-            justifyContent: "center",
+            justifyContent: "space-between",
             marginTop: "20px",
           }}
         >
-          <div className="flex flex-row text-white gap-4 ml-5">
-            <button
-              className="bg-blue-500 px-6 py-2 font-semibold rounded-lg hover:bg-blue-800 ease-in-out"
-              onClick={handleAdd}
-            >
-              Add
-            </button>
-            <button
-              className="bg-red-500 px-4 py-2 rounded-lg font-semibold hover:bg-red-800 ease-in-out"
-              onClick={handleCancel}
-            >
-              Cancel
-            </button>
-          </div>
+          <button
+            className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-800 ease-in-out"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+          <button
+            className="bg-blue-500 text-white px-6 py-2 font-semibold rounded-lg hover:bg-blue-800 ease-in-out"
+            onClick={handleAdd}
+          >
+            Next
+          </button>
         </div>
       </div>
     </>

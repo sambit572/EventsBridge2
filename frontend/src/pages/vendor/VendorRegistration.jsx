@@ -52,7 +52,15 @@ const VendorRegister = () => {
     const emailRegex = /^[a-z][a-z0-9._%+-]*@[a-z0-9.-]+\.[a-z]{2,}$/;
 
     if (!emailRegex.test(form.email)) {
-      setError("Invalid email! First letter must be lowercase.");
+      setError("Invalid email");
+      return false;
+    }
+    if(!form.fullName){
+      setError("Enter Full name");
+      return false;
+    }
+    if(form.phone.length >10 || form.phone.length <10){
+      setError("Invalid phone number");
       return false;
     }
 
@@ -106,8 +114,8 @@ const VendorRegister = () => {
       return false;
     }
 
-    if (form.password.length < 6) {
-      setError("Password must be at least 6 characters!");
+    if (form.password.length < 8) {
+      setError("Password must be at least 8 characters long");
       return false;
     }
     setError("");
@@ -166,7 +174,7 @@ const VendorRegister = () => {
       const fullName = vendor.fullName || "";
       const firstName = fullName.split(" ")[0];
       const firstLetter = firstName?.charAt(0).toUpperCase() || "";
-      const profilePic = vendor.profilePic || "";
+      const profilePic = vendor.profilePicture || "";
 
       localStorage.setItem("VendorCurrentlyLoggedIn", "true");
       localStorage.setItem("VendorFullName", fullName);
@@ -270,9 +278,9 @@ const VendorRegister = () => {
   return (
     <>
       <Seo
-        title={"Register as a Vendor"}
+        title={"Vendor Registration | Grow Your Event Business with EventsBridge | Get More Bookings"}
         description={
-          "Register as a vendor on Eventsbridge and connect with our platform. Sign up to offer your services and grow your business via our event platform."
+          "Join EventsBridge and connect with thousands of customers searching for photographers, decorators, caterers, DJs, makeup artists, banquet halls and event planners. Register your business today and receive high-quality leads with zero hidden charges."
         }
       />
       <div>
@@ -286,25 +294,69 @@ const VendorRegister = () => {
         <StepProgress currentStep={0} />
         {isLoading && <Spinner />}
 
-        <div className="min-h-screen w-full bg-gray-100 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-          <div className="w-full max-w-6xl flex flex-col lg:flex-row shadow-2xl rounded-2xl overflow-hidden">
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+          .vr-root, .vr-root * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
+          .vr-card {
+            animation: vr-rise 0.5s cubic-bezier(.22,1,.36,1) both;
+            background-image:
+              linear-gradient(145deg, #fff9d6, #ffe680, #ffd34d, #ffe680, #fff9d6),
+              linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #3b82f6 100%);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            border: 4px solid transparent !important;
+            background-size: 300% 300%;
+            animation: vr-rise 0.5s cubic-bezier(.22,1,.36,1) both, vr-gradient-shift 6s ease infinite;
+          }
+          @keyframes vr-rise { from { opacity:0; transform: translateY(18px) scale(.985); } to { opacity:1; transform: translateY(0) scale(1); } }
+          @keyframes vr-gradient-shift {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          .vr-field { animation: vr-fade 0.45s ease both; }
+          @keyframes vr-fade { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }
+          .vr-input {
+            width:100%; padding: 10px 12px; background: rgba(255,255,255,0.92);
+            border: 1.5px solid #d6d3d1; border-radius: 10px; outline:none;
+            transition: border-color .2s ease, box-shadow .2s ease, transform .15s ease;
+            font-size: 14px;
+          }
+          .vr-input:hover { border-color:#bbb6b1; }
+          .vr-input:focus { border-color:#16a34a; box-shadow: 0 0 0 3px rgba(34,197,94,0.18); transform: translateY(-1px); }
+          .vr-label { display:block; font-size:12.5px; font-weight:600; color:#4b5563; margin-bottom:4px; letter-spacing:.01em; }
+          .vr-submit { position:relative; overflow:hidden; }
+          .vr-submit::after {
+            content:''; position:absolute; top:0; left:-60%; width:50%; height:100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
+            transform: skewX(-20deg); transition: left .6s ease;
+          }
+          .vr-submit:hover::after { left:120%; }
+          .vr-submit:active { transform: scale(0.98); }
+          .vr-eye-btn { transition: color .15s ease, transform .15s ease; }
+          .vr-eye-btn:hover { transform: scale(1.1); }
+          .vr-illustration { animation: vr-float 5s ease-in-out infinite; }
+          @keyframes vr-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        `}</style>
+
+        <div className="vr-root min-h-[calc(100vh-110px)] w-full bg-gray-100 flex items-center justify-center p-3 sm:p-4 lg:p-6">
+          <div className="vr-card w-full max-w-5xl flex flex-col lg:flex-row shadow-2xl rounded-[18px]">
             {/* LEFT SIDE: Form area - Full width on mobile */}
             <div
-              className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 lg:p-12 bg-cover bg-center relative"
+              className="w-full lg:w-1/2 flex items-center justify-center p-3 sm:p-5 lg:p-6 bg-cover bg-center relative rounded-l-[14px] rounded-r-none"
               style={{
                 backgroundImage: `url(${laptopBackground})`,
               }}
             >
               <div className="absolute inset-0 bg-black/30 "></div>
               <div className="relative z-10 w-full max-w-md">
-                {/* Changed from bg-stone-100/95 to bg-stone-100/75 for more transparency */}
-                <div className="bg-stone-100/65 backdrop-blur-md rounded-xl shadow-lg p-8">
-                  <div className="flex flex-col gap-4">
-                    <div className="text-left">
-                      <h2 className="text-3xl font-bold text-gray-800">
+                <div className="bg-stone-100/70 backdrop-blur-md rounded-xl shadow-lg p-5 sm:p-6">
+                  <div className="flex flex-col gap-2.5">
+                    <div className="text-left vr-field" style={{ animationDelay: "0ms" }}>
+                      <h2 className="text-2xl font-bold text-gray-800">
                         Create Vendor Account
                       </h2>
-                      <p className="text-gray-600 mt-1">
+                      <p className="text-gray-600 text-sm mt-0.5">
                         Welcome! Please fill in the details to register.
                       </p>
                     </div>
@@ -312,15 +364,15 @@ const VendorRegister = () => {
                     {/* Error message */}
                     {error && (
                       <div
-                        className="bg-red-100/90 border-l-4 border-red-500 text-red-700 p-4 rounded-md backdrop-blur-sm"
+                        className="bg-red-100/90 border-l-4 border-red-500 text-red-700 p-2.5 rounded-md backdrop-blur-sm text-sm"
                         role="alert"
                       >
                         <p>{error}</p>
                       </div>
                     )}
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <div className="vr-field" style={{ animationDelay: "40ms" }}>
+                      <label className="vr-label">
                         Full Name <span className="text-red-600">*</span>
                       </label>
                       <input
@@ -329,91 +381,95 @@ const VendorRegister = () => {
                         placeholder="Enter your full name"
                         value={form.fullName}
                         onChange={handleChange}
-                        className="w-full p-3 bg-white/90 backdrop-blur-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition"
+                        className="vr-input"
                         required
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Email Address <span className="text-red-600">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="Enter your email address"
-                        value={form.email}
-                        onChange={handleChange}
-                        className="w-full p-3 bg-white/90 backdrop-blur-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Phone Number <span className="text-red-600">*</span>
-                      </label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        placeholder="Enter your phone number"
-                        value={form.phone}
-                        onChange={handleChange}
-                        className="w-full p-3 bg-white/90 backdrop-blur-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition"
-                        required
-                      />
-                    </div>
-
-                    <div className="relative">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Password <span className="text-red-600">*</span>
-                      </label>
-                      <div className="relative">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      <div className="vr-field" style={{ animationDelay: "80ms" }}>
+                        <label className="vr-label">
+                          Email Address <span className="text-red-600">*</span>
+                        </label>
                         <input
-                          type={showPassword ? "text" : "password"}
-                          name="password"
-                          placeholder="Enter password"
-                          value={form.password}
+                          type="email"
+                          name="email"
+                          placeholder="you@example.com"
+                          value={form.email}
                           onChange={handleChange}
-                          className="w-full p-3 pr-12 bg-white/90 backdrop-blur-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition"
+                          className="vr-input"
                           required
                         />
-                        <button
-                          type="button"
-                          onClick={togglePasswordVisibility}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 w-6 h-6 flex items-center justify-center"
-                        >
-                          {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
-                        </button>
+                      </div>
+
+                      <div className="vr-field" style={{ animationDelay: "100ms" }}>
+                        <label className="vr-label">
+                          Phone Number <span className="text-red-600">*</span>
+                        </label>
+                        <input
+                          type="tel"
+                          name="phone"
+                          placeholder="10-digit number"
+                          value={form.phone}
+                          onChange={handleChange}
+                          className="vr-input"
+                          required
+                        />
                       </div>
                     </div>
 
-                    <div className="relative">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Confirm Password <span className="text-red-600">*</span>
-                      </label>
-                      <div className="relative">
-                        <input
-                          type={showPassword ? "text" : "password"}
-                          name="confirmPassword"
-                          placeholder="Confirm password"
-                          value={form.confirmPassword}
-                          onChange={handleChange}
-                          className="w-full p-3 pr-12 bg-white/90 backdrop-blur-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition"
-                          required
-                        />
-                        <button
-                          type="button"
-                          onClick={togglePasswordVisibility}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 w-6 h-6 flex items-center justify-center"
-                        >
-                          {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
-                        </button>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      <div className="relative vr-field" style={{ animationDelay: "140ms" }}>
+                        <label className="vr-label">
+                          Password <span className="text-red-600">*</span>
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            placeholder="Enter password"
+                            value={form.password}
+                            onChange={handleChange}
+                            className="vr-input pr-10"
+                            required
+                          />
+                          <button
+                            type="button"
+                            onClick={togglePasswordVisibility}
+                            className="vr-eye-btn absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 w-5 h-5 flex items-center justify-center"
+                          >
+                            {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="relative vr-field" style={{ animationDelay: "160ms" }}>
+                        <label className="vr-label">
+                          Confirm Password <span className="text-red-600">*</span>
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            name="confirmPassword"
+                            placeholder="Confirm password"
+                            value={form.confirmPassword}
+                            onChange={handleChange}
+                            className="vr-input pr-10"
+                            required
+                          />
+                          <button
+                            type="button"
+                            onClick={togglePasswordVisibility}
+                            className="vr-eye-btn absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 w-5 h-5 flex items-center justify-center"
+                          >
+                            {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
+                          </button>
+                        </div>
                       </div>
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <div className="vr-field" style={{ animationDelay: "200ms" }}>
+                      <label className="vr-label">
                         Profile Picture (Optional)
                       </label>
                       <input
@@ -421,14 +477,15 @@ const VendorRegister = () => {
                         name="profilePic"
                         accept="image/*"
                         onChange={handleChange}
-                        className="w-full p-3 bg-white/90 backdrop-blur-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                        className="vr-input file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
                       />
                     </div>
 
                     <button
                       onClick={handleSubmit}
                       disabled={loading}
-                      className="w-full mt-4 bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition-all duration-300 shadow-md hover:shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed"
+                      className="vr-submit w-full mt-1.5 bg-green-600 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-green-700 transition-all duration-300 shadow-md hover:shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed vr-field"
+                      style={{ animationDelay: "240ms" }}
                     >
                       {loading ? "Registering..." : "Next"}
                     </button>
@@ -438,26 +495,23 @@ const VendorRegister = () => {
             </div>
 
             {/* RIGHT SIDE: Branding area - Hidden on mobile */}
-            <div className="hidden lg:flex w-full lg:w-1/2 bg-white flex-col items-center justify-center text-center p-8 relative">
-              {/* Placeholder for the illustrated image */}
-              <div className="w-full max-w-sm mt-[-80px] ml-10">
-                <img
+            <div className="hidden lg:flex w-full lg:w-1/2 flex-col items-center justify-center text-center p-6 relative rounded-r-[14px]" style={{ background: "linear-gradient(145deg, #fff9d6, #ffe680, #ffd34d)" }}>
+              <div className="vr-illustration w-full max-w-xs mt-[-40px]">
+                {/* <img
                   decoding="async"
                   loading="lazy"
                   src="../new-illustrator.png"
                   alt="Registration Illustration"
                   className="w-full h-auto object-contain"
-                />
+                /> */}
               </div>
-              <h1 className="text-4xl font-bold text-gray-800 mb-4 mt-[-10px] ">
+              <h1 className="text-3xl font-bold text-gray-800 mb-2 mt-[-6px]">
                 Register Here
               </h1>
-              <p className="text-lg text-gray-600 max-w-md mx-auto leading-relaxed">
+              <p className="text-base text-gray-600 max-w-md mx-auto leading-relaxed">
                 Join EventsBridge, your one-stop platform for discovering and
                 booking trusted vendors, planning events, and creating
-                unforgettable experiences. We make event planning simple, fast,
-                and hassle-freeregister today and take the first step toward
-                smarter celebrations.
+                unforgettable experiences.
               </p>
             </div>
           </div>

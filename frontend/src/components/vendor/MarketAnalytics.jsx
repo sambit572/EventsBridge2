@@ -57,8 +57,21 @@ const CATEGORIES = [
   { id: "photo_video",     label: "Photo and Videography",      icon: "📷" },
   { id: "food_catering",   label: "Food and Catering",          icon: "🍽️" },
   { id: "beauty_makeover", label: "Beauty Makeover",            icon: "💄" },
-  { id: "card_printing",   label: "Card Design and Printing",   icon: "🖨️" },
+  { id: "card_printing",   label: "Mascot Artists",   icon: "🎭" },
 ];
+
+/* ── Responsive viewport-width hook ── */
+function useViewportWidth() {
+  const [width, setWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1200
+  );
+  useEffect(() => {
+    const onResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  return width;
+}
 
 /* ── Chart.js Loader ── */
 function useChartJs(callback, deps = []) {
@@ -423,14 +436,22 @@ function AdjustPricingModal({ onClose }) {
 export default function MarketAnalytics() {
   const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
+  const width = useViewportWidth();
+
+  const isStackedLayout = width <= 900;   // right sidebar drops below the left column
+  const kpiColumns =
+    width <= 480 ? "1fr 1fr"
+    : width <= 700 ? "1fr 1fr 1fr"
+    : width <= 1024 ? "1fr 1fr 1fr 1fr"
+    : "1fr 1fr 1fr 1fr 1.25fr";
 
   return (
-    <div style={{ padding: "18px 18px 50px", background: "#f1f5f9", minHeight: "100%", fontFamily: "'DM Sans', sans-serif" }}>
+    <div style={{ padding: width <= 480 ? "14px 12px 50px" : "18px 18px 50px", background: "#f1f5f9", minHeight: "100%", fontFamily: "'DM Sans', sans-serif" }}>
 
       {/* ── Header ── */}
       <div style={{ marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
         <SelectCategoryButton selectedCategory={selectedCategory} onSelect={setSelectedCategory} />
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
           <p style={{ margin: 0, fontSize: 12, color: "#64748b" }}>Live insights · April 2026</p>
           <div style={{ background: "#dbeafe", border: "1px solid #93c5fd", borderRadius: 20, padding: "5px 14px", fontSize: 11.5, fontWeight: 600, color: "#1e40af" }}>🔴 Live</div>
         </div>
@@ -439,7 +460,7 @@ export default function MarketAnalytics() {
       {/* ── KPI Row ── */}
       <div style={{
         display: "grid",
-        gridTemplateColumns: "1fr 1fr 1fr 1fr 1.25fr",
+        gridTemplateColumns: kpiColumns,
         gap: 12,
         marginBottom: 14
       }}>
@@ -453,9 +474,14 @@ export default function MarketAnalytics() {
       {/* ── Smart Tips ── */}
       <SmartTipsBanner />
 
-      {/* ── Main Grid: Left wide | Right sidebar ── */}
-      {/* ✅ FIX 1: alignItems "stretch" makes both columns equal height */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 14, marginBottom: 14, alignItems: "stretch" }}>
+      {/* ── Main Grid: Left wide | Right sidebar (stacks on narrower screens) ── */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: isStackedLayout ? "1fr" : "1fr 300px",
+        gap: 14,
+        marginBottom: 14,
+        alignItems: "stretch"
+      }}>
 
         {/* Left */}
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -472,8 +498,8 @@ export default function MarketAnalytics() {
           </Card>
         </div>
 
-        {/* ✅ FIX 2: height "100%" + display flex so sidebar fills full column height */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 14, height: "100%" }}>
+        {/* Right sidebar - fills column height on desktop, stacks naturally on mobile */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 14, height: isStackedLayout ? "auto" : "100%" }}>
           <FutureDemandForecast />
           <BenchmarkPanel />
         </div>

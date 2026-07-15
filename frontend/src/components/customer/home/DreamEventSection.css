@@ -1,64 +1,310 @@
-/* ── Flip Card Base ── */
-.dream-flip-card {
-  perspective: 1200px;
-  width: 100%;
-  cursor: pointer;
-}
-
-.dream-flip-inner {
+/* ── Trust Showcase Card (animated aurora background) ── */
+.trust-showcase-card {
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 1.1s cubic-bezier(0.4, 0.2, 0.2, 1);
-  transform-style: preserve-3d;
+  min-height: 300px;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 2rem 1.75rem;
+  gap: 1.25rem;
+  background: linear-gradient(155deg, #1e1b4b 0%, #3730a5 45%, #5b21b6 75%, #4c1d95 100%);
+  background-size: 200% 200%;
+  animation: trustGradientShift 12s ease-in-out infinite;
+  box-shadow: 0 10px 40px rgba(76, 29, 149, 0.4);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-.dream-flip-card:hover .dream-flip-inner {
-  transform: rotateY(180deg);
+.trust-showcase-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 55px rgba(124, 92, 255, 0.45);
 }
 
-.dream-flip-front,
-.dream-flip-back {
+@keyframes trustGradientShift {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+}
+
+/* animated glow blobs */
+.trust-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(54px);
+  pointer-events: none;
+  animation: trustBlobFloat 7s ease-in-out infinite;
+  z-index: 0;
+}
+
+.trust-blob-1 {
+  width: 300px; height: 300px;
+  background: rgba(167, 139, 250, 0.40);
+  top: -80px; right: -70px;
+  animation-delay: 0s;
+}
+
+.trust-blob-2 {
+  width: 240px; height: 240px;
+  background: rgba(96, 165, 250, 0.28);
+  bottom: -60px; left: -60px;
+  animation-delay: 2.2s;
+}
+
+.trust-blob-3 {
+  width: 170px; height: 170px;
+  background: rgba(217, 70, 239, 0.22);
+  bottom: 38%; right: 12%;
+  animation-delay: 4.4s;
+}
+
+@keyframes trustBlobFloat {
+  0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+  50% { transform: translateY(-18px) translateX(8px) scale(1.08); }
+}
+
+/* slow-rotating conic aurora sweep for extra depth/motion */
+.trust-aurora-sweep {
+  position: absolute;
+  inset: -40%;
+  z-index: 0;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(167, 139, 250, 0) 0deg,
+    rgba(167, 139, 250, 0.16) 90deg,
+    rgba(96, 165, 250, 0) 160deg,
+    rgba(217, 70, 239, 0.14) 250deg,
+    rgba(167, 139, 250, 0) 360deg
+  );
+  animation: trustAuroraSpin 18s linear infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes trustAuroraSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* faint grid texture overlay for depth, with gentle shimmer */
+.trust-grid-overlay {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 75% 75% at 30% 20%, black 30%, transparent 100%);
+  animation: trustGridDrift 9s ease-in-out infinite;
 }
 
-.dream-flip-back {
-  transform: rotateY(180deg);
+@keyframes trustGridDrift {
+  0%, 100% { background-position: 0px 0px; opacity: 0.8; }
+  50% { background-position: 10px 14px; opacity: 1; }
 }
 
-/* ── On hover: hide all overlays & text on back — pure photo only ── */
-.dream-flip-card:hover .dream-back-overlay {
+/* floating sparkle particles for a premium, eye-catching touch */
+.trust-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  pointer-events: none;
+  z-index: 0;
   opacity: 0;
-  transition: opacity 0.25s ease 0.55s;
+  animation: trustParticleFloat 6s ease-in-out infinite;
 }
 
-/* ── Mobile: disable 3D flip, show tap toggle instead ── */
+.trust-particle-1 { width: 4px; height: 4px; top: 18%;  left: 62%; animation-delay: 0s;   box-shadow: 0 0 8px 2px rgba(255,255,255,0.6); }
+.trust-particle-2 { width: 3px; height: 3px; top: 64%;  left: 8%;  animation-delay: 1.4s; box-shadow: 0 0 6px 2px rgba(255,255,255,0.5); }
+.trust-particle-3 { width: 5px; height: 5px; top: 38%;  left: 88%; animation-delay: 2.8s; box-shadow: 0 0 10px 3px rgba(167,139,250,0.7); }
+.trust-particle-4 { width: 3px; height: 3px; top: 80%;  left: 45%; animation-delay: 4.2s; box-shadow: 0 0 6px 2px rgba(255,255,255,0.5); }
+.trust-particle-5 { width: 4px; height: 4px; top: 10%;  left: 25%; animation-delay: 5.6s; box-shadow: 0 0 8px 2px rgba(96,165,250,0.6); }
+
+@keyframes trustParticleFloat {
+  0%   { opacity: 0; transform: translateY(0) scale(0.6); }
+  15%  { opacity: 1; transform: translateY(-6px) scale(1); }
+  85%  { opacity: 1; transform: translateY(-26px) scale(1); }
+  100% { opacity: 0; transform: translateY(-34px) scale(0.6); }
+}
+
+.trust-header {
+  position: relative;
+  z-index: 2;
+}
+
+.trust-badge {
+  display: inline-block;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background: linear-gradient(120deg, #818cf8, #c084fc);
+  padding: 4px 12px;
+  border-radius: 50px;
+  margin-bottom: 0.7rem;
+  box-shadow: 0 4px 14px rgba(129,140,248,0.45);
+}
+
+.trust-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(1.7rem, 2.9vw, 2.5rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.15;
+  margin: 0;
+}
+
+/* ── Trust points: single big slot, sliding text reveal (one item at a time) ── */
+.trust-reveal-stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.1rem;
+  height: 110px;
+}
+
+.trust-reveal-item {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 1.5rem 1.6rem;
+  border-radius: 1.2rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 28px rgba(76, 29, 149, 0.35);
+  overflow: hidden; /* acts as the reveal mask for the text rising inside it */
+}
+
+/* Incoming item: rises up from below the mask into resting position */
+.trust-reveal-item.is-entering {
+  animation: trustRevealIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Outgoing item: rises further up and fades out the top of the mask */
+.trust-reveal-item.is-leaving {
+  animation: trustRevealOut 0.6s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+}
+
+@keyframes trustRevealIn {
+  0%   { transform: translateY(100%); opacity: 0; }
+  60%  { opacity: 1; }
+  100% { transform: translateY(0%); opacity: 1; }
+}
+
+@keyframes trustRevealOut {
+  0%   { transform: translateY(0%); opacity: 1; }
+  100% { transform: translateY(-110%); opacity: 0; }
+}
+
+/* The actual text/emoji also slide internally for a layered "reveal" feel,
+   independent of the card's own slide, so the words feel like they're
+   sliding up from behind a mask rather than the whole box just moving. */
+.trust-reveal-item.is-entering .trust-reveal-emoji,
+.trust-reveal-item.is-entering .trust-reveal-label {
+  animation: trustRevealTextIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.trust-reveal-item.is-entering .trust-reveal-label {
+  animation-delay: 0.06s;
+}
+
+@keyframes trustRevealTextIn {
+  0%   { transform: translateY(60%); opacity: 0; }
+  100% { transform: translateY(0%); opacity: 1; }
+}
+
+.trust-reveal-emoji {
+  font-size: 2.6rem;
+  line-height: 1;
+  flex-shrink: 0;
+  display: inline-block;
+  filter: drop-shadow(0 4px 14px rgba(167, 139, 250, 0.5));
+}
+
+.trust-reveal-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+/* Progress dots showing position in the 8-item cycle */
+.trust-reveal-dots {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 0.45rem;
+  margin-top: 0.4rem;
+}
+
+.trust-reveal-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.22);
+  transition: background 0.3s ease, transform 0.3s ease, width 0.3s ease;
+}
+
+.trust-reveal-dot.active {
+  background: #c4b5fd;
+  width: 22px;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(196, 181, 253, 0.7);
+}
+
+
+.trust-cta {
+  position: relative;
+  z-index: 2;
+  align-self: flex-start;
+  margin-top: auto;
+  background: linear-gradient(120deg, #818cf8, #7c3aed);
+  color: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 10px 22px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(124,92,255,0.45);
+  letter-spacing: 0.01em;
+}
+
+.trust-cta:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124,92,255,0.6);
+}
+
+/* Mobile adjustments */
 @media (max-width: 767px) {
-  .dream-flip-card:hover .dream-flip-inner {
-    transform: none;
+  .trust-showcase-card {
+    padding: 1.5rem 1.4rem;
+    gap: 1rem;
   }
+  .trust-title { font-size: 1.25rem; }
+  .trust-reveal-stage { height: 92px; }
+  .trust-reveal-item { padding: 1.1rem 1.2rem; gap: 0.8rem; }
+  .trust-reveal-emoji { font-size: 1.9rem; }
+  .trust-reveal-label { font-size: 1rem; }
+  .trust-cta { font-size: 0.78rem; padding: 8px 18px; }
+}
 
-  .dream-flip-back {
-    display: none;
-  }
-
-  .dream-flip-card.flipped .dream-flip-front {
-    display: none;
-  }
-
-  .dream-flip-card.flipped .dream-flip-back {
-    display: flex;
-    position: relative;
-    transform: none;
-    min-height: inherit;
-  }
-
-  /* Mobile layout — 2 column grid */
+/* ── Mobile layout grid (kept from original) ── */
+@media (max-width: 767px) {
   .dream-mobile-layout {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
@@ -326,4 +572,11 @@
   .catering-event-item { padding: 5px 6px; }
   .catering-event-label { font-size: 0.68rem; }
   .catering-event-emoji { font-size: 0.85rem; }
+}
+
+/* ── EMI card gradient (matches new blue-purple theme) ── */
+.dream-emi-gradient {
+  background: linear-gradient(155deg, #1e1b4b 0%, #3730a5 45%, #5b21b6 75%, #4c1d95 100%) !important;
+  background-size: 200% 200%;
+  animation: trustGradientShift 12s ease-in-out infinite;
 }

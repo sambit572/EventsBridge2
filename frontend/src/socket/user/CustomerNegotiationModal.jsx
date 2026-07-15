@@ -14,8 +14,7 @@ const CustomerNegotiationModal = () => {
   const [selectedServiceIndex, setSelectedServiceIndex] = useState(0);
   const [showTimer, setShowTimer] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15 * 60);
-  const [proceededWithoutNegotiation, setProceededWithoutNegotiation] =
-    useState(false);
+  const [proceededWithoutNegotiation, setProceededWithoutNegotiation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [dataLoading, setDataLoading] = useState(true);
@@ -238,6 +237,7 @@ const CustomerNegotiationModal = () => {
         "serviceName",
         "serviceId",
         "bookedByUserId",
+        "userDetailsId",
         "bookedByUser",
         "bookedByUserEmail",
         "bookedByUserPhoneNumber",
@@ -330,12 +330,15 @@ const CustomerNegotiationModal = () => {
             item.cateringDetails;
           proposedPrice = proposedPrices[item.cartItemId];
 
-          const minValidation = totalPrice * 0.5;
-          if (proposedPrice < minValidation) {
+          // ✅ Validate price is within range (for catering, it's fixed price)
+          if (proposedPrice < totalPrice) {
             throw new Error(
-              `❗ Price for ${packageName} too low. Minimum: ₹${Math.floor(
-                minValidation
-              )}`
+              `❗ Price for ${packageName} cannot be less than listed price ₹${totalPrice}`
+            );
+          }
+          if (proposedPrice > totalPrice * 1.5) {
+            throw new Error(
+              `❗ Price for ${packageName} cannot exceed 150% of listed price (max: ₹${Math.floor(totalPrice * 1.5)})`
             );
           }
 
@@ -352,6 +355,7 @@ const CustomerNegotiationModal = () => {
 
             serviceName: service.serviceName,
             bookedByUserId: bookingDetails.bookedById,
+            userDetailsId, 
             bookedByUser: bookingDetails.bookedBy,
             bookedByUserEmail: bookingDetails.userEmail,
             bookedByUserPhoneNumber: bookingDetails.phone,
@@ -374,13 +378,20 @@ const CustomerNegotiationModal = () => {
           if (!proposedPrice || Number(proposedPrice) <= 0)
             throw new Error("❗ Please enter a valid price for this service.");
 
-          const minValidation = (service.minPrice || 0) * 0.5;
-          if (Number(proposedPrice) < minValidation)
+          // ✅ Validate price is within the listed price range
+          const minPrice = service.minPrice || 0;
+          const maxPrice = service.maxPrice || 0;
+          
+          if (Number(proposedPrice) < minPrice) {
             throw new Error(
-              `❗ Price for ${
-                service.serviceName
-              } too low. Minimum: ₹${Math.floor(minValidation)}`
+              `❗ Price cannot be less than minimum listed price ₹${minPrice}`
             );
+          }
+          if (Number(proposedPrice) > maxPrice) {
+            throw new Error(
+              `❗ Price cannot exceed maximum listed price ₹${maxPrice}`
+            );
+          }
 
           console.log("Service data for negotiation data:", service);
           negotiationData = {
@@ -393,6 +404,7 @@ const CustomerNegotiationModal = () => {
             serviceType: service.serviceCategory,
 
             serviceName: service.serviceName,
+              userDetailsId, 
             bookedByUserId: bookingDetails.bookedById,
             bookedByUser: bookingDetails.bookedBy,
             bookedByUserEmail: bookingDetails.userEmail,
@@ -590,18 +602,18 @@ const CustomerNegotiationModal = () => {
   }, 0);
 
   return (
-    <div className="min-h-screen p-4 sm:p-8 bg-slate-100 flex justify-center items-start font-sans">
-      <div className="w-full max-w-3xl bg-white rounded-2xl p-6 sm:p-10 shadow-xl border border-slate-200 border-t-8 border-t-blue-600">
-        <h2 className="text-center text-3xl sm:text-4xl font-bold mb-8 text-slate-800">
+    <div className="min-h-screen p-4 sm:p-6 bg-slate-100 flex justify-center items-start font-sans">
+      <div className="w-full max-w-4xl bg-white rounded-2xl p-5 sm:p-7 shadow-xl border border-slate-200 border-t-8 border-t-blue-600">
+        <h2 className="text-center text-2xl sm:text-3xl font-bold mb-5 text-slate-800">
           Propose Your Negotiated Price
         </h2>
 
-        {/* ✅ NEW: Service Group Selection */}
+        {/* ✅ Service Group Selection */}
         {isMultipleServiceGroups() && (
-          <div className="mb-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
+          <div className="mb-4 p-3 bg-blue-50 rounded-xl border border-blue-200">
             <label
               htmlFor="service-group-select"
-              className="block mb-2 font-semibold text-blue-800"
+              className="block mb-1.5 font-semibold text-blue-800 text-sm"
             >
               Select Service to Negotiate:
             </label>
@@ -609,7 +621,7 @@ const CustomerNegotiationModal = () => {
               id="service-group-select"
               value={selectedServiceIndex}
               onChange={handleServiceGroupChange}
-              className="w-full p-3 bg-white border-2 border-blue-300 rounded-xl text-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+              className="w-full p-2.5 bg-white border-2 border-blue-300 rounded-xl text-base focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
             >
               {groupedServices.map((group, index) => {
                 const itemCount = group.items.filter(
@@ -630,174 +642,187 @@ const CustomerNegotiationModal = () => {
           </div>
         )}
 
-        {/* ✅ NEW: Service Details Header */}
-        <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
-          <h3 className="text-xl font-bold text-blue-900 mb-3">
-            {currentService?.serviceName || "Service"}
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-            <div>
-              <span className="text-slate-600 font-medium">Vendor:</span>
-              <span className="ml-2 font-semibold text-slate-800">
-                {/* ✅ FIXED: Try multiple vendor name fields */}
-                {currentVendor?.businessName ||
-                  currentVendor?.fullName ||
-                  currentVendor?.name ||
-                  "Unknown Vendor"}
-              </span>
-            </div>
-            <div>
-              <span className="text-slate-600 font-medium">Date:</span>
-              <span className="ml-2 font-semibold text-slate-800">
-                {formatDateForDisplay(bookingDetails.startDate)} -{" "}
-                {formatDateForDisplay(bookingDetails.endDate)}
-              </span>
-            </div>
-          </div>
-        </div>
-        {/* ✅ NEW: Show all packages for current service */}
-        {currentItems.some((item) => item.cateringDetails) && (
-          <div className="mb-6 space-y-4">
-            <h4 className="text-lg font-bold text-slate-800 mb-3">
-              🍽️ Selected Packages (
-              {currentItems.filter((i) => i.cateringDetails).length})
-            </h4>
-
-            {currentItems.map((item, itemIndex) => {
-              if (!item.cateringDetails) return null;
-
-              const { packageName, plateCount, pricePerPlate, totalPrice } =
-                item.cateringDetails;
-              const itemId = item.cartItemId;
-
-              return (
-                <div
-                  key={itemIndex}
-                  className="bg-green-50 rounded-xl border-2 border-green-200 p-4"
-                >
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h5 className="font-bold text-green-800 text-lg">
-                        {packageName}
-                      </h5>
-                      <p className="text-sm text-gray-600 mt-1">
-                        {plateCount} plates @ ₹{pricePerPlate}/plate
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-xs text-gray-500 block">
-                        Listed Price
-                      </span>
-                      <span className="text-xl font-bold text-green-600">
-                        ₹{totalPrice}/-
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Price Input for this package */}
-                  <div className="mt-3">
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Your Negotiated Price for this package:
-                    </label>
-                    <input
-                      type="number"
-                      placeholder={`e.g., ${Math.floor(totalPrice * 0.9)}`}
-                      value={proposedPrices[itemId] || ""}
-                      onChange={(e) =>
-                        handlePriceChange(itemId, e.target.value)
-                      }
-                      className="w-full p-3 bg-white border-2 border-green-300 rounded-lg text-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200"
-                    />
-                    {/* <p className="text-xs text-gray-500 mt-1">
-                      Minimum acceptable: ₹{Math.floor(totalPrice * 0.5)}
-                    </p> */}
-                  </div>
+        {/* Two columns: vendor/date card + price entry on the left,
+            listed-price/venue/summary on the right — keeps Send/Proceed
+            buttons visible without scrolling on most screens. */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* LEFT COLUMN */}
+          <div className="flex flex-col gap-4">
+            {/* Service Details Header */}
+            <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
+              <h3 className="text-lg font-bold text-blue-900 mb-2">
+                {currentService?.serviceName || "Service"}
+              </h3>
+              <div className="grid grid-cols-1 gap-1.5 text-sm">
+                <div>
+                  <span className="text-slate-600 font-medium">Vendor:</span>
+                  <span className="ml-2 font-semibold text-slate-800">
+                    {currentVendor?.businessName ||
+                      currentVendor?.fullName ||
+                      currentVendor?.name ||
+                      "Unknown Vendor"}
+                  </span>
                 </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* ✅ Regular Service Display */}
-        {!currentItems.some((item) => item.cateringDetails) && (
-          <>
-            {/* ✅ MODIFIED: Wrap in fragment and handle undefined */}
-            <div className="mb-6 p-4 bg-slate-50 rounded-xl border border-slate-200">
-              <div className="flex justify-between items-center">
-                <span className="text-slate-600 font-medium">
-                  Listed Price:
-                </span>
-                <span className="text-2xl font-bold text-blue-600">
-                  ₹{currentService?.minPrice || 0}-₹
-                  {currentService?.maxPrice || 0}
-                </span>
+                <div>
+                  <span className="text-slate-600 font-medium">Date:</span>
+                  <span className="ml-2 font-semibold text-slate-800">
+                    {formatDateForDisplay(bookingDetails.startDate)} -{" "}
+                    {formatDateForDisplay(bookingDetails.endDate)}
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* ✅ NEW: Input for Regular Service (as requested) */}
-            <div className="mb-6">
-              <label
-                htmlFor="proposed-price-regular"
-                className="block text-sm font-semibold text-gray-700 mb-2"
-              >
-                Enter Your Price for This Service (INR):
+            {/* ✅ Regular Service Display (price input lives here on the left) */}
+            {!currentItems.some((item) => item.cateringDetails) && (
+              <>
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between items-center">
+                  <span className="text-slate-600 font-medium text-sm">
+                    Listed Price:
+                  </span>
+                  <span className="text-xl font-bold text-blue-600">
+                    ₹{currentService?.minPrice || 0}-₹
+                    {currentService?.maxPrice || 0}
+                  </span>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="proposed-price-regular"
+                    className="block text-sm font-semibold text-gray-700 mb-1.5"
+                  >
+                    Enter Your Price for This Service (INR):
+                  </label>
+                  <input
+                    id="proposed-price-regular"
+                    type="number"
+                    placeholder={`e.g., ${Math.floor(
+                      (currentService?.maxPrice || 0) * 0.8
+                    )}`}
+                    value={proposedPrices[currentService._id] || ""}
+                    onChange={(e) =>
+                      handlePriceChange(currentService._id, e.target.value)
+                    }
+                    className="w-full p-2.5 bg-white border-2 border-slate-300 rounded-lg text-base focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Venue Location */}
+            <div>
+              <label className="block mb-1.5 font-semibold text-slate-700 text-sm">
+                Venue Location:
               </label>
               <input
-                id="proposed-price-regular"
-                type="number"
-                placeholder={`e.g., ${Math.floor(
-                  (currentService?.maxPrice || 0) * 0.8
-                )}`}
-                value={proposedPrices[currentService._id] || ""}
-                onChange={(e) =>
-                  handlePriceChange(currentService._id, e.target.value)
-                }
-                className="w-full p-3 bg-white border-2 border-slate-300 rounded-lg text-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                type="text"
+                placeholder="Enter Your Venue Location"
+                value={venueInput}
+                onChange={(e) => setVenueInput(e.target.value)}
+                className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-          </>
-        )}
-
-        {/* Venue Location */}
-        <div className="mb-6">
-          <label className="block mb-2 font-semibold text-slate-700">
-            Venue Location:
-          </label>
-          <input
-            type="text"
-            placeholder="Enter Your Venue Location"
-            value={venueInput}
-            onChange={(e) => setVenueInput(e.target.value)}
-            className="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        {/* ✅ Summary Section */}
-        <div className="mb-6 p-4 bg-blue-50 rounded-xl border-2 border-blue-200">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-slate-600 font-medium">Total Items:</span>
-            <span className="font-semibold text-slate-800">
-              {currentItems.filter((i) => i.cateringDetails).length || 1}{" "}
-              item(s)
-            </span>
           </div>
-          {currentItems.some((item) => item.cateringDetails) && (
-            <div className="flex justify-between items-center">
-              <span className="text-slate-600 font-medium">
-                Group Total (Listed):
-              </span>
-              <span className="text-2xl font-bold text-blue-600">
-                ₹{groupTotal}/-
-              </span>
+
+          {/* RIGHT COLUMN */}
+          <div className="flex flex-col gap-4">
+            {/* ✅ Catering packages, if present, render here on the right
+                so they don't push the buttons below the fold */}
+            {currentItems.some((item) => item.cateringDetails) && (
+              <div className="space-y-3 max-h-[340px] overflow-y-auto pr-1">
+                <h4 className="text-base font-bold text-slate-800">
+                  🍽️ Selected Packages (
+                  {currentItems.filter((i) => i.cateringDetails).length})
+                </h4>
+
+                {currentItems.map((item, itemIndex) => {
+                  if (!item.cateringDetails) return null;
+
+                  const {
+                    packageName,
+                    plateCount,
+                    pricePerPlate,
+                    totalPrice,
+                  } = item.cateringDetails;
+                  const itemId = item.cartItemId;
+
+                  return (
+                    <div
+                      key={itemIndex}
+                      className="bg-green-50 rounded-xl border-2 border-green-200 p-3"
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <h5 className="font-bold text-green-800 text-base">
+                            {packageName}
+                          </h5>
+                          <p className="text-xs text-gray-600 mt-0.5">
+                            {plateCount} plates @ ₹{pricePerPlate}/plate
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-xs text-gray-500 block">
+                            Listed Price
+                          </span>
+                          <span className="text-lg font-bold text-green-600">
+                            ₹{totalPrice}/-
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="mt-2">
+                        <label className="block text-xs font-semibold text-gray-700 mb-1">
+                          Your Negotiated Price for this package:
+                        </label>
+                        <input
+                          type="number"
+                          placeholder={`e.g., ${Math.floor(totalPrice * 0.9)}`}
+                          value={proposedPrices[itemId] || ""}
+                          onChange={(e) =>
+                            handlePriceChange(itemId, e.target.value)
+                          }
+                          className="w-full p-2 bg-white border-2 border-green-300 rounded-lg text-base focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* ✅ Summary Section */}
+            <div className="p-3.5 bg-blue-50 rounded-xl border-2 border-blue-200">
+              <div className="flex justify-between items-center mb-1.5">
+                <span className="text-slate-600 font-medium text-sm">
+                  Total Items:
+                </span>
+                <span className="font-semibold text-slate-800 text-sm">
+                  {currentItems.filter((i) => i.cateringDetails).length || 1}{" "}
+                  item(s)
+                </span>
+              </div>
+              {currentItems.some((item) => item.cateringDetails) && (
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-600 font-medium text-sm">
+                    Group Total (Listed):
+                  </span>
+                  <span className="text-xl font-bold text-blue-600">
+                    ₹{groupTotal}/-
+                  </span>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
 
         {!showTimer && (
           <>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+            {/* Actions — Proceed Without Negotiation on the left,
+                Send to Vendor on the right */}
+            <div className="mt-5 ">
+
               <button
-                className="flex-1 py-4 px-6 text-base rounded-xl border-none cursor-pointer font-bold uppercase tracking-wider transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl bg-blue-600 text-white shadow-md hover:bg-blue-700 disabled:bg-slate-400 disabled:shadow-none disabled:transform-none"
+                className="flex-1 py-3.5 px-6 text-sm sm:text-base rounded-xl border-none cursor-pointer font-bold uppercase tracking-wider transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl bg-blue-600 text-white shadow-md hover:bg-blue-700 disabled:bg-slate-400 disabled:shadow-none disabled:transform-none"
                 onClick={handleNegotiateServiceGroup}
                 disabled={isLoading}
               >
@@ -805,22 +830,10 @@ const CustomerNegotiationModal = () => {
                   ? "Sending..."
                   : `Send to ${currentVendor?.fullName}`}
               </button>
-
-              <button
-                className="flex-1 py-4 px-6 text-base rounded-xl border-none cursor-pointer font-bold uppercase tracking-wider transition-colors duration-300 bg-slate-200 text-slate-700 hover:bg-slate-300 disabled:bg-slate-400"
-                onClick={handleProceedWithoutNegotiation}
-                disabled={isLoading}
-              >
-                {isLoading
-                  ? "Processing..."
-                  : `Proceed Without Negotiation${
-                      isMultipleServiceGroups() ? " (All)" : ""
-                    }`}
-              </button>
             </div>
 
             {isMultipleServiceGroups() && (
-              <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-xl">
+              <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-xl">
                 <p className="text-sm text-yellow-800">
                   📝 <strong>Note:</strong> "Send to Vendor" negotiates all
                   packages in the selected service. "Proceed Without
@@ -833,7 +846,7 @@ const CustomerNegotiationModal = () => {
 
         {/* Timer Section */}
         {showTimer && (
-          <div className="mt-8 text-center bg-slate-50 p-6 rounded-xl border border-slate-200">
+          <div className="mt-5 text-center bg-slate-50 p-5 rounded-xl border border-slate-200">
             <h3 className="text-xl font-bold mb-2 text-slate-800">
               ⏳{" "}
               {proceededWithoutNegotiation

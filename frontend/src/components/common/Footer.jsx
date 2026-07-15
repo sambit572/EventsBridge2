@@ -12,7 +12,7 @@ import insta40 from "/instagram-40.webp";
 import insta80 from "/instagram-80.webp";
 
 export const categoriesData = {
-  "DJ Services & Brash Band": [
+  "DJ & Musical Band": [
     "Wedding DJ",
     "Corporate Event DJ",
     "Private Party DJ",
@@ -50,27 +50,25 @@ export const categoriesData = {
     "Instrumental Performance",
     "Bharatanatyam Dance",
   ],
-  "Islamic Maulbi": [
-    "Religious Sermon",
-    "Tilawat",
-    "Marriage Ceremonies",
-    "Funeral Services",
+  "Bouncers & Security": [
+    "Event Security",
+    "VIP Protection",
+    "Crowd Management",
+    "Corporate Security",
     "Special Event",
   ],
-  "Christian Priest": [
-    "All",
-    "Christening",
-    "Wedding Ceremony",
-    "Funeral Service",
-    "Blessings Prayers",
-    "Church Program",
+  "Stars & Influencers": [
+    "Celebrity Appearance",
+    "Brand Ambassador",
+    "Social Media Influencer",
+    "Live Performance",
+    "Special Event",
   ],
-  "Hindu Pandit": [
-    "Wedding Ceremony",
-    "Puja Ceremony",
-    "Housewarming",
-    "Naming Ceremony",
-    "Shraddh Ceremony",
+  "Mehendi & Henna Artist": [
+    "Bridal Mehendi",
+    "Arabic Mehendi",
+    "Traditional Mehendi",
+    "Indo-Arabic Mehendi",
     "Special Event",
   ],
   "Beauty Makeover": ["Bridal Makeup", "Unisex", "Mehendi Artist"],
@@ -81,10 +79,11 @@ export const categoriesData = {
   ],
   "Ceremonial Ride": ["Bridal Car", "Luxury Car", "Classic Car"],
   Fireworks: ["Wedding Fireworks", "Indoor Fireworks", "Outdoor Fireworks"],
-  "Card Design & Printing": [
-    "Wedding Invitations",
-    "Birthday Party Invitations",
-    "Corporate Cards",
+  "Mascot Artists": [
+    "Birthday Mascots",
+    "Corporate Mascots",
+    "Theme Party Mascots",
+    "Walkabout Characters",
   ],
   "Magic Shows": [
     "Children’s Magic Shows",
@@ -207,7 +206,7 @@ function Footer() {
                   alt="Email"
                   className="icon"
                 />{" "}
-                techsupport@eventsbridge.com
+                support@eventsbridge.com
               </p>
             </a>
             <p
@@ -606,7 +605,7 @@ function Footer() {
                       className="icon"
                       alt=""
                     />{" "}
-                    techsupport@eventsbridge.com{" "}
+                    support@eventsbridge.com{" "}
                   </p>
                   <p>
                     <img
