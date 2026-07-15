@@ -1,0 +1,582 @@
+/* ── Trust Showcase Card (animated aurora background) ── */
+.trust-showcase-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 2rem 1.75rem;
+  gap: 1.25rem;
+  background: linear-gradient(155deg, #1e1b4b 0%, #3730a5 45%, #5b21b6 75%, #4c1d95 100%);
+  background-size: 200% 200%;
+  animation: trustGradientShift 12s ease-in-out infinite;
+  box-shadow: 0 10px 40px rgba(76, 29, 149, 0.4);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.trust-showcase-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 55px rgba(124, 92, 255, 0.45);
+}
+
+@keyframes trustGradientShift {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+}
+
+/* animated glow blobs */
+.trust-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(54px);
+  pointer-events: none;
+  animation: trustBlobFloat 7s ease-in-out infinite;
+  z-index: 0;
+}
+
+.trust-blob-1 {
+  width: 300px; height: 300px;
+  background: rgba(167, 139, 250, 0.40);
+  top: -80px; right: -70px;
+  animation-delay: 0s;
+}
+
+.trust-blob-2 {
+  width: 240px; height: 240px;
+  background: rgba(96, 165, 250, 0.28);
+  bottom: -60px; left: -60px;
+  animation-delay: 2.2s;
+}
+
+.trust-blob-3 {
+  width: 170px; height: 170px;
+  background: rgba(217, 70, 239, 0.22);
+  bottom: 38%; right: 12%;
+  animation-delay: 4.4s;
+}
+
+@keyframes trustBlobFloat {
+  0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+  50% { transform: translateY(-18px) translateX(8px) scale(1.08); }
+}
+
+/* slow-rotating conic aurora sweep for extra depth/motion */
+.trust-aurora-sweep {
+  position: absolute;
+  inset: -40%;
+  z-index: 0;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(167, 139, 250, 0) 0deg,
+    rgba(167, 139, 250, 0.16) 90deg,
+    rgba(96, 165, 250, 0) 160deg,
+    rgba(217, 70, 239, 0.14) 250deg,
+    rgba(167, 139, 250, 0) 360deg
+  );
+  animation: trustAuroraSpin 18s linear infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes trustAuroraSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* faint grid texture overlay for depth, with gentle shimmer */
+.trust-grid-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 75% 75% at 30% 20%, black 30%, transparent 100%);
+  animation: trustGridDrift 9s ease-in-out infinite;
+}
+
+@keyframes trustGridDrift {
+  0%, 100% { background-position: 0px 0px; opacity: 0.8; }
+  50% { background-position: 10px 14px; opacity: 1; }
+}
+
+/* floating sparkle particles for a premium, eye-catching touch */
+.trust-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  animation: trustParticleFloat 6s ease-in-out infinite;
+}
+
+.trust-particle-1 { width: 4px; height: 4px; top: 18%;  left: 62%; animation-delay: 0s;   box-shadow: 0 0 8px 2px rgba(255,255,255,0.6); }
+.trust-particle-2 { width: 3px; height: 3px; top: 64%;  left: 8%;  animation-delay: 1.4s; box-shadow: 0 0 6px 2px rgba(255,255,255,0.5); }
+.trust-particle-3 { width: 5px; height: 5px; top: 38%;  left: 88%; animation-delay: 2.8s; box-shadow: 0 0 10px 3px rgba(167,139,250,0.7); }
+.trust-particle-4 { width: 3px; height: 3px; top: 80%;  left: 45%; animation-delay: 4.2s; box-shadow: 0 0 6px 2px rgba(255,255,255,0.5); }
+.trust-particle-5 { width: 4px; height: 4px; top: 10%;  left: 25%; animation-delay: 5.6s; box-shadow: 0 0 8px 2px rgba(96,165,250,0.6); }
+
+@keyframes trustParticleFloat {
+  0%   { opacity: 0; transform: translateY(0) scale(0.6); }
+  15%  { opacity: 1; transform: translateY(-6px) scale(1); }
+  85%  { opacity: 1; transform: translateY(-26px) scale(1); }
+  100% { opacity: 0; transform: translateY(-34px) scale(0.6); }
+}
+
+.trust-header {
+  position: relative;
+  z-index: 2;
+}
+
+.trust-badge {
+  display: inline-block;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background: linear-gradient(120deg, #818cf8, #c084fc);
+  padding: 4px 12px;
+  border-radius: 50px;
+  margin-bottom: 0.7rem;
+  box-shadow: 0 4px 14px rgba(129,140,248,0.45);
+}
+
+.trust-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(1.7rem, 2.9vw, 2.5rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.15;
+  margin: 0;
+}
+
+/* ── Trust points: single big slot, sliding text reveal (one item at a time) ── */
+.trust-reveal-stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.1rem;
+  height: 110px;
+}
+
+.trust-reveal-item {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 1.5rem 1.6rem;
+  border-radius: 1.2rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 28px rgba(76, 29, 149, 0.35);
+  overflow: hidden; /* acts as the reveal mask for the text rising inside it */
+}
+
+/* Incoming item: rises up from below the mask into resting position */
+.trust-reveal-item.is-entering {
+  animation: trustRevealIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Outgoing item: rises further up and fades out the top of the mask */
+.trust-reveal-item.is-leaving {
+  animation: trustRevealOut 0.6s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+}
+
+@keyframes trustRevealIn {
+  0%   { transform: translateY(100%); opacity: 0; }
+  60%  { opacity: 1; }
+  100% { transform: translateY(0%); opacity: 1; }
+}
+
+@keyframes trustRevealOut {
+  0%   { transform: translateY(0%); opacity: 1; }
+  100% { transform: translateY(-110%); opacity: 0; }
+}
+
+/* The actual text/emoji also slide internally for a layered "reveal" feel,
+   independent of the card's own slide, so the words feel like they're
+   sliding up from behind a mask rather than the whole box just moving. */
+.trust-reveal-item.is-entering .trust-reveal-emoji,
+.trust-reveal-item.is-entering .trust-reveal-label {
+  animation: trustRevealTextIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.trust-reveal-item.is-entering .trust-reveal-label {
+  animation-delay: 0.06s;
+}
+
+@keyframes trustRevealTextIn {
+  0%   { transform: translateY(60%); opacity: 0; }
+  100% { transform: translateY(0%); opacity: 1; }
+}
+
+.trust-reveal-emoji {
+  font-size: 2.6rem;
+  line-height: 1;
+  flex-shrink: 0;
+  display: inline-block;
+  filter: drop-shadow(0 4px 14px rgba(167, 139, 250, 0.5));
+}
+
+.trust-reveal-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+/* Progress dots showing position in the 8-item cycle */
+.trust-reveal-dots {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 0.45rem;
+  margin-top: 0.4rem;
+}
+
+.trust-reveal-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.22);
+  transition: background 0.3s ease, transform 0.3s ease, width 0.3s ease;
+}
+
+.trust-reveal-dot.active {
+  background: #c4b5fd;
+  width: 22px;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(196, 181, 253, 0.7);
+}
+
+
+.trust-cta {
+  position: relative;
+  z-index: 2;
+  align-self: flex-start;
+  margin-top: auto;
+  background: linear-gradient(120deg, #818cf8, #7c3aed);
+  color: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 10px 22px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(124,92,255,0.45);
+  letter-spacing: 0.01em;
+}
+
+.trust-cta:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124,92,255,0.6);
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .trust-showcase-card {
+    padding: 1.5rem 1.4rem;
+    gap: 1rem;
+  }
+  .trust-title { font-size: 1.25rem; }
+  .trust-reveal-stage { height: 92px; }
+  .trust-reveal-item { padding: 1.1rem 1.2rem; gap: 0.8rem; }
+  .trust-reveal-emoji { font-size: 1.9rem; }
+  .trust-reveal-label { font-size: 1rem; }
+  .trust-cta { font-size: 0.78rem; padding: 8px 18px; }
+}
+
+/* ── Mobile layout grid (kept from original) ── */
+@media (max-width: 767px) {
+  .dream-mobile-layout {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  /* Grand Venues — full width */
+  .dream-mobile-grand {
+    grid-column: 1 / -1;
+  }
+
+  /* Catering — full width */
+  .dream-mobile-catering {
+    grid-column: 1 / -1;
+  }
+
+  /* EMI + Vendor — side by side */
+  .dream-mobile-emi,
+  .dream-mobile-vendor {
+    grid-column: span 1;
+  }
+
+  /* Full Planning + Mandap — side by side */
+  .dream-mobile-planning,
+  .dream-mobile-mandap {
+    grid-column: span 1;
+  }
+}
+
+/* ── Artisan Catering Card ── */
+.artisan-catering-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  border-radius: 1.5rem;
+  background: linear-gradient(145deg, #0f0f0f 0%, #1a1300 60%, #2a1f00 100%);
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding: 1.4rem 1.4rem 1.1rem;
+  gap: 0.6rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.35);
+}
+
+.artisan-catering-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(245, 197, 24, 0.25);
+}
+
+/* Animated blob backgrounds */
+.catering-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(38px);
+  pointer-events: none;
+  animation: blobFloat 6s ease-in-out infinite;
+}
+
+.catering-blob-1 {
+  width: 160px; height: 160px;
+  background: rgba(245, 197, 24, 0.22);
+  top: -40px; right: -40px;
+  animation-delay: 0s;
+}
+
+.catering-blob-2 {
+  width: 100px; height: 100px;
+  background: rgba(255, 120, 0, 0.15);
+  bottom: 20px; left: -20px;
+  animation-delay: 2s;
+}
+
+.catering-blob-3 {
+  width: 70px; height: 70px;
+  background: rgba(245, 197, 24, 0.12);
+  bottom: 60px; right: 30px;
+  animation-delay: 4s;
+}
+
+@keyframes blobFloat {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-12px) scale(1.05); }
+}
+
+/* Header row */
+.catering-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+}
+
+.catering-icon-wrap {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #F5C518, #FF9500);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(245,197,24,0.4);
+}
+
+.catering-icon-emoji {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.catering-arrow {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.85rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.artisan-catering-card:hover .catering-arrow {
+  background: #F5C518;
+  color: #111;
+}
+
+/* Title */
+.catering-title-block {
+  position: relative;
+  z-index: 2;
+}
+
+.catering-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 2px;
+  line-height: 1.2;
+}
+
+.catering-subtitle {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.45);
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0.03em;
+}
+
+/* Event list */
+.catering-events-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.catering-event-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.22s ease, transform 0.22s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.catering-event-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(245,197,24,0.04), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.catering-event-item.active {
+  background: rgba(245, 197, 24, 0.12);
+  transform: translateX(3px);
+}
+
+.catering-event-item.active::before {
+  opacity: 1;
+}
+
+.catering-event-emoji {
+  font-size: 0.95rem;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.catering-event-item.active .catering-event-emoji {
+  transform: scale(1.2);
+}
+
+.catering-event-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  transition: color 0.22s ease;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.catering-event-item.active .catering-event-label {
+  color: #F5C518;
+  font-weight: 800;
+}
+
+.catering-event-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  flex-shrink: 0;
+  transition: background 0.22s, transform 0.22s;
+}
+
+.catering-event-item.active .catering-event-dot {
+  background: #F5C518;
+  transform: scale(1.3);
+  box-shadow: 0 0 6px rgba(245,197,24,0.7);
+}
+
+/* CTA */
+.catering-cta {
+  position: relative;
+  z-index: 2;
+  align-self: flex-start;
+  background: #F5C518;
+  color: #111;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 0.72rem;
+  padding: 7px 16px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 14px rgba(245,197,24,0.35);
+  letter-spacing: 0.01em;
+}
+
+.catering-cta:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(245,197,24,0.5);
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .artisan-catering-card {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+  .catering-title { font-size: 1rem; }
+  .catering-events-list { gap: 2px; }
+  .catering-event-item { padding: 5px 6px; }
+  .catering-event-label { font-size: 0.68rem; }
+  .catering-event-emoji { font-size: 0.85rem; }
+}
+
+/* ── EMI card gradient (matches new blue-purple theme) ── */
+.dream-emi-gradient {
+  background: linear-gradient(155deg, #1e1b4b 0%, #3730a5 45%, #5b21b6 75%, #4c1d95 100%) !important;
+  background-size: 200% 200%;
+  animation: trustGradientShift 12s ease-in-out infinite;
+}

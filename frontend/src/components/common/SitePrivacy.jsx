@@ -14,9 +14,9 @@ export default function PrivacyPolicy({
     // Main container
     <>
       <Seo
-        title={"Privacy Policy"}
+        title={"Privacy Policy | EventsBridge"}
         description={
-          "Learn about how Eventsbridge protects your privacy and handles data. Read our full privacy policy for transparency on user and vendor information."
+          "Read the EventsBridge Privacy Policy to understand how we collect, use, protect and manage your personal information while using our event booking platform and vendor marketplace."
         }
       />
       <main className="bg-gray-50 antialiased text-gray-800">

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 const bookingSchema = new mongoose.Schema(
   {
     user: {
@@ -12,6 +13,16 @@ const bookingSchema = new mongoose.Schema(
       ref: "Vendor",
       required: true,
       index: true, //Index for faster queries by vendor
+    },
+    negotiationId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Negotiation",
+    index: true,
+},
+  userDetailsId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "UserDetails",
+      required: true,
     },
     service: {
       type: mongoose.Schema.Types.ObjectId,
@@ -51,6 +62,7 @@ const bookingSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+ 
     paymentStatus: {
       type: String,
       enum: ["PENDING", "PAID", "FAILED", "REFUNDED"],
@@ -60,15 +72,15 @@ const bookingSchema = new mongoose.Schema(
       type: String,
       enum: ["ONLINE", "COD", "WALLET", "UPI", "BANK_TRANSFER"],
       default: "ONLINE",
-      required: true,
+      
     },
     paymentDate: {
       type: Date,
-      required: true,
+     
     },
     transactionId: {
       type: String,
-      required: true,
+     
     },
 
     // Invoice

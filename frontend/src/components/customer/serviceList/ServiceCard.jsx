@@ -65,14 +65,11 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
 
   return (
     <div
-      className="flex cursor-pointer flex-col overflow-hidden rounded-lg bg-white transition-shadow duration-300 ease-in-out md:flex-row"
+      className="flex cursor-pointer flex-col overflow-hidden rounded-lg bg-white transition-shadow duration-300 ease-in-out"
       onClick={handleCardClick}
     >
       <div
-        className="relative overflow-hidden rounded-lg 
-             w-full md:w-[400px] lg:w-[480px] xl:w-[500px] 
-             h-[200px] lg:h-[290px] 
-             bg-gray-100 flex-shrink-0 md:sticky"
+        className="relative overflow-hidden rounded-t-lg w-full h-[220px] bg-gray-100 flex-shrink-0"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onTouchStart={onTouchStart}
@@ -82,6 +79,20 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
         <span className="absolute top-[10px] left-[10px] z-[20] bg-black/50 px-2 py-1 rounded-md text-[11px] text-white font-bold">
           EventsBridge
         </span>
+
+        {service.vendorVerificationStatus === "verified" &&
+  service.vendorTier === "premium" && (
+    <span className="absolute top-[10px] right-[10px] z-[20] bg-yellow-500 px-2 py-1 rounded-md text-[11px] font-bold text-white">
+      Premium
+    </span>
+)}
+
+{service.vendorVerificationStatus === "verified" &&
+  service.vendorTier === "basic" && (
+    <span className="absolute top-[10px] right-[10px] z-[20] bg-blue-500 px-2 py-1 rounded-md text-[11px] font-bold text-white">
+      Basic
+    </span>
+)}
 
         <div className="relative w-full h-full">
           {Array.isArray(media) && media.length > 0 ? (
@@ -310,42 +321,10 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
           )}
         </div>
 
-        {/* ✅ MODIFIED: Side thumbnail strip now handles videos */}
-        {Array.isArray(media) && media.length > 1 && (
-          <div className="flex flex-col gap-0.5 bg-gray-200 p-1.5">
-            {media.map((thumbUrl, idx) => (
-              <div
-                key={idx}
-                className={`relative h-[50px] w-[85px] cursor-pointer rounded border-2 object-cover transition-all duration-300 ${
-                  idx === currentIndex
-                    ? "border-orange-500"
-                    : "border-transparent"
-                } ${!isVendorAvailable ? "grayscale brightness-75" : ""}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCurrentIndex(idx);
-                }}
-              >
-                {getYouTubeID(thumbUrl) ? (
-                  <div className="w-full h-full bg-black flex items-center justify-center rounded">
-                    <FaYoutube className="text-red-500 text-3xl" />
-                  </div>
-                ) : (
-                  <img
-                    decoding="async"
-                    loading="lazy"
-                    src={thumbUrl}
-                    alt={`thumb-${idx}`}
-                    className="w-full h-full object-cover rounded"
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        )}
+
       </div>
 
-      <div className="flex-grow">
+      <div className="flex-grow min-w-0">
         <ServiceDescription
           service={{ ...service, categoryId: categoryId }}
           onSwitchToLogin={onSwitchToLogin}

@@ -4,6 +4,8 @@ import {
   registerUser,
   loginUser,
   logoutUser,
+  userLoginOtp,
+  verifyUserLoginOtp,
   sendPasswordResetLink,
   updateUserProfile,
   updateUserAvatar,
@@ -13,7 +15,7 @@ import {
   changePassword,
   getUserProfile,
   googleAuth,
-  verifyLogin,
+  phoneLogin,
 } from "../../controller/user/user.controller.js";
 
 import { verifyJwt } from "../../middleware/auth.middleware.js";
@@ -28,19 +30,19 @@ const router = Router();
 router.get("/no-need-to-login", noNeedToLogin);
 router.post("/signup", registerUser);
 router.post("/login", loginUser);
+router.post("/send-otp", userLoginOtp);
+router.post("/verify-login-otp", verifyUserLoginOtp);
 router.post("/logout", logoutUser);
 router.post("/auth/google", googleAuth);
 router.post("/forgot-password", sendPasswordResetLink);
 router.post("/reset-password/:resetToken", resetPassword);
-router.post("/verify-otp", verifyLogin);
+router.post("/verify-otp", phoneLogin);
 
 //
 // 🔒 PROTECTED ROUTES (Require JWT)
 //
 router.post("/change-password", verifyJwt, changePassword);
 router.route("/get-email").get(verifyJwt, getUserEmail);
-router.get("/profile", verifyJwt, getUserProfile);
-
 router.get("/profile", verifyJwt, getUserProfile);
 router.put("/update-profile", verifyJwt, updateUserProfile);
 

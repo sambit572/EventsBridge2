@@ -14,6 +14,7 @@ import Register from "./pages/common/Register.jsx";
 // Customer Pages
 import Home from "./pages/customer/Home";
 import ServiceList from "./pages/customer/ServiceList";
+import CustomerRegistration from "./pages/customer/CustomerRegistration.jsx";
 
 import ServiceDetails from "./pages/customer/ServiceDetails";
 
@@ -29,6 +30,9 @@ const VendorLogin = React.lazy(() => import("./pages/vendor/VendorLogin.jsx"));
 import AboutUs from "./pages/common/AboutUs";
 import HelpUs from "./pages/common/HelpUs";
 import HelpCenter from "./pages/common/HelpCenter";
+import ContactUs from "./pages/common/ContactUs";
+import FaqPage from "./pages/common/FaqPage.jsx";
+import Blog from "./pages/common/Blog.jsx";
 
 import ForgotPass from "./pages/customer/ForgotPass.jsx";
 import ResetPassword from "./pages/customer/ResetPassword.jsx";
@@ -58,6 +62,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./redux/UserSlice.js";
 import { setVendor } from "./redux/VendorSlice.js";
 import ScrollToTop from "./components/common/ScrollToTop.jsx";
+import AnalyticsTracker from "./components/common/AnalyticsTracker.jsx";
 import AddToCart from "./components/customer/YourCart/AddToCart.jsx";
 import DashboardEnforcement from "./utils/DashboardEnforcement.jsx";
 const BookingSuccess = React.lazy(() =>
@@ -202,6 +207,7 @@ const App = () => {
   return (
     <>
       <ScrollToTop />
+      <AnalyticsTracker />
       {location.pathname !== "/admin" && (
         <Navbar
           onOpenLogin={handleOpenLogin}
@@ -216,7 +222,7 @@ const App = () => {
         <VendorChangePassword onClose={() => setShowPasswordModal(false)} />
       )}
 
-      <main className="custom-mt mt-[52px]  sm:mt-[52px] md:mt-[62px]">
+      <main className="custom-mt mt-[94px] sm:mt-[94px] md:mt-[94px]">
         {vendor?._id && <VendorSocketManager />}
         <Toaster
           toastOptions={{
@@ -250,7 +256,7 @@ const App = () => {
               </Suspense>
             }
           />
-          <Route path="/faqs" element={<FaqSection />} />
+          <Route path="/faqs" element={<FaqPage />} />
           {/* Other routes */}
           <Route
             path="/service/:categoryId/:serviceId"
@@ -332,6 +338,9 @@ const App = () => {
           />
           <Route path="/your-cart" element={<AddToCart />} />
           <Route path="/about_us" element={<AboutUs />} />
+          <Route path="/contact_us" element={<ContactUs />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/register" element={<CustomerRegistration />} />
           <Route path="/help_us" element={<HelpUs />} />
           <Route path="/help-Center" element={<HelpCenter />} />
           <Route path="/feedback" element={<Feedback />} /> {/* Feedback */}

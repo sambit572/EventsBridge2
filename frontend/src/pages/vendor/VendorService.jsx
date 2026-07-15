@@ -130,23 +130,23 @@ function VendorService({ currentStep }) {
   };
 
   const categories = [
-    "DJ Services & Brash Band",
+    "DJ & Musical Band",
     "Music Concert & Orchestra",
     "Decor & Tenthouse",
     "Photo & Videography",
     "Food & Catering",
     "Banquet Hall & Mandap",
     "Classical Music & Dance",
-    "Islamic Maulbi",
-    "Christian Priest",
-    "Hindu Pandit",
+    "Bouncers & Security",
+    "Stars & Influencers",
+    "Mehendi & Henna Artist",
     "Beauty Makeover",
     "Balloon Decor",
     "Floral Decor",
     "Ceremonial Ride",
     "Luxury Ride",
     "Fireworks",
-    "Card Design & Printing",
+    "Mascot Artists",
     "Magic Shows",
     "Event Management Company",
     "Hotel & Resorts",
@@ -204,7 +204,7 @@ function VendorService({ currentStep }) {
   };
   // ✅ Define subcategories for each main category
   const subcategories = {
-    "DJ Services & Brash Band": [
+    "DJ & Musical Band": [
       "Wedding DJ",
       "Corporate Event DJ",
       "Private Party DJ",
@@ -242,27 +242,25 @@ function VendorService({ currentStep }) {
       "Instrumental Performance",
       "Bharatanatyam Dance",
     ],
-    "Islamic Maulbi": [
-      "Religious Sermon",
-      "Tilawat",
-      "Marriage Ceremonies",
-      "Funeral Services",
+    "Bouncers & Security": [
+      "Event Security",
+      "VIP Protection",
+      "Crowd Management",
+      "Corporate Security",
       "Special Event",
     ],
-    "Christian Priest": [
-      "All",
-      "Christening",
-      "Wedding Ceremony",
-      "Funeral Service",
-      "Blessings Prayers",
-      "Church Program",
+    "Stars & Influencers": [
+      "Celebrity Appearance",
+      "Brand Ambassador",
+      "Social Media Influencer",
+      "Live Performance",
+      "Special Event",
     ],
-    "Hindu Pandit": [
-      "Wedding Ceremony",
-      "Puja Ceremony",
-      "Housewarming",
-      "Naming Ceremony",
-      "Shraddh Ceremony",
+    "Mehendi & Henna Artist": [
+      "Bridal Mehendi",
+      "Arabic Mehendi",
+      "Traditional Mehendi",
+      "Indo-Arabic Mehendi",
       "Special Event",
     ],
     "Beauty Makeover": ["Bridal Makeup", "Unisex", "Mehendi Artist"],
@@ -274,10 +272,11 @@ function VendorService({ currentStep }) {
     "Ceremonial Ride": ["Bridal Ride", "Luxury Ride", "Classic Ride"],
     "Luxury Ride": ["Bridal Ride", "Luxury Ride", "Classic Ride"],
     Fireworks: ["Wedding Fireworks", "Indoor Fireworks", "Outdoor Fireworks"],
-    "Card Design & Printing": [
-      "Wedding Invitations",
-      "Birthday Party Invitations",
-      "Corporate Cards",
+    "Mascot Artists": [
+      "Birthday Mascots",
+      "Corporate Mascots",
+      "Theme Party Mascots",
+      "Walkabout Characters",
     ],
     "Magic Shows": [
       "Children’s Magic Shows",
@@ -310,8 +309,8 @@ function VendorService({ currentStep }) {
   // Locations based on selected state
   const filteredLocations = selectedState
     ? allLocations[selectedState].filter((loc) =>
-      loc.toLowerCase().includes(locationSearchTerm.toLowerCase())
-    )
+        loc.toLowerCase().includes(locationSearchTerm.toLowerCase())
+      )
     : [];
 
   const filteredStates = Object.keys(allLocations).filter((state) =>
@@ -651,7 +650,8 @@ function VendorService({ currentStep }) {
             !pkg.maxPlates
           ) {
             alert(
-              `Please fill all fields for the package "${pkg.packageName || "Unnamed"
+              `Please fill all fields for the package "${
+                pkg.packageName || "Unnamed"
               }".`
             );
             return false;
@@ -869,7 +869,28 @@ function VendorService({ currentStep }) {
         </div>
       )}
 
+      <div style={{
+        background: "linear-gradient(135deg, #060d1a 0%, #0b1a2e 50%, #0d1f38 100%)",
+        minHeight: "calc(100vh - 130px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "10px 16px 14px",
+        position: "relative",
+        overflow: "hidden",
+      }}>
+      {/* premium bg orbs */}
+      <div style={{position:"absolute",top:-120,left:-80,width:420,height:420,borderRadius:"50%",background:"radial-gradient(circle,rgba(245,158,11,0.12) 0%,transparent 65%)",pointerEvents:"none"}} />
+      <div style={{position:"absolute",bottom:-80,right:-80,width:380,height:380,borderRadius:"50%",background:"radial-gradient(circle,rgba(99,102,241,0.14) 0%,transparent 65%)",pointerEvents:"none"}} />
+      <div style={{position:"absolute",inset:0,opacity:0.03,backgroundImage:"linear-gradient(rgba(255,255,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px)",backgroundSize:"48px 48px",pointerEvents:"none"}} />
       <div className="form-container">
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+          .form-container, .form-container * { font-family: 'Plus Jakarta Sans', sans-serif; }
+          .vs-fadein { animation: vs-fadein 0.4s ease; }
+          @keyframes vs-fadein { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        `}</style>
+        <div className="form-section-title">Service Details — Step 2 of 4</div>
         <div className="form-wrapper">
           <div className="form-column">
             <div className="ServiceCategory">
@@ -941,9 +962,9 @@ function VendorService({ currentStep }) {
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        background: "#f7f3ff",
-                        color: "#4b2bb3",
-                        border: "1px solid #4b2bb3",
+                        background: "#eef4ff",
+                        color: "#001f3f",
+                        border: "1px solid #001f3f",
                         borderRadius: "6px",
                         padding: "2px 6px",
                         fontSize: "14px",
@@ -959,7 +980,7 @@ function VendorService({ currentStep }) {
                         }
                         style={{
                           marginLeft: "4px",
-                          color: "#4b2bb3",
+                          color: "#001f3f",
                           cursor: "pointer",
                           border: "none",
                           background: "transparent",
@@ -1025,19 +1046,19 @@ function VendorService({ currentStep }) {
                           fontSize: "12px",
                           background:
                             selectedSubcategories.length ===
-                              availableSubcategories.length
+                            availableSubcategories.length
                               ? "#e0e0e0"
                               : "#4b2bb3",
                           color:
                             selectedSubcategories.length ===
-                              availableSubcategories.length
+                            availableSubcategories.length
                               ? "#999"
                               : "white",
                           border: "none",
                           borderRadius: "4px",
                           cursor:
                             selectedSubcategories.length ===
-                              availableSubcategories.length
+                            availableSubcategories.length
                               ? "not-allowed"
                               : "pointer",
                           fontWeight: "500",
@@ -1055,8 +1076,8 @@ function VendorService({ currentStep }) {
                             padding: "4px 12px",
                             fontSize: "12px",
                             background: "transparent",
-                            color: "#4b2bb3",
-                            border: "1px solid #4b2bb3",
+                            color: "#001f3f",
+                            border: "1px solid #001f3f",
                             borderRadius: "4px",
                             cursor: "pointer",
                             fontWeight: "500",
@@ -1078,7 +1099,7 @@ function VendorService({ currentStep }) {
                         onClick={handleSelectAllSubcategories}
                         style={{
                           fontWeight: "600",
-                          color: "#4b2bb3",
+                          color: "#001f3f",
                           borderBottom: "1px solid #e0e0e0",
                           background: "#f7f3ff",
                         }}
@@ -1129,7 +1150,7 @@ function VendorService({ currentStep }) {
                 required
               />
               {previewImages.length > 0 && (
-                <div className="preview-container">
+                <div className="preview-container" style={{maxHeight:"170px",overflow:"hidden"}}>
                   <div className="main-preview">
                     {selectedFiles[selectedImageIndex]?.type?.startsWith(
                       "video/"
@@ -1137,7 +1158,7 @@ function VendorService({ currentStep }) {
                       <video
                         src={previewImages[selectedImageIndex]}
                         controls
-                        style={{ maxWidth: "100%", maxHeight: "300px" }}
+                        style={{ maxWidth: "100%", maxHeight: "110px" }}
                       />
                     ) : (
                       <img
@@ -1157,8 +1178,8 @@ function VendorService({ currentStep }) {
                             }
                             onClick={() => setSelectedImageIndex(idx)}
                             style={{
-                              width: "60px",
-                              height: "60px",
+                              width: "48px",
+                              height: "48px",
                               objectFit: "cover",
                             }}
                             muted
@@ -1200,7 +1221,7 @@ function VendorService({ currentStep }) {
                     value={minPrice}
                     min="1"
                     onChange={(e) => setMinPrice(e.target.value)}
-                    className="w-1/2 rounded-md px-3 py-2 bg-[#fff] text-[#4b2bb3] border-2 border-[#c5b9f5] focus:outline-none focus:border-[2px] focus:border-[#4b2bb3] cursor-text caret-black"
+                    className="w-1/2 rounded-md px-3 py-2 bg-[#fff] text-[#001f3f] border-2 border-[#b8cce4] focus:outline-none focus:border-[2px] focus:border-[#001f3f] cursor-text caret-black"
                   />
                   <span className="text-gray-600 font-semibold">-</span>
                   <input
@@ -1209,7 +1230,7 @@ function VendorService({ currentStep }) {
                     value={maxPrice}
                     min="1"
                     onChange={(e) => setMaxPrice(e.target.value)}
-                    className="w-1/2 rounded-md px-3 py-2 bg-[#f7f3ff] text-[#4b2bb3] border-2 border-[#c5b9f5] focus:outline-none focus:border-[2px] focus:border-[#4b2bb3] cursor-text caret-black"
+                    className="w-1/2 rounded-md px-3 py-2 bg-[#f5f8ff] text-[#001f3f] border-2 border-[#b8cce4] focus:outline-none focus:border-[2px] focus:border-[#001f3f] cursor-text caret-black"
                   />
                 </div>
               </div>
@@ -1383,7 +1404,7 @@ function VendorService({ currentStep }) {
           <div className="form-divider"></div>
 
           <div className="form-right">
-            <h3 style={{ color: "#4b2bb3", fontWeight: "600" }}>
+            <h3 style={{ color: "#374151", fontWeight: "600", fontSize: "11.5px", letterSpacing: "0.2px", marginBottom: 5 }}>
               Estimated Duration *
             </h3>
             <div className="duration-inputs">
@@ -1395,7 +1416,7 @@ function VendorService({ currentStep }) {
                 value={days}
                 onChange={(e) => setDays(e.target.value)}
               />
-              <span>d :</span>
+              <span className="duration-label">d :</span>
               <input
                 type="number"
                 min="0"
@@ -1405,7 +1426,7 @@ function VendorService({ currentStep }) {
                 value={hours}
                 onChange={(e) => setHours(e.target.value)}
               />
-              <span>h :</span>
+              <span className="duration-label">h :</span>
               <input
                 type="number"
                 min="0"
@@ -1415,7 +1436,7 @@ function VendorService({ currentStep }) {
                 value={minutes}
                 onChange={(e) => setMinutes(e.target.value)}
               />
-              <span>m</span>
+              <span className="duration-label">m</span>
             </div>
 
             <label htmlFor="state-location" className="state-location-label">
@@ -1446,9 +1467,9 @@ function VendorService({ currentStep }) {
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      background: "#f7f3ff",
-                      color: "#4b2bb3",
-                      border: "1px solid #4b2bb3",
+                      background: "#eef4ff",
+                      color: "#001f3f",
+                      border: "1px solid #001f3f",
                       borderRadius: "6px",
                       padding: "2px 6px",
                       fontSize: "14px",
@@ -1460,7 +1481,7 @@ function VendorService({ currentStep }) {
                       onClick={() => setSelectedState("")}
                       style={{
                         marginLeft: "4px",
-                        color: "#4b2bb3",
+                        color: "#001f3f",
                         cursor: "pointer",
                         border: "none",
                         background: "transparent",
@@ -1544,9 +1565,9 @@ function VendorService({ currentStep }) {
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      background: "#f7f3ff",
-                      color: "#4b2bb3",
-                      border: "1px solid #4b2bb3",
+                      background: "#eef4ff",
+                      color: "#001f3f",
+                      border: "1px solid #001f3f",
                       borderRadius: "6px",
                       padding: "2px 6px",
                       fontSize: "14px",
@@ -1562,7 +1583,7 @@ function VendorService({ currentStep }) {
                       }
                       style={{
                         marginLeft: "4px",
-                        color: "#4b2bb3",
+                        color: "#001f3f",
                         cursor: "pointer",
                         border: "none",
                         background: "transparent",
@@ -1620,19 +1641,19 @@ function VendorService({ currentStep }) {
                       fontSize: "12px",
                       background:
                         selectedLocations.length ===
-                          allLocations[selectedState]?.length
+                        allLocations[selectedState]?.length
                           ? "#e0e0e0"
                           : "#4b2bb3",
                       color:
                         selectedLocations.length ===
-                          allLocations[selectedState]?.length
+                        allLocations[selectedState]?.length
                           ? "#999"
                           : "white",
                       border: "none",
                       borderRadius: "4px",
                       cursor:
                         selectedLocations.length ===
-                          allLocations[selectedState]?.length
+                        allLocations[selectedState]?.length
                           ? "not-allowed"
                           : "pointer",
                       fontWeight: "500",
@@ -1649,8 +1670,8 @@ function VendorService({ currentStep }) {
                         padding: "4px 12px",
                         fontSize: "12px",
                         background: "transparent",
-                        color: "#4b2bb3",
-                        border: "1px solid #4b2bb3",
+                        color: "#001f3f",
+                        border: "1px solid #001f3f",
                         borderRadius: "4px",
                         cursor: "pointer",
                         fontWeight: "500",
@@ -1669,7 +1690,7 @@ function VendorService({ currentStep }) {
                       onClick={handleSelectAllLocations}
                       style={{
                         fontWeight: "600",
-                        color: "#4b2bb3",
+                        color: "#001f3f",
                         borderBottom: "1px solid #e0e0e0",
                         background: "#f7f3ff",
                       }}
@@ -1739,6 +1760,7 @@ function VendorService({ currentStep }) {
             <Button onBack={handleBack} onNext={handleNext} />
           </div>
         </div>
+      </div>
       </div>
     </>
   );

@@ -4,14 +4,14 @@ import { Seo } from "../../seo/seo";
 
 const TermsAndConditions = ({
   siteName = "@ EVENTSBRIDGE",
-  lastUpdated = "August 12, 2025",
+  lastUpdated = "July 8, 2026",
 }) => {
   return (
     <>
       <Seo
-        title={"Terms & Conditions"}
+        title={"Terms & Conditions | EventsBridge Event Booking Platform"}
         description={
-          "Read the Eventsbridge terms and conditions. Understand our policies on bookings, vendor agreements, user obligations, and event services."
+          "Read the EventsBridge Terms & Conditions covering bookings, vendor services, customer responsibilities, payments, cancellations, refunds, platform usage and legal policies."
         }
       />
       <div className="tc-container">
@@ -26,33 +26,6 @@ const TermsAndConditions = ({
               carefully before using our services.
             </strong>
           </p>
-          <section className="pp-section">
-            <h2>Platform Fee Structure</h2>
-            <ol>
-              <li>
-                <strong>Fee on advance payment:</strong> We charge 5% on the
-                advance payment collected at booking time. The advance payment
-                equals 20% of the total booking amount.
-              </li>
-              <br />
-              <li>
-                <strong>Effective fee:</strong> Because the advance is 20% of
-                the total, a 5% fee on that advance equals an effective fee of
-                1.5% of the total booking value.
-              </li>{" "}
-              <br />
-              <li>
-                <strong>Example:</strong> If total = ₹10,000 → advance = ₹2,000
-                → platform fee = 5% of ₹2,000 = ₹100 → effective fee = 1.5% of
-                ₹10,000.
-              </li>
-              <br />
-              <li className="bg-yellow-200">
-                <strong>**Introductory Offer:</strong> To welcome our partners,
-                the platform fee is currently waived for all new vendors.
-              </li>
-            </ol>
-          </section>
           <h2 className="tc-heading">Roles and Responsibilities</h2>
           <p className="tc-text">
             Our platform connects Vendors offering services with Customers

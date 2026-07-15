@@ -18,6 +18,8 @@ import {
   registerVendor,
   updateVendor,
   loginVendor,
+  vendorLoginOtp,
+  verifyVendorLoginOtp,
   vendorLogout,
   sendVendorResetLink,
   resetVendorPassword,
@@ -29,7 +31,7 @@ import {
   verifyConfirmPassword,
   getSearchSuggestions,
   getVendorDashboard,
-  verifyVendorLogin,
+  submitVerificationRequest
   // updateTheBankDetails,
 } from "../../controller/vendor/vendor.controller.js";
 
@@ -63,6 +65,9 @@ import {
 } from "../../controller/vendor/whychooseus.controller.js";
 import { getVendorBookings } from "../../controller/vendor/vendorBookingHistory.controller.js";
 
+//Top-Verified-Vendors-Route
+import { getVerifiedVendors } from "../../controller/vendor/TopVerifiedVendors.js";
+
 const vendor_router = express.Router();
 
 // --- WHY CHOOSE US ROUTES --- //
@@ -89,6 +94,8 @@ vendor_router.post(
   registerVendor
 );
 vendor_router.post("/login", loginVendor);
+vendor_router.post("/send-otp",vendorLoginOtp);
+vendor_router.post("/verify-login-otp", verifyVendorLoginOtp);
 vendor_router.post("/logout", verifyVendorJwt, vendorLogout);
 vendor_router.post("/send-reset-link", sendVendorResetLink);
 vendor_router.post("/reset-password/:resetToken", resetVendorPassword);
@@ -96,8 +103,10 @@ vendor_router.post("/change-password", verifyVendorJwt, changeVendorPassword);
 vendor_router.get("/silent-login", verifyVendorJwt, vendorSilentLogin);
 vendor_router.post("/check-email", checkVendorEmailStatus);
 vendor_router.get("/me", verifyVendorJwt, getVendorProfile);
+vendor_router.put( "/verification-request",verifyVendorJwt,submitVerificationRequest);
 vendor_router.get("/category/:category", getServicesByCategory);
-vendor_router.post("/verify-otp", verifyVendorLogin);
+vendor_router.get("/top-verified-vendors",getVerifiedVendors);
+
 
 vendor_router.get("/service/:id", getServiceById); // --- PROFILE ROUTES --- //
 vendor_router.put("/:id", upload.single("profilePicture"), updateVendor);
