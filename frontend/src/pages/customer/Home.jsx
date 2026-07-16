@@ -62,9 +62,15 @@ const Home = () => {
         }
       }
     };
-    requestIdleCallback(() => {
-      checkUser();
-    });
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(() => {
+        checkUser();
+      });
+    } else {
+      setTimeout(() => {
+        checkUser();
+      }, 1);
+    }
   }, []);
 
   useEffect(() => {
