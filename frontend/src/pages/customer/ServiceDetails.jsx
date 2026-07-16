@@ -37,29 +37,17 @@ const Service = ({ onSwitchToLogin }) => {
   const dispatch = useDispatch();
   const vendor = useSelector((state) => state.vendor.vendor);
 
-  useEffect(() => {
-    if (!categoryServices || categoryServices.length === 0) {
-      axios
-        .get(`${BACKEND_URL}/common/category/${categoryId}`)
-        .then((res) => {
-          dispatch(setCategoryServices(res.data.data));
-        })
-        .catch((err) => console.error(err));
-    }
-  }, [categoryId]);
   const [service, setService] = useState(null);
   const [mediaList, setMediaList] = useState([]);
   // ❌ REMOVED: selectMedia is no longer needed, we use currentIndex
   // const [selectMedia, setSelectMedia] = useState(null);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [latestReview, setLatestReview] = useState(null);
   const [notified, setNotified] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [reviews, setReviews] = useState([]);
+  const [currentUser] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
 
@@ -68,7 +56,6 @@ const Service = ({ onSwitchToLogin }) => {
   const [touchEndX, setTouchEndX] = useState(0);
   const minSwipeDistance = 50;
   const [whyChooseUsPoints, setWhyChooseUsPoints] = useState([]);
-  const [mouseY, setMouseY] = useState(0);
 
   const prevSlide = () =>
     setCurrentIndex((i) =>
@@ -108,10 +95,6 @@ const Service = ({ onSwitchToLogin }) => {
     setTimeout(() => {
       setIsAnimating(false);
     }, 2000);
-  };
-
-  const handleClick = () => {
-    setIsWishlisted(!isWishlisted);
   };
 
   useEffect(() => {
@@ -257,27 +240,6 @@ const Service = ({ onSwitchToLogin }) => {
     }
   };
 
-  const handleNotifyMe = async (e) => {
-    e.stopPropagation();
-    const isLoggedIn = localStorage.getItem("currentlyLoggedIn") === "true";
-    if (!isLoggedIn) {
-      toast.error("Please log in to get notifications.", { duration: 1500 });
-      if (onSwitchToLogin) onSwitchToLogin(true);
-      return;
-    }
-    try {
-      await axios.post(`${BACKEND_URL}/notifications/notify-when-available`, {
-        serviceId,
-      });
-      toast.success("You'll be notified when this service becomes available!", {
-        duration: 1500,
-      });
-    } catch (err) {
-      toast.error("Failed to set up notification.", { duration: 1500 });
-      console.error("Notify me error:", err);
-    }
-  };
-
   // swipe handlers
   const onTouchStart = (e) => {
     setTouchEndX(0);
@@ -350,62 +312,22 @@ const Service = ({ onSwitchToLogin }) => {
                         className="absolute inset-0 w-full h-full object-cover"
                       />
 
-                      {/* Poster Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent z-20 flex items-center">
-                        <div className="w-full max-w-2xl px-6 sm:px-10 py-6">
-                          {/* Badge */}
-                          <div className="inline-block bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">
-                            {service?.category?.name || "FESTIVAL SPECIAL"}
-                          </div>
+                      {service?.vendorVerificationStatus === "verified" &&
+                        service?.vendorTier === "premium" && (
+                          <span className="absolute top-4 right-4 z-30 flex items-center gap-1.5 rounded-md bg-[#ffbf00] px-3 py-1.5 text-sm font-bold text-[#352500] shadow-md">
+                            <span className="text-[22px] leading-none text-[#fff8c7] drop-shadow-[0_1px_2px_rgba(92,64,0,0.65)]">
+                              &#9733;
+                            </span>
+                            Premium
+                          </span>
+                        )}
 
-                          {/* Main Heading */}
-                          <h2 className="text-3xl sm:text-5xl font-black text-white mb-2 leading-tight">
-                            {service?.title || "GRAND LAUNCH"}
-                          </h2>
-
-                          {/* Discount */}
-                          <div className="text-4xl sm:text-6xl font-black text-orange-400 mb-3">
-                            30% OFF
-                          </div>
-
-                          {/* Subtitle */}
-                          <p className="text-base sm:text-lg text-gray-200 mb-4">
-                            {service?.description?.substring(0, 50) || "Unlock Divine Luxury Experiences"}
-                          </p>
-
-                          {/* Features Row */}
-                          <div className="flex flex-wrap gap-3 mb-4">
-                            <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
-                              <p className="text-xs text-gray-300">SALE CAPACITY</p>
-                              <p className="text-sm font-bold text-white">75% Filled</p>
-                            </div>
-                            <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
-                              <p className="text-xs text-gray-300">SECURE PAYMENTS</p>
-                              <p className="text-sm font-bold text-white">100% Safe</p>
-                            </div>
-                            <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
-                              <p className="text-xs text-gray-300">EMI AVAILABLE</p>
-                              <p className="text-sm font-bold text-white">Yes</p>
-                            </div>
-                          </div>
-
-                          {/* Timer Box */}
-                          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 max-w-[200px] border border-white/20">
-                            <p className="text-xs text-gray-300 text-center mb-2">ENDS IN</p>
-                            <div className="text-3xl font-bold text-white text-center">
-                              08:14
-                            </div>
-                            <p className="text-xs text-gray-300 text-center">HRS : MINS</p>
-                          </div>
-                        </div>
-
-                        {/* Right Side CTA */}
-                        <div className="absolute right-6 sm:right-10 top-1/2 -translate-y-1/2">
-                          <button className="bg-orange-400 hover:bg-orange-500 text-black font-bold px-6 py-3 rounded-lg shadow-lg transition-all">
-                            CLAIM OFFER
-                          </button>
-                        </div>
-                      </div>
+                      {service?.vendorVerificationStatus === "verified" &&
+                        service?.vendorTier === "basic" && (
+                          <span className="absolute top-4 right-4 z-30 rounded-md bg-[#ffbf00] px-3 py-1.5 text-sm font-bold text-[#352500] shadow-md">
+                            Verified
+                          </span>
+                        )}
 
                       {/* Unavailable Overlay */}
                       {!isVendorAvailable && (
@@ -528,7 +450,7 @@ const Service = ({ onSwitchToLogin }) => {
                       className={clsx('flex', 'w-full', 'cursor-pointer', 'items-center', 'justify-center', 'rounded-full', 'bg-gradient-to-r', 'from-[#001f3f]', 'to-[#004f9f]', 'sm:px-[1rem]', 'lg:px-12', 'py-3', 'text-sm', 'font-bold', 'text-white', 'transition-colors', 'duration-300', 'ease-in-out', 'hover:from-[#002366]', 'hover:to-[#0066cc]', 'active:from-[#000d1a]', 'active:to-[#003366]', 'lg:w-auto', 'lg:min-w-[220px]')}
                       onClick={handleBookNow}
                     >
-                      BOOK NOW
+                       CALL TO VENDOR
                     </button>
                   </>
                 ) : (
@@ -614,7 +536,6 @@ const Service = ({ onSwitchToLogin }) => {
               userId={currentUser?.id}
               onNewReview={(newReview) => {
                 setLatestReview(newReview);
-                setReviews((prev) => [newReview, ...prev]);
                 setIsReviewModalOpen(false);
               }}
               closePopup={() => setIsReviewModalOpen(false)}

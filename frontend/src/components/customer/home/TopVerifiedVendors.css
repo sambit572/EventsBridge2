@@ -150,20 +150,26 @@
 /* Premium badge */
 .tvv-verified-badge {
   position: absolute;
-  bottom: 10px; left: 10px;
+  top: 10px;
+  right: 10px;
   z-index: 4;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: #1a1100;
-  font-size: 10px;
+  background: #ffbf00;
+  color: #352500;
+  font-size: 14px;
   font-weight: 800;
-  padding: 3px 8px 3px 6px;
-  border-radius: 20px;
+  padding: 6px 12px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
   letter-spacing: 0.3px;
   font-family: "Plus Jakarta Sans", sans-serif;
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.5);
+  box-shadow: 0 4px 10px rgba(92, 64, 0, 0.28);
+}
+
+.tvv-verified-badge svg {
+  flex: 0 0 auto;
+  filter: drop-shadow(0 1px 2px rgba(92,64,0,0.65));
 }
 
 /* Inner image prev/next arrows */

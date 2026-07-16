@@ -1,6 +1,12 @@
 .home {
   width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   /* margin-top: 70px; */
+}
+
+.home * {
+  box-sizing: border-box;
 }
 
 .categories-head1 {
