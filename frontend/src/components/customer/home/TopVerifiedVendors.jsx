@@ -49,7 +49,7 @@ const VendorCard = ({ vendor }) => {
         </div>
         <span className="tvv-brand-label">EVENTSBRIDGE</span>
         <div className="tvv-verified-badge">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="#1a1100">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff8c7">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
           </svg>
           Premium

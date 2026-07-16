@@ -312,6 +312,23 @@ const Service = ({ onSwitchToLogin }) => {
                         className="absolute inset-0 w-full h-full object-cover"
                       />
 
+                      {service?.vendorVerificationStatus === "verified" &&
+                        service?.vendorTier === "premium" && (
+                          <span className="absolute top-4 right-4 z-30 flex items-center gap-1.5 rounded-md bg-[#ffbf00] px-3 py-1.5 text-sm font-bold text-[#352500] shadow-md">
+                            <span className="text-[22px] leading-none text-[#fff8c7] drop-shadow-[0_1px_2px_rgba(92,64,0,0.65)]">
+                              &#9733;
+                            </span>
+                            Premium
+                          </span>
+                        )}
+
+                      {service?.vendorVerificationStatus === "verified" &&
+                        service?.vendorTier === "basic" && (
+                          <span className="absolute top-4 right-4 z-30 rounded-md bg-[#ffbf00] px-3 py-1.5 text-sm font-bold text-[#352500] shadow-md">
+                            Verified
+                          </span>
+                        )}
+
                       {/* Unavailable Overlay */}
                       {!isVendorAvailable && (
                         <div className="unavailable-overlay">

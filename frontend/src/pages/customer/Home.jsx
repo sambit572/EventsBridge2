@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import "./Home.css";
 import { Seo } from "../../seo/seo";
@@ -25,6 +26,7 @@ const FaqSection = React.lazy(() =>
 );
 
 const Home = () => {
+  const location = useLocation();
   const [showAll, setShowAll] = useState(
     () => sessionStorage.getItem("showAll") === "true"
   );
