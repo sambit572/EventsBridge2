@@ -9,8 +9,8 @@
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  padding: 2rem 2rem 1.75rem;
-  gap: 1.25rem;
+  padding: 1.4rem 2rem 1.75rem;
+  gap: 0.9rem;
   background: linear-gradient(155deg, #1e1b4b 0%, #3730a5 45%, #5b21b6 75%, #4c1d95 100%);
   background-size: 200% 200%;
   animation: trustGradientShift 12s ease-in-out infinite;
@@ -106,6 +106,30 @@
   50% { background-position: 10px 14px; opacity: 1; }
 }
 
+/* floating sparkle particles for a premium, eye-catching touch */
+.trust-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  animation: trustParticleFloat 6s ease-in-out infinite;
+}
+
+.trust-particle-1 { width: 4px; height: 4px; top: 18%;  left: 62%; animation-delay: 0s;   box-shadow: 0 0 8px 2px rgba(255,255,255,0.6); }
+.trust-particle-2 { width: 3px; height: 3px; top: 64%;  left: 8%;  animation-delay: 1.4s; box-shadow: 0 0 6px 2px rgba(255,255,255,0.5); }
+.trust-particle-3 { width: 5px; height: 5px; top: 38%;  left: 88%; animation-delay: 2.8s; box-shadow: 0 0 10px 3px rgba(167,139,250,0.7); }
+.trust-particle-4 { width: 3px; height: 3px; top: 80%;  left: 45%; animation-delay: 4.2s; box-shadow: 0 0 6px 2px rgba(255,255,255,0.5); }
+.trust-particle-5 { width: 4px; height: 4px; top: 10%;  left: 25%; animation-delay: 5.6s; box-shadow: 0 0 8px 2px rgba(96,165,250,0.6); }
+
+@keyframes trustParticleFloat {
+  0%   { opacity: 0; transform: translateY(0) scale(0.6); }
+  15%  { opacity: 1; transform: translateY(-6px) scale(1); }
+  85%  { opacity: 1; transform: translateY(-26px) scale(1); }
+  100% { opacity: 0; transform: translateY(-34px) scale(0.6); }
+}
+
 .trust-header {
   position: relative;
   z-index: 2;
@@ -121,7 +145,7 @@
   background: linear-gradient(120deg, #818cf8, #c084fc);
   padding: 4px 12px;
   border-radius: 50px;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.5rem;
   box-shadow: 0 4px 14px rgba(129,140,248,0.45);
 }
 
@@ -221,7 +245,7 @@
   z-index: 2;
   display: flex;
   gap: 0.45rem;
-  margin-top: -0.85rem;
+  margin-top: 0.4rem;
 }
 
 .trust-reveal-dot {
@@ -482,10 +506,9 @@
 }
 
 .catering-event-label {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 0.75rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.72rem;
   font-weight: 600;
-  font-style: italic;
   color: rgba(255,255,255,0.5);
   transition: color 0.22s ease;
   flex: 1;
@@ -497,6 +520,20 @@
 .catering-event-item.active .catering-event-label {
   color: #F5C518;
   font-weight: 800;
+}
+
+.catering-event-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  flex-shrink: 0;
+  transition: background 0.22s, transform 0.22s;
+}
+
+.catering-event-item.active .catering-event-dot {
+  background: #F5C518;
+  transform: scale(1.3);
+  box-shadow: 0 0 6px rgba(245,197,24,0.7);
 }
 
 /* CTA */
@@ -537,7 +574,7 @@
   .catering-event-emoji { font-size: 0.85rem; }
 }
 
-/* ── EMI card gradient (matches new blue-purple theme) ── */
+/* ── EMI card gradient (matches blue-purple theme) ── */
 .dream-emi-gradient {
   background: linear-gradient(155deg, #1e1b4b 0%, #3730a5 45%, #5b21b6 75%, #4c1d95 100%) !important;
   background-size: 200% 200%;

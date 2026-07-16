@@ -18,7 +18,7 @@ const trustPoints = [
   { emoji: "✨", label: "Verified & Trusted Vendors" },
   { emoji: "💰", label: "Best Deals for Every Budget" },
   { emoji: "🤝", label: "Direct Price Negotiation" },
-  { emoji: "📍", label: "Connect with Top Local Event Vendors" },
+  { label: "Connect with Top Local Event Vendors" },
   { emoji: "💳", label: "Flexible EMI Payments" },
   { emoji: "⭐", label: "Genuine Customer Reviews" },
   { emoji: "🔒", label: "Safe & Secure Bookings" },
@@ -91,6 +91,7 @@ function ArtisanCateringCard({ className, style, isMobile }) {
           >
             <span className="catering-event-emoji">{evt.emoji}</span>
             <span className="catering-event-label">{evt.label}</span>
+            <span className="catering-event-dot" />
           </div>
         ))}
       </div>
@@ -135,23 +136,13 @@ function TrustPointsReveal() {
     <div className="trust-reveal-stage">
       {outgoing && (
         <div key={`out-${prevIndex}`} className="trust-reveal-item is-leaving">
-          <span className="trust-reveal-emoji">{outgoing.emoji}</span>
+          {outgoing.emoji && <span className="trust-reveal-emoji">{outgoing.emoji}</span>}
           <span className="trust-reveal-label">{outgoing.label}</span>
         </div>
       )}
       <div key={`in-${index}`} className="trust-reveal-item is-entering">
-        <span className="trust-reveal-emoji">{current.emoji}</span>
+        {current.emoji && <span className="trust-reveal-emoji">{current.emoji}</span>}
         <span className="trust-reveal-label">{current.label}</span>
-      </div>
-
-      {/* Progress dots so the person can see position in the cycle */}
-      <div className="trust-reveal-dots">
-        {trustPoints.map((_, i) => (
-          <span
-            key={i}
-            className={`trust-reveal-dot ${i === index ? "active" : ""}`}
-          />
-        ))}
       </div>
     </div>
   );
@@ -291,40 +282,6 @@ export default function DreamEventSection() {
             >
               Join Now
             </button>
-          </motion.div>
-
-          {/* Full Planning */}
-          <motion.div
-            variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            onClick={() => navigate("/category/photographer")}
-            className="dream-mobile-planning relative overflow-hidden rounded-2xl cursor-pointer p-5 flex flex-col justify-between"
-            style={{ minHeight: "130px", background: "linear-gradient(135deg, #f7f7f7 0%, #eeeeee 100%)" }}
-          >
-            <div className="text-3xl">📋</div>
-            <div>
-              <h3 className="text-gray-900 text-base font-black mb-0.5" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Full Planning</h3>
-              <p className="text-gray-500 text-xs">End-to-end event management</p>
-            </div>
-            <div className="absolute top-4 right-4 w-8 h-8 bg-black/5 rounded-full flex items-center justify-center">
-              <span className="text-gray-700 font-bold text-sm">→</span>
-            </div>
-          </motion.div>
-
-          {/* Inclusive & Mandap */}
-          <motion.div
-            variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            onClick={() => navigate("/category/tenthouse")}
-            className="dream-mobile-mandap relative overflow-hidden rounded-2xl cursor-pointer p-5 flex flex-col justify-between"
-            style={{ minHeight: "130px", background: "linear-gradient(135deg, #111111 0%, #222222 100%)" }}
-          >
-            <div className="text-3xl">🕌</div>
-            <div>
-              <h3 className="text-white text-base font-black mb-0.5" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Inclusive &amp; Mandap</h3>
-              <p className="text-gray-400 text-xs">Sacred setups, every tradition</p>
-              <button className="mt-3 text-gray-900 font-bold text-xs px-4 py-2 rounded-full hover:opacity-80 transition-all duration-200" style={{ background: "#F5C518" }}>
-                Book Now
-              </button>
-            </div>
           </motion.div>
 
         </div>

@@ -85,7 +85,7 @@ const ProfileMenu = ({
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <button
                   onClick={handleSignupClick}
-                  style={{ width: "100%", background: "#001f3f", color: "#fff", border: "none", borderRadius: "12px", padding: "11px", fontSize: "13px", fontWeight: 600, cursor: "pointer", transition: "opacity 0.2s" }}
+                  style={{ width: "100%", background: "#F5C518", color: "#001f3f", border: "none", borderRadius: "12px", padding: "11px", fontSize: "13px", fontWeight: 600, cursor: "pointer", transition: "opacity 0.2s" }}
                   onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
                   onMouseLeave={e => e.currentTarget.style.opacity = "1"}
                 >

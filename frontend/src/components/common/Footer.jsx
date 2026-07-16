@@ -78,7 +78,7 @@ export const categoriesData = {
     "Birthday Party Decor",
   ],
   "Ceremonial Ride": ["Bridal Car", "Luxury Car", "Classic Car"],
-  Fireworks: ["Wedding Fireworks", "Indoor Fireworks", "Outdoor Fireworks"],
+  "Fireworks & Special Effects": ["Wedding Fireworks", "Indoor Fireworks", "Outdoor Fireworks"],
   "Mascot Artists": [
     "Birthday Mascots",
     "Corporate Mascots",

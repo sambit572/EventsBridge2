@@ -106,7 +106,7 @@ export const CategoryData = [
   },
   {
     id: "fireworks",
-    title: "Fireworks",
+    title: "Fireworks & Special Effects",
     image: getCategoryImage("fireworks"),
     tagline: "Skies that Spark Magic",
     keywords: ["fireworks", "cracker", "pyro", "celebration"],

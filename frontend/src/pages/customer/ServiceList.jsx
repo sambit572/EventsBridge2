@@ -85,7 +85,7 @@ const ServiceList = ({ onSwitchToLogin }) => {
     "Floral Decor": floralBanner,
     "Ceremonial Ride": carBanner,
     "Luxury Ride": carBanner,
-    Fireworks: fireworksBanner,
+    "Fireworks & Special Effects": fireworksBanner,
     "Mascot Artists": cardBanner,
     "Magic Shows": magicBanner,
     // "Stage Decor": stageBanner,
@@ -174,7 +174,7 @@ const ServiceList = ({ onSwitchToLogin }) => {
     ],
     "Ceremonial Ride": ["All", "Bridal Ride", "Luxury Ride", "Classic Ride"],
     "Luxury Ride": ["All", "Bridal Ride", "Luxury Ride", "Classic Ride"],
-    Fireworks: [
+    "Fireworks & Special Effects": [
       "All",
       "Wedding Fireworks",
       "Indoor Fireworks",

@@ -156,8 +156,8 @@
 .get-started-btn {
   font-size: 14px;
   font-weight: 700;
-  color: #ffffff;
-  background-color: #111111;
+  color: #111111;
+  background-color: #F5C518;
   border: none;
   border-radius: 24px;
   padding: 9px 20px;
@@ -168,7 +168,7 @@
 }
 
 .get-started-btn:hover {
-  background-color: #333333;
+  background-color: #e0b010;
   transform: translateY(-1px);
 }
 

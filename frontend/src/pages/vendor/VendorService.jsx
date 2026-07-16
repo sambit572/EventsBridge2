@@ -145,7 +145,7 @@ function VendorService({ currentStep }) {
     "Floral Decor",
     "Ceremonial Ride",
     "Luxury Ride",
-    "Fireworks",
+    "Fireworks & Special Effects",
     "Mascot Artists",
     "Magic Shows",
     "Event Management Company",
@@ -271,7 +271,7 @@ function VendorService({ currentStep }) {
     ],
     "Ceremonial Ride": ["Bridal Ride", "Luxury Ride", "Classic Ride"],
     "Luxury Ride": ["Bridal Ride", "Luxury Ride", "Classic Ride"],
-    Fireworks: ["Wedding Fireworks", "Indoor Fireworks", "Outdoor Fireworks"],
+    "Fireworks & Special Effects": ["Wedding Fireworks", "Indoor Fireworks", "Outdoor Fireworks"],
     "Mascot Artists": [
       "Birthday Mascots",
       "Corporate Mascots",

@@ -92,7 +92,7 @@ const categoryMeta = {
     description:
       "Rent luxury cars, vintage vehicles and premium wedding rides in Odisha for bridal entry, groom arrival, receptions, VIP guests and corporate events.",
   },
-  Fireworks: {
+  "Fireworks & Special Effects": {
     title:
       "Fireworks & Special Effects Services in Odisha | Wedding Fireworks & Stage Effects | EventsBridge",
     description:
