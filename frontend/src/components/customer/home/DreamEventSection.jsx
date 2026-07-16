@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import "./DreamEventSection.css";
@@ -216,9 +216,56 @@ function TrustShowcaseCard({ className, style, minHeight }) {
 // ── Main Section ──
 export default function DreamEventSection() {
   const navigate = useNavigate();
+  const [showAlreadyPartnerPopup, setShowAlreadyPartnerPopup] = useState(false);
+
+  const handleJoinAsPartnerClick = () => {
+    const isVendorLoggedIn = localStorage.getItem("VendorCurrentlyLoggedIn") === "true";
+    if (isVendorLoggedIn) {
+      // Already a registered vendor — show a friendly popup instead of the registration form
+      setShowAlreadyPartnerPopup(true);
+    } else {
+      // New / not-yet-registered vendor — take them to the registration form
+      navigate("/vendor/register");
+    }
+  };
+
+  useEffect(() => {
+    if (!showAlreadyPartnerPopup) return;
+    const timer = setTimeout(() => setShowAlreadyPartnerPopup(false), 3000);
+    return () => clearTimeout(timer);
+  }, [showAlreadyPartnerPopup]);
 
   return (
-    <section className="w-full bg-white py-12 px-4">
+    <section className="w-full bg-white py-12 px-4 relative">
+
+      {/* Already a Partner popup */}
+      <AnimatePresence>
+        {showAlreadyPartnerPopup && (
+          <motion.div
+            initial={{ opacity: 0, y: -24, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -16, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed top-6 left-1/2 -translate-x-1/2 z-[999] flex items-center gap-3 rounded-2xl px-6 py-4 shadow-2xl"
+            style={{ background: "#111", border: "2px solid #F5C518" }}
+            role="status"
+          >
+            <span
+              className="flex items-center justify-center w-8 h-8 rounded-full font-black text-sm flex-shrink-0"
+              style={{ background: "#F5C518", color: "#111" }}
+            >
+              ✓
+            </span>
+            <span
+              className="font-bold text-white"
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "0.95rem" }}
+            >
+              You're already our partner!
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="w-full max-w-[1680px] mx-auto">
 
         {/* Header */}
@@ -287,6 +334,7 @@ export default function DreamEventSection() {
               </div>
             </div>
             <button
+              onClick={handleJoinAsPartnerClick}
               className="self-start text-white font-bold text-xs px-4 py-2 rounded-full hover:opacity-80 transition-all duration-200"
               style={{ background: "#111" }}
             >
@@ -389,6 +437,7 @@ export default function DreamEventSection() {
               </div>
             </div>
             <button
+              onClick={handleJoinAsPartnerClick}
               className="relative z-10 self-start text-white font-bold text-sm px-7 py-3 rounded-full hover:opacity-80 transition-all duration-200 mt-4"
               style={{ background: "#111" }}
             >

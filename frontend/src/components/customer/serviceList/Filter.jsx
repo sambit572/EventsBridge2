@@ -115,7 +115,7 @@ const Filter = ({ onApply, onCancel }) => {
               )}
             </div>
             <button className="drawer-close" onClick={closeDrawer} aria-label="Close">
-              <FaTimes />
+              <FaTimes size={22} />
             </button>
           </div>
 

@@ -165,19 +165,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  background: #ffffff;
+  color: #0f2644;
+  border: none;
   border-radius: 50%;
-  font-size: 15px;
+  font-size: 18px;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  position: relative;
+  z-index: 5;
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .drawer-close:hover {
-  background: rgba(249, 115, 22, 0.35);
+  background: #F5C518;
   transform: rotate(90deg) scale(1.1);
 }
 

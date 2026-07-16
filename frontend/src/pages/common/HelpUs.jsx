@@ -20,12 +20,12 @@ const HelpUs = () => {
         <div className="max-w-7xl mx-auto space-y-20">
           {/* Top Section: Banner */}
           <div
-            className="w-[100%] max-w-5xl min-h-[420px] relative bg-cover bg-center rounded-xl overflow-hidden shadow-lg mx-auto"
+            className="w-[100%] max-w-5xl relative bg-cover bg-center rounded-xl shadow-lg mx-auto"
             style={{
               backgroundImage: `url(${bgBanner})`,
             }}
           >
-            <div className="absolute inset-0 bg-white/10 backdrop-blur-sm p-4 sm:p-6 lg:p-10 flex flex-col lg:flex-row items-center justify-between gap-6 z-10">
+            <div className="w-full min-h-[420px] bg-white/10 backdrop-blur-sm p-4 sm:p-6 lg:p-10 rounded-xl flex flex-col lg:flex-row items-center justify-between gap-6 z-10">
               {/* Left Content */}
               <div className="w-full lg:w-1/2 space-y-4 text-black max-w-[500px]">
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-[#001f3f] drop-shadow-sm">
@@ -54,7 +54,7 @@ const HelpUs = () => {
                 )}
 
                 <button
-                  className="mt-2 bg-[#e5e5de] text-[#001f3f] border-solid px-4 py-2 rounded hover:bg-[#ffc107] hover:shadow-md hover:scale-105 transition-all font-semibold"
+                  className="mt-2 mb-20 sm:mb-2 bg-[#e5e5de] text-[#001f3f] border-solid px-4 py-2 rounded hover:bg-[#ffc107] hover:shadow-md hover:scale-105 transition-all font-semibold relative z-20"
                   onClick={() => setShowMore(!showMore)}
                 >
                   {showMore ? "Show Less" : "Read More"}
