@@ -567,48 +567,79 @@ setRating(0);
       </div>
 
       {/* ✅ Password Change Modal */}
-      {showPasswordModal && (
-        <div className={clsx('fixed', 'inset-0', 'bg-black/30', 'flex', 'items-center', 'justify-center', 'z-50')}>
-          <div className={clsx('bg-white', 'p-6', 'rounded-lg', 'w-80', 'shadow-xl')}>
-            <h3 className={clsx('text-lg', 'font-bold', 'mb-4')}>Change Password</h3>
-
-            <PasswordInput
-              placeholder="Current Password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-            />
-            <PasswordInput
-              placeholder="New Password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <PasswordInput
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-
-            {errorMsg && (
-              <p className={clsx('text-red-500', 'text-sm', 'mt-1')}>{errorMsg}</p>
-            )}
-
-            <div className={clsx('mt-4', 'flex', 'justify-center', 'gap-4')}>
-              <button
-                onClick={handlePasswordChangeSubmit}
-                className={clsx('bg-blue-600', 'text-white', 'px-4', 'py-2', 'rounded')}
-              >
-                Submit
-              </button>
-              <button
-                onClick={() => setShowPasswordModal(false)}
-                className={clsx('bg-gray-300', 'px-4', 'py-2', 'rounded')}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Password Change Modal */}
+{showPasswordModal && (
+  <div
+    className={clsx(
+      "fixed inset-0 z-50 flex items-center justify-center",
+      "bg-black/30 px-4"
+    )}
+  >
+    <div
+      className={clsx(
+        "w-full max-w-md",
+        "bg-white rounded-xl shadow-2xl",
+        "p-6"
       )}
+    >
+      <h3 className="text-xl font-bold text-center text-gray-800 mb-6">
+        Change Password
+      </h3>
+
+      <div className="space-y-4">
+        <PasswordInput
+          placeholder="Current Password"
+          value={oldPassword}
+          onChange={(e) => setOldPassword(e.target.value)}
+        />
+
+        <PasswordInput
+          placeholder="New Password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+
+        <PasswordInput
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
+      </div>
+
+      {errorMsg && (
+        <p className="text-red-500 text-sm mt-4 text-center">
+          {errorMsg}
+        </p>
+      )}
+
+      <div className="mt-6 flex justify-end gap-3">
+        <button
+          onClick={() =>
+              setShowPasswordModal(false)}
+          className={clsx(
+            "px-5 py-2",
+            "bg-gray-300 hover:bg-gray-400",
+            "rounded-lg transition-colors duration-200"
+          )}
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={handlePasswordChangeSubmit}
+          className={clsx(
+            "px-5 py-2",
+            "bg-blue-600 hover:bg-blue-700",
+            "text-white rounded-lg",
+            "transition-colors duration-200"
+          )}
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

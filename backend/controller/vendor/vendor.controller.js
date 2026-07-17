@@ -13,7 +13,7 @@ import { User } from "../../model/user/user.model.js";
 import { Service } from "../../model/vendor/service.model.js";
 import { resetWhyChooseUs } from "./whychooseus.controller.js";
 import client from "../../db/redisClient.js";
-import vendorBookingHistoryModel from "../../model/vendor/vendorBookingHistory.model.js";
+import {VendorBooking} from "../../model/vendor/vendorBookingHistory.model.js";
 
 
 

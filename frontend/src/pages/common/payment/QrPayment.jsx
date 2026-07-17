@@ -67,16 +67,9 @@ const QRPayment = () => {
     try {
       let finalTransactionId = transactionId.trim();
 
-      // If receipt is uploaded and no manual ID, extract from receipt
-      if (receiptFile && !finalTransactionId) {
-        toast.loading("Extracting transaction ID from receipt...");
-        finalTransactionId = await extractUpiTransactionId(receiptFile);
-        toast.dismiss();
-        toast.success("Transaction ID extracted successfully!");
-      }
 
       if (!finalTransactionId) {
-        throw new Error("Please provide a transaction ID or upload a receipt");
+        throw new Error("Please provide a transaction ID ");
       }
 
       // Validate transaction ID format
@@ -88,7 +81,7 @@ const QRPayment = () => {
       console.log("Order ID:", orderId);
       console.log("Merchant Ref:", merchantRef);
 
-      toast.success("Payment verified successfully!");
+  
 
       // Navigate to success page
       navigate("/payment-success", {

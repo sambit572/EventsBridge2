@@ -6,7 +6,7 @@ import Vendor from "./model/vendor/vendor.model.js";
 import { Service } from "./model/vendor/service.model.js";
 import Booking from "./model/common/booking.model.js";
 import { UserBookingHistory } from "./model/user/userBookinghistory.model.js";
-import VendorBooking from "./model/vendor/vendorBookingHistory.model.js";
+import {VendorBooking }from "./model/vendor/vendorBookingHistory.model.js";
 
 const seedDatabase = async () => {
   try {

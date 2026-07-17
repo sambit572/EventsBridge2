@@ -3,7 +3,7 @@ import { Negotiation } from "../../model/common/Negotiation.model.js";
 import { sendEmail } from "../../utilities/sendEmail.js";
 import Booking from "../../model/common/booking.model.js";
 import { UserBookingHistory } from "../../model/user/userBookinghistory.model.js";
-
+import {VendorBooking} from "../../model/vendor/vendorBookingHistory.model.js";
 export default async function registerNegotiationHandler(
   apiNameSpace,
   io,
@@ -19,32 +19,43 @@ export default async function registerNegotiationHandler(
   ...data,
   vendorDecision: "pending",
 });
-
-await Booking.create({
-    vendor: data.vendorId,
-    service: data.serviceId,
-    user: data.bookedByUserId,
-
-    startDate: new Date(data.date.startDate),
-    endDate: new Date(data.date.endDate),
-
-     userDetailsId: data.userDetailsId,
-
-    amount:
-        data.proposedPrice > 0
-            ? data.proposedPrice
-            : data.originalPriceRange.min,
-
-    bookingStatus: "PENDING",
-
-    location: data.venueLocation,
-
-    negotiationId: res._id,
+const booking = await Booking.create({
+  vendor: data.vendorId,
+  service: data.serviceId,
+  user: data.bookedByUserId,
+  startDate: new Date(data.date.startDate),
+  endDate: new Date(data.date.endDate),
+  userDetailsId: data.userDetailsId,
+  amount:
+    data.proposedPrice > 0
+      ? data.proposedPrice
+      : data.originalPriceRange.min,
+  bookingStatus: "PENDING",
+  location: data.venueLocation,
+  negotiationId: res._id,
 });
 console.log("✅ Booking created");
 
 console.log("✅ Negotiation request saved to DB:", res);
 
+// Linking booking_id to userbooking 
+const updatedHistory = await UserBookingHistory.findOneAndUpdate(
+    {
+        userDetailsId: data.userDetailsId,
+    },
+    {
+        booking: booking._id,
+    },
+    {
+        new: true,
+    }
+);
+
+if (updatedHistory) {
+    console.log("✅ Booking linked to UserBookingHistory");
+} else {
+    console.log("⚠️ No UserBookingHistory found for userDetailsId:", data.userDetailsId);
+}
 try {
   await sendEmail({
     to: data.vendorEmail,
@@ -113,6 +124,7 @@ try {
 } catch (emailError) {
   console.error("❌ Email sending failed:", emailError);
 }
+     
       // If vendor is online, send directly
       const vendorSocketId = vendorSocketMap.get(data.vendorId);
       if (vendorSocketId) {
@@ -178,9 +190,10 @@ try {
 
         console.log("✅ Vendor response saved:", negotiation);
         
-// Update Booking
+// Update Booking When vendor accepts the booking 
+let updatedBooking;
 try {
-  const updatedBooking = await Booking.findOneAndUpdate(
+   updatedBooking = await Booking.findOneAndUpdate(
     {
       negotiationId: negotiation._id,
     },
@@ -197,47 +210,61 @@ try {
   );
 
   if (updatedBooking) {
-    console.log(
-      `✅ Booking updated: status=${updatedBooking.bookingStatus}, amount=${updatedBooking.amount}`
-    );
-  } else {
+    console.log(`✅ Booking updated`);
+
+    // Update userbooking too vendor accepts the booking 
+    const updatedHistory=await UserBookingHistory.findOneAndUpdate({
+      booking:updatedBooking._id,
+    },
+    {
+      bookingStatus:updatedBooking.bookingStatus,
+      amount: updatedBooking.amount,
+    },
+    {
+      new:true,
+    }
+  );
+  if (updatedHistory) {
+  console.log("✅ UserBookingHistory updated");
+   } else {
+  console.log("⚠️ UserBookingHistory not found");
+}
+  } 
+  else {
     console.log("⚠️ No Booking found for negotiation:", negotiation._id);
   }
 } catch (error) {
   console.error("❌ Failed to update Booking:", error);
 }
-        // Update UserBookingHistory status directly via DB (no API call needed - already in backend)
-        try {
-  const updatedHistory = await UserBookingHistory.findOneAndUpdate(
-    {
-      userId: negotiation.bookedByUserId,
-    },
-    {
-      bookingStatus:
-        negotiation.vendorDecision === "accepted"
-          ? "CONFIRMED"
-          : "CANCELLED",
 
-      amount:
-        negotiation.finalPrice ?? negotiation.proposedPrice,
-    },
-    { new: true }
-  );
+  //Create Vendro Booking After being accepted by vendor
 
-  if (updatedHistory) {
-    console.log(
-      `✅ UserBookingHistory updated: status=${updatedHistory.bookingStatus}, amount=${updatedHistory.amount}`
-    );
-  } else {
-    console.log("⚠️ No UserBookingHistory found.");
-  }
-} catch (error) {
-  console.error("❌ Failed to update UserBookingHistory:", error);
+   if (updatedBooking){
+const existingVendorBooking = await VendorBooking.findOne({
+  booking: updatedBooking._id,
+});
+
+if (!existingVendorBooking && negotiation.vendorDecision === "accepted") {
+  await VendorBooking.create({
+    vendor: updatedBooking.vendor,
+    booking: updatedBooking._id,
+    user: updatedBooking.user,
+    service: updatedBooking.service,
+
+    location: updatedBooking.location,
+    startDate: updatedBooking.startDate,
+    endDate: updatedBooking.endDate,
+
+    amount: updatedBooking.amount,
+    paymentStatus: updatedBooking.paymentStatus,
+    paymentMode: updatedBooking.paymentMode,
+
+    bookingStatus: updatedBooking.bookingStatus,
+  });
+
+  console.log("✅ VendorBooking created");
 }
-          
-          
-
-        // Notify the customer (bookedByUserId) about the vendor decision
+     }     // Notify the customer (bookedByUserId) about the vendor decision
         const customerSocketId = socket.handshake?.query?.customerSocketMap?.[negotiation.bookedByUserId?.toString()];
         // Emit to customer's room if they're connected
         apiNameSpace.to(negotiation.bookedByUserId?.toString()).emit("negotiation-status-update", {

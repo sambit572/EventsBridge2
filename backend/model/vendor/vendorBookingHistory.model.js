@@ -59,4 +59,6 @@ const vendorBookingSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("VendorBooking", vendorBookingSchema);
+export const VendorBooking =
+  mongoose.models.VendorBooking ||
+  mongoose.model("VendorBooking",vendorBookingSchema );

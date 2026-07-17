@@ -317,19 +317,11 @@ export const createService = async (req, res) => {
     const mediaUrls = await processServiceMedia(req.files, serviceName);
     serviceData.serviceImage = mediaUrls;
 
-    /* =========================
-       NEW UPDATED FIX
-       ✅ ALWAYS UPSERT SERVICE
-       This avoids issue after delete/re-add
-       ========================= */
-    let newService;
-    let responseMessage;
 
-    newService = await Service.findOneAndUpdate(
-      { vendorId: req.vendor._id },
-      serviceData,
-      { new: true, upsert: true }
-    );
+let responseMessage;
+
+// creating service 
+const newService = await Service.create(serviceData);
 
     if (req.vendor.isRegistrationComplete === false) {
       await Vendor.findByIdAndUpdate(req.vendor._id, {

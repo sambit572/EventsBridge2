@@ -49,7 +49,7 @@ export const PaymentSuccess = () => {
         localStorage.setItem("lastUserDetailsId", userDetailsId);
         
         // Show success message
-        toast.success("Payment status updated successfully!");
+    
       } else {
         throw new Error(response.data?.message || "Update failed");
       }
@@ -62,7 +62,9 @@ export const PaymentSuccess = () => {
 
   useEffect(() => {
     // Show success toast on mount
-    toast.success("Payment completed successfully!");
+    toast.success("Payment completed successfully!",{
+      duration:1500,
+    });
     
     // Update payment status in backend and wait for completion
     updatePaymentStatusOnBackend().then(() => {

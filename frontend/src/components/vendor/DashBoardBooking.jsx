@@ -237,33 +237,7 @@ const DashBoardBooking = () => {
                   <span className="text-gray-700 font-medium">
                     ₹{booking.amount}
                   </span>
-                  <span
-                    className={`px-2 py-0.5 text-xs font-semibold rounded-full border transition-all duration-300 ${
-                      booking.paymentStatus === "PAID"
-                        ? "bg-green-100 text-green-700 border-green-300"
-                        : booking.paymentStatus === "PENDING"
-                        ? "bg-yellow-100 text-yellow-700 border-yellow-300"
-                        : booking.paymentStatus === "FAILED"
-                        ? "bg-red-100 text-red-700 border-red-300"
-                        : booking.paymentStatus === "REFUNDED"
-                        ? "bg-purple-100 text-purple-700 border-purple-300"
-                        : "bg-gray-100 text-gray-700 border-gray-300"
-                    }`}
-                  >
-                    {booking.paymentStatus || "N/A"}
-                  </span>
-                </p>
-              </div>
-
-              {/* Footer */}
-              <div className="px-5 py-3 bg-gray-50 border-t border-gray-100 text-sm text-gray-600 flex justify-between items-center">
-                <p>
-                  <span className="font-medium">Txn ID:</span>{" "}
-                  {booking.transactionId || "—"}
-                </p>
-                <p>
-                  <span className="font-medium">Payment Mode:</span>{" "}
-                  {booking.paymentMode || "N/A"}
+               
                 </p>
               </div>
             </div>
