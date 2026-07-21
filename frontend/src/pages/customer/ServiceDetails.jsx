@@ -447,7 +447,7 @@ const Service = ({ onSwitchToLogin }) => {
                     </button>
 
                     <button
-                      className={clsx('flex', 'w-full', 'cursor-pointer', 'items-center', 'justify-center', 'rounded-full', 'bg-gradient-to-r', 'from-[#001f3f]', 'to-[#004f9f]', 'sm:px-[1rem]', 'lg:px-12', 'py-3', 'text-sm', 'font-bold', 'text-white', 'transition-colors', 'duration-300', 'ease-in-out', 'hover:from-[#002366]', 'hover:to-[#0066cc]', 'active:from-[#000d1a]', 'active:to-[#003366]', 'lg:w-auto', 'lg:min-w-[220px]')}
+                      className={clsx('flex', 'w-full', 'cursor-pointer', 'items-center', 'justify-center', 'rounded-full', 'bg-gradient-to-r', 'from-[#6d28d9]', 'to-[#8b5cf6]', 'sm:px-[1rem]', 'lg:px-12', 'py-3', 'text-sm', 'font-bold', 'text-white', 'transition-colors', 'duration-300', 'ease-in-out', 'hover:from-[#5b21b6]', 'hover:to-[#7c3aed]', 'active:from-[#4c1d95]', 'active:to-[#6d28d9]', 'lg:w-auto', 'lg:min-w-[220px]')}
                       onClick={handleBookNow}
                     >
                        CALL TO VENDOR

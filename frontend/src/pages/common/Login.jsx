@@ -1,6 +1,7 @@
 // Login.jsx
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
 
 import OTPVerificationEmail from "./OtpVerificationEmail.jsx";
@@ -13,7 +14,7 @@ import { FiEyeOff, FiEye } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import Spinner from "./../../components/common/Spinner";
 import { Seo } from "../../seo/seo";
-import EventsBridgeLogo from "../../assets/EventsBridgeOnlyLogo.png";
+import EventsBridgeLogo from "../../assets/EventsBridgeOnlyLogo.webp";
   
 
 
@@ -468,7 +469,10 @@ const Login = ({ onClose, onSwitchToRegister }) => {
 
   const renderStep = () => {
     if (step === "success")
-      return <SuccessBlock autoCloseTime={3000} onClose={onClose} />;
+      return createPortal(
+        <SuccessBlock autoCloseTime={3000} onClose={onClose} />,
+        document.body
+      );
 
     if (step === "otp")
       return (

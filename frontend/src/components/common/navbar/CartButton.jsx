@@ -8,7 +8,7 @@ const CartButton = ({ cartCount, handleAddToCart }) => {
       className="flex items-center justify-center gap-1 text-[#001f3f] font-semibold 
                  cursor-pointer px-2 py-1 rounded-md
                  transition-all duration-300 
-                 hover:bg-[#001f3f] hover:text-white hover:scale-105"
+                 hover:bg-[#F5C518] hover:text-[#001f3f] hover:scale-105"
     >
       {/* Icon with Badge */}
       <div className="relative flex items-center text-xl sm:text-lg">

@@ -13,7 +13,7 @@ import { FiEyeOff, FiEye } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import VendorForgotPass from "./VendorForgetPass.jsx";
 import { BACKEND_URL } from "../../utils/constant.js";
-import EventsBridgeLogo from "../../assets/EventsBridgeOnlyLogo.png";
+import EventsBridgeLogo from "../../assets/EventsBridgeOnlyLogo.webp";
 
 let firebaseAuthCache = null;
 async function loadFirebaseAuth() {
@@ -470,7 +470,11 @@ setStep("otp");
   `;
 
   const renderStep = () => {
-    if (step === "success") return <SuccessBlock showSuccessIcon={showSuccessIcon} />;
+    if (step === "success")
+      return ReactDOM.createPortal(
+        <SuccessBlock showSuccessIcon={showSuccessIcon} />,
+        document.body
+      );
     if (step === "otp") return (
       <OTPVerificationEmail setStep={setStep} onClose={onClose} emailOtp={formData.emailOtp} type="vendor" />
     );
