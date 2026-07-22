@@ -141,7 +141,7 @@ export const SearchResult = ({
                         alt={service.vendor?.fullName}
                         className="w-6 h-6 rounded-full object-cover"
                       />
-                      <span className="text-sm text-black-600">
+                    <span className="text-sm text-black-600">
                         by {service.vendor?.fullName}
                       </span>
                     </div>

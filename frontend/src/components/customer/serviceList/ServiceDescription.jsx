@@ -33,6 +33,7 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
   const title = service.serviceName || service.title || "Untitled Service";
   const vendorName = service.vendorName || "Unknown Vendor";
   const description = service.serviceDes || service.description || "";
+  const isVerified = service.vendorVerificationStatus === "verified";
   const rawDuration = service.duration || 0;
 
   const isVendorAvailable = service.available !== false;
@@ -544,7 +545,10 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
               {title.toUpperCase()}
             </h3>
           </Link>
-          <div className="flex flex-wrap items-center gap-1 mt-0.5">
+          <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
+            {isVerified && (
+              <span className="inline-flex items-center justify-center w-5 h-5 bg-[#ffbf00] text-white text-sm font-bold rounded-full shadow-lg ring-2 ring-[#fff8c7]">★</span>
+            )}
             <span className="text-xs font-semibold text-[#3498db]">
               {vendorName}
             </span>

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import clsx from "clsx";
 import "./TopVerifiedVendors.css";
 import {useNavigate} from "react-router-dom"
 
@@ -11,11 +12,11 @@ const StarRating = ({ rating }) => {
   return (
     <span className="tvv-stars">
       {Array.from({ length: full }).map((_, i) => (
-        <span key={`f${i}`} className="tvv-star filled">★</span>
+        <span key={`f${i}`} className={clsx('tvv-star', 'filled')}>★</span>
       ))}
-      {half && <span className="tvv-star half">★</span>}
+      {half && <span className={clsx('tvv-star', 'half')}>★</span>}
       {Array.from({ length: empty }).map((_, i) => (
-        <span key={`e${i}`} className="tvv-star empty">☆</span>
+        <span key={`e${i}`} className={clsx('tvv-star', 'empty')}>☆</span>
       ))}
       <span className="tvv-rating-num">{rating.toFixed(1)}</span>
     </span>
@@ -52,10 +53,10 @@ const VendorCard = ({ vendor }) => {
           <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff8c7">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
           </svg>
-          Premium
+          Verified
         </div>
-        {hovered && total > 1 && <button className="tvv-arrow tvv-arrow-left" onClick={prev}>‹</button>}
-        {hovered && total > 1 && <button className="tvv-arrow tvv-arrow-right" onClick={next}>›</button>}
+        {hovered && total > 1 && <button className={clsx('tvv-arrow', 'tvv-arrow-left')} onClick={prev}>‹</button>}
+        {hovered && total > 1 && <button className={clsx('tvv-arrow', 'tvv-arrow-right')} onClick={next}>›</button>}
         {total > 1 && (
           <div className="tvv-dots">
             {vendor.images.map((_, i) => (
@@ -80,27 +81,30 @@ const VendorCard = ({ vendor }) => {
 
 export default function TopVerifiedVendors() {
    const [vendors, setVendors] = useState([]);
+   const [loading, setLoading] = useState(true);
    useEffect(() => {
-  const fetchVerifiedVendors = async () => {
-    try {
-      const response = await fetch(`${BACKEND_URL}/vendors/top-verified-vendors`);
+   const fetchVerifiedVendors = async () => {
+     try {
+       const response = await fetch(`${BACKEND_URL}/vendors/top-verified-vendors`);
 
-      const data = await response.json();
+       const data = await response.json();
 
-      if (data.success) {
-        const formattedVendors = data.vendors.map((vendor, index) => ({
-          ...vendor,
-          rank: index + 1,
-        }));
+       if (data.success) {
+         const formattedVendors = data.vendors.map((vendor, index) => ({
+           ...vendor,
+           rank: index + 1,
+         }));
 
-        setVendors(formattedVendors);
-      }
-    } catch (error) {
-      console.error("Error fetching vendors:", error);
-    }
-  };
+         setVendors(formattedVendors);
+       }
+     } catch (error) {
+       console.error("Error fetching vendors:", error);
+     } finally {
+       setLoading(false);
+     }
+   };
 
-  fetchVerifiedVendors();
+   fetchVerifiedVendors();
 }, []);
 const LOOPED_VENDORS = vendors;
 const N = LOOPED_VENDORS.length;
@@ -177,8 +181,12 @@ const N = LOOPED_VENDORS.length;
     }, 2500);
     return () => clearInterval(timer);
   }, [goNext]);
-if (!vendors.length) {
+if (loading) {
   return <div>Loading top verified vendors...</div>;
+}
+
+if (!vendors.length) {
+  return <div className="text-center">No top verified vendors available at the moment.</div>;
 }
   return (
     <section className="tvv-section">
@@ -195,7 +203,7 @@ if (!vendors.length) {
         onMouseEnter={() => { isPausedRef.current = true; }}
         onMouseLeave={() => { isPausedRef.current = false; }}
       >
-        <button className="tvv-carousel-arrow tvv-carousel-arrow-left" onClick={goPrev} aria-label="Previous">‹</button>
+        <button className={clsx('tvv-carousel-arrow', 'tvv-carousel-arrow-left')} onClick={goPrev} aria-label="Previous">‹</button>
 
         {/* overflow:hidden on the wrapper, not the track */}
         <div className="tvv-track-outer">
@@ -206,7 +214,7 @@ if (!vendors.length) {
           </div>
         </div>
 
-        <button className="tvv-carousel-arrow tvv-carousel-arrow-right" onClick={goNext} aria-label="Next">›</button>
+        <button className={clsx('tvv-carousel-arrow', 'tvv-carousel-arrow-right')} onClick={goNext} aria-label="Next">›</button>
       </div>
     </section>
   );

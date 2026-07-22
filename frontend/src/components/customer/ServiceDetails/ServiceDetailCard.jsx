@@ -334,6 +334,9 @@ const ServiceDetailCard = ({ service }) => {
       </h2>
 
       <div className="flex items-center gap-2 text-sm font-medium text-black mb-2 flex-wrap">
+        {service?.vendorVerificationStatus === "verified" && (
+          <span className="inline-flex items-center justify-center w-5 h-5 bg-[#ffbf00] text-white text-sm font-bold rounded-full shadow-lg ring-2 ring-[#fff8c7]">★</span>
+        )}
         <span className="font-semibold text-blue-600 text-base">
           {vendorName || "Unknown Vendor"}
         </span>
