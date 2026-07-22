@@ -45,6 +45,56 @@
   font-family: "Plus Jakarta Sans", sans-serif;
 }
 
+/* ── Loading state ── */
+.tvv-loading-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #666;
+  margin: 0;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.tvv-loading-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tvv-loading-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4f46e5, #9333ea);
+  animation: tvv-dot-bounce 1.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.tvv-loading-dots span:nth-child(2) { animation-delay: 0.16s; }
+.tvv-loading-dots span:nth-child(3) { animation-delay: 0.32s; }
+
+@keyframes tvv-dot-bounce {
+  0%, 80%, 100% { transform: translateY(0) scale(0.85); opacity: 0.45; }
+  40% { transform: translateY(-7px) scale(1.1); opacity: 1; }
+}
+
+.tvv-loading-ellipsis span {
+  display: inline-block;
+  animation: tvv-ellipsis-pulse 1.4s ease-in-out infinite;
+  opacity: 0;
+  transform: translateY(1px) scale(0.7);
+}
+
+.tvv-loading-ellipsis span:nth-child(1) { animation-delay: 0s; }
+.tvv-loading-ellipsis span:nth-child(2) { animation-delay: 0.2s; }
+.tvv-loading-ellipsis span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes tvv-ellipsis-pulse {
+  0%, 70%, 100% { opacity: 0; transform: translateY(1px) scale(0.7); }
+  35% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 /* ── Carousel outer wrapper ── */
 .tvv-carousel-wrapper {
   position: relative;

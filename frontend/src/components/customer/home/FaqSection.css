@@ -5,7 +5,7 @@
 }
 
 .faq-title {
-  background: #f3c12d;
+  background: #ffd400;
   color: rgb(0, 0, 0);
   padding: 8px 10px;
   font-size: 1.5rem;
@@ -25,19 +25,21 @@
 }
 
 .faq-columns {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px 20px;
+  align-items: start;
 }
-.faq-question:hover {
-  color: #fff;
-  background-color: #001f3f;
-}
-.faq-column {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+
+/* Only apply hover color on devices with real hover (mouse/trackpad).
+   On touch devices, :hover sticks to the last-tapped element and has
+   nothing to do with which box is actually open — so it's excluded
+   there entirely, and the open state below takes over instead. */
+@media (hover: hover) and (pointer: fine) {
+  .faq-question:hover {
+    color: #fff;
+    background-color: #7c3aed;
+  }
 }
 
 .faq-item {
@@ -47,6 +49,8 @@
   box-shadow: #e5e7eb;
   transition: box-shadow 0.3s ease;
   background-color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 
 .faq-item.active {
@@ -55,17 +59,28 @@
   border: 1px solid #344003e1;
 }
 
+/* The actually-open box, driven by React state — not a pseudo-class,
+   so it always matches the box whose answer is showing. */
+.faq-item.active .faq-question {
+  color: #fff;
+  background-color: #7c3aed;
+}
+
 .faq-question {
   width: 100%;
+  flex: 1;
+  min-height: 66px;
   background-color: #fee9b2;
   color: black;
-  padding: 14px;
-  text-align: left;
+  padding: 14px 40px;
+  text-align: center;
   font-weight: bold;
   border: none;
   outline: none;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  position: relative;
   cursor: pointer;
 }
 
@@ -78,9 +93,18 @@
 .faq-icon {
   font-size: 18px;
   color: black;
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
 }
-.faq-icon:hover {
+.faq-item.active .faq-icon {
   color: white;
+}
+@media (hover: hover) and (pointer: fine) {
+  .faq-icon:hover {
+    color: white;
+  }
 }
 .faq-subtitle {
   font-size: 18px;
@@ -94,14 +118,14 @@
 
 @media (max-width: 992px) {
   .faq-columns {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 576px) {
   .faq-question {
     font-size: 15px;
-    padding: 12px;
+    padding: 12px 34px;
   }
 
   .faq-answer {
@@ -112,15 +136,11 @@
   .faq-columns {
     gap: 10px;
   }
-
-  .faq-column {
-    gap: 12px;
-  }
 }
 @media (max-width: 576px) {
   .faq-question {
     font-size: 15px;
-    padding: 12px;
+    padding: 12px 34px;
   }
 
   .faq-answer {
@@ -130,10 +150,6 @@
 
   .faq-columns {
     gap: 10px;
-  }
-
-  .faq-column {
-    gap: 12px;
   }
 }
 @media (max-width: 375px) {
