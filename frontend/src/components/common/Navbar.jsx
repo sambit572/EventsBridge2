@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import "./Navbar.css";
 import { FaSearch } from "react-icons/fa";
-import logoImg from "../../assets/EventsBridgeOnlyLogo.png";
+import logoImg from "../../assets/EventsBridgeOnlyLogo.webp";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -355,14 +355,6 @@ setShowSuggestions(true);
                 <CartButton cartCount={user.cartCount} handleAddToCart={handleAddToCart} />
               </div>
             </div>
-
-            {/* Sign In / Get Started — shown when NOT logged in */}
-            {!userFirstName && !VendorFirstName && (
-              <div className="navbar-auth">
-                <button className="signin-btn" onClick={handleLoginClick}>Sign In</button>
-                <button className="get-started-btn" onClick={handleSignupClick}>Get Started</button>
-              </div>
-            )}
 
             {/* Three dots menu — now receives vendor & cart props for mobile */}
             <div ref={ellipsisRef}>

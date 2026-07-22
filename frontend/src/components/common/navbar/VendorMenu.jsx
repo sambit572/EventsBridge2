@@ -67,13 +67,13 @@ const VendorMenu = ({
       {/* Vendor section - Trigger button */}
       <div
         className="group flex items-center gap-2 px-3 py-1 rounded-2xl transition-all duration-300
-                   hover:bg-gradient-to-r hover:from-[#001f3f] hover:to-[#003366] hover:text-white
-                   hover:shadow-[0_0_20px_-5px] hover:shadow-[#001f3f]/40
+                   hover:bg-[#F5C518] hover:text-[#001f3f]
+                   hover:shadow-[0_0_20px_-5px] hover:shadow-[#F5C518]/40
                    max-[1024px]:text-[12px] max-[820px]:text-[11px]"
         onClick={toggleVendorDropdown}
       >
         <VendorIcon className="w-[22px] h-[22px] transition-all duration-300 group-hover:scale-110 group-active:scale-95" />
-        <span className="text-[#001F3F] font-semibold hidden sm:inline md:hidden lg:inline group-hover:text-white transition-colors duration-300">
+        <span className="text-[#001F3F] font-semibold hidden sm:inline md:hidden lg:inline group-hover:text-[#001f3f] transition-colors duration-300">
           {!VendorFirstName ? "Be a Partner" : `Hi, ${VendorFirstName}`}
         </span>
       </div>

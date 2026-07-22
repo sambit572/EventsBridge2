@@ -51,7 +51,7 @@ function StepProgress({ currentStep }) {
                 <div
                   className={`
                     absolute left-1/2 w-full h-1 transition-colors duration-500
-                    ${isCompleted ? "bg-teal-500" : "bg-gray-200"}
+                    ${isCompleted ? "bg-purple-500" : "bg-gray-200"}
                     top-[18px] sm:top-[26px]
                   `}
                 />
@@ -61,8 +61,8 @@ function StepProgress({ currentStep }) {
               <div
                 className={`
                   relative z-10 flex items-center justify-center rounded-full border-2 transition-all duration-300
-                  ${isCompleted ? "bg-teal-500 border-teal-500" : ""}
-                  ${isActive ? "bg-white border-teal-500 scale-110" : ""}
+                  ${isCompleted ? "bg-purple-500 border-purple-500" : ""}
+                  ${isActive ? "bg-white border-purple-500 scale-110" : ""}
                   ${isPending ? "bg-gray-100 border-gray-200" : ""}
                   w-10 h-10 sm:w-14 sm:h-14
                 `}
@@ -86,7 +86,7 @@ function StepProgress({ currentStep }) {
               <div
                 className={`
                   mt-3 font-semibold whitespace-nowrap
-                  ${isActive ? "text-teal-600" : "text-gray-800"}
+                  ${isActive ? "text-purple-600" : "text-gray-800"}
                   ${isPending ? "text-gray-400" : ""}
                   text-[11px] sm:text-base
                 `}
@@ -98,7 +98,7 @@ function StepProgress({ currentStep }) {
               <div
                 className={`
                   mt-1.5 font-medium
-                  ${isCompleted || isActive ? "text-teal-600" : "text-gray-400"}
+                  ${isCompleted || isActive ? "text-purple-600" : "text-gray-400"}
                   text-[10px] sm:text-sm
                 `}
               >

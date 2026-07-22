@@ -638,11 +638,28 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  background: none;
-  border: none;
+  background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 10px;
   cursor: pointer;
-  padding: 4px 4px;
+  padding: 8px 10px;
   color: rgba(255,255,255,0.35);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.sb-section-toggle:hover,
+.sb-section-toggle:focus-visible {
+  background: rgba(245,158,11,0.16);
+  border-color: rgba(245,158,11,0.45);
+}
+
+.sb-section-toggle .sb-nav-label {
+  color: #f59e0b;
+  font-weight: 700;
+}
+
+.sb-section-toggle svg {
+  color: #f59e0b;
 }
 
 /* ── Profile details ── */
@@ -878,5 +895,16 @@
 @media (max-width: 380px) {
   .dash-sidebar {
     width: 88%;
+  }
+}
+
+/* Push the drawer below the fixed top navbar on mobile so the avatar
+   card (and its "SK" initials) never sit underneath the navbar's
+   higher z-index and get clipped. 94px matches the offset the rest
+   of the app already uses for the fixed navbar (see App.jsx `mt-[94px]`). */
+@media (max-width: 768px) {
+  .dash-sidebar {
+    top: 94px;
+    height: calc(100vh - 94px);
   }
 }

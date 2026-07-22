@@ -35,7 +35,7 @@ const ProfileMenu = ({
       {/* Profile trigger button */}
       <div
         className="group flex items-center gap-2 px-3 py-1 rounded-2xl transition-all duration-300 
-                   hover:bg-gradient-to-r hover:from-[#001f3f] hover:to-[#004080] hover:text-white"
+                   hover:bg-[#F5C518] hover:text-[#001f3f]"
       >
         <span
           className="flex items-center gap-2 max-[1024px]:text-[13px] max-[820px]:text-[12px] max-[640px]:text-[11px]"
@@ -43,15 +43,15 @@ const ProfileMenu = ({
         >
           {!userFirstName ? (
             <>
-              <CgProfile className="text-2xl text-[#001f3f] group-hover:text-white group-hover:scale-110 transition-all duration-300" />
-              <span className="font-semibold hidden sm:inline md:hidden lg:inline group-hover:text-white transition-colors duration-300">
+              <CgProfile className="text-2xl text-[#001f3f] group-hover:text-[#001f3f] group-hover:scale-110 transition-all duration-300" />
+              <span className="font-semibold hidden sm:inline md:hidden lg:inline group-hover:text-[#001f3f] transition-colors duration-300">
                 Login
               </span>
             </>
           ) : (
             <>
               <UserProfileIcon currentUser={currentUser} />
-              <span className="font-semibold hidden sm:inline group-hover:text-white transition-colors duration-300">
+              <span className="font-semibold hidden sm:inline group-hover:text-[#001f3f] transition-colors duration-300">
                 {`Hi, ${userFirstName}`}
               </span>
             </>

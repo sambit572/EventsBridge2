@@ -164,6 +164,9 @@ const registerVendor = async (req, res) => {
         );
     }
 
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedPhone = phoneNumber.trim();
+
     const existingVendor =
       await Vendor.findOne({
         $or: [

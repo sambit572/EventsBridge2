@@ -122,6 +122,8 @@ const SuccessBlock = ({ onClose, autoCloseTime = 5000 }) => {
           background: rgba(15, 10, 40, 0.65);
           backdrop-filter: blur(10px);
           padding: 32px 16px;
+          padding-top: calc(32px + env(safe-area-inset-top, 0px));
+          padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
           box-sizing: border-box;
         }
 
@@ -133,6 +135,7 @@ const SuccessBlock = ({ onClose, autoCloseTime = 5000 }) => {
           background: #ffffff;
           overflow-y: auto;
           max-height: calc(100vh - 64px);
+          max-height: calc(100dvh - 64px);
           -webkit-overflow-scrolling: touch;
           box-shadow: 0 32px 80px rgba(79,70,229,.22), 0 8px 32px rgba(0,0,0,.12);
         }
@@ -248,36 +251,58 @@ const SuccessBlock = ({ onClose, autoCloseTime = 5000 }) => {
         /* ─── Tablet & small laptop tweak ─── */
         @media (max-width: 600px) {
           .eb-overlay { padding: 20px 12px; align-items: center; }
-          .eb-modal-box { border-radius: 20px; max-height: calc(100vh - 40px); }
+          .eb-overlay {
+            padding-top: calc(20px + env(safe-area-inset-top, 0px));
+            padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+          }
+          .eb-modal-box {
+            border-radius: 20px;
+            max-height: calc(100vh - 40px);
+            max-height: calc(100dvh - 40px);
+          }
         }
 
         /* ─── Phones ─── */
         @media (max-width: 480px) {
-          .eb-body { padding: 28px 22px 28px; }
-          .eb-icon-wrap { transform: scale(0.82); margin-bottom: 12px; }
-          .eb-heading { font-size: 21px; }
-          .eb-paragraph { font-size: 13.5px; max-width: 100%; margin-bottom: 22px; }
-          .eb-icons-row { gap: 10px; font-size: 19px; margin-bottom: 22px; }
-          .eb-cta-btn { font-size: 14px; padding: 13px 0; }
-          .eb-badge span { font-size: 12px; }
+          .eb-overlay { align-items: flex-start; }
+          .eb-modal-box {
+            max-height: calc(100vh - 24px);
+            max-height: calc(100dvh - 24px);
+          }
+          .eb-body { padding: 22px 18px 20px; }
+          .eb-icon-wrap { transform: scale(0.72); margin-bottom: 4px; }
+          .eb-heading { font-size: 19px; margin-bottom: 6px; }
+          .eb-badge { margin-bottom: 12px; padding: 4px 12px; }
+          .eb-paragraph { font-size: 13px; max-width: 100%; margin-bottom: 16px; line-height: 1.55; }
+          .eb-icons-row { gap: 8px; font-size: 17px; margin-bottom: 16px; }
+          .eb-cta-btn { font-size: 14px; padding: 12px 0; }
+          .eb-badge span { font-size: 11.5px; }
+          .eb-footer-text { margin-top: 10px; font-size: 11px; }
         }
 
         /* ─── Very small phones ─── */
         @media (max-width: 360px) {
-          .eb-body { padding: 24px 16px 24px; }
-          .eb-icon-wrap { transform: scale(0.7); margin-bottom: 4px; }
-          .eb-heading { font-size: 19px; }
-          .eb-icons-row { gap: 8px; font-size: 17px; }
+          .eb-body { padding: 18px 14px 16px; }
+          .eb-icon-wrap { transform: scale(0.6); margin-bottom: 0; }
+          .eb-heading { font-size: 17px; }
+          .eb-paragraph { font-size: 12.5px; margin-bottom: 12px; }
+          .eb-icons-row { gap: 6px; font-size: 15px; margin-bottom: 12px; }
         }
 
         /* ─── Short viewports (landscape phones) ─── */
         @media (max-height: 560px) {
           .eb-overlay { align-items: flex-start; padding-top: 16px; }
-          .eb-modal-box { max-height: calc(100vh - 32px); }
-          .eb-icon-wrap { transform: scale(0.65); margin-bottom: 4px; }
-          .eb-body { padding: 20px 24px 20px; }
-          .eb-paragraph { margin-bottom: 14px; }
-          .eb-icons-row { margin-bottom: 14px; }
+          .eb-modal-box {
+            max-height: calc(100vh - 32px);
+            max-height: calc(100dvh - 32px);
+          }
+          .eb-icon-wrap { transform: scale(0.55); margin-bottom: 0; }
+          .eb-body { padding: 16px 24px 16px; }
+          .eb-heading { font-size: 17px; margin-bottom: 4px; }
+          .eb-badge { margin-bottom: 8px; }
+          .eb-paragraph { margin-bottom: 10px; font-size: 12.5px; }
+          .eb-icons-row { margin-bottom: 10px; }
+          .eb-footer-text { margin-top: 6px; }
         }
       `}</style>
 

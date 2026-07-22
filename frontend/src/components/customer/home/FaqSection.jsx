@@ -56,11 +56,6 @@ const FaqSection = () => {
     setActiveIndex(index === activeIndex ? null : index);
   };
 
-  // Split into 3 columns
-  const columnCount = 3;
-  const columns = Array.from({ length: columnCount }, (_, colIndex) =>
-    faqData.filter((_, i) => i % columnCount === colIndex)
-  );
   return (
     <>
       <div className="faq-container">
@@ -70,31 +65,25 @@ const FaqSection = () => {
         </h3>
 
         <div className="faq-columns">
-          {columns.map((column, colIdxs) => (
-            <div key={colIdxs} className="faq-column">
-              {column.map((item, index) => {
-                const itemIndex = colIdxs + index * columnCount;
-                return (
-                  <div
-                    className={`faq-item ${
-                      activeIndex === itemIndex ? "active" : ""
-                    }`}
-                  >
-                    <button
-                      className="faq-question"
-                      onClick={() => toggleAnswer(itemIndex)}
-                    >
-                      {item.question}
-                      <span className="faq-icon">
-                        {activeIndex === itemIndex ? "−" : "+"}
-                      </span>
-                    </button>
-                    {activeIndex === itemIndex && (
-                      <div className="faq-answer">{item.answer}</div>
-                    )}
-                  </div>
-                );
-              })}
+          {faqData.map((item, itemIndex) => (
+            <div
+              key={itemIndex}
+              className={`faq-item ${
+                activeIndex === itemIndex ? "active" : ""
+              }`}
+            >
+              <button
+                className="faq-question"
+                onClick={() => toggleAnswer(itemIndex)}
+              >
+                {item.question}
+                <span className="faq-icon">
+                  {activeIndex === itemIndex ? "−" : "+"}
+                </span>
+              </button>
+              {activeIndex === itemIndex && (
+                <div className="faq-answer">{item.answer}</div>
+              )}
             </div>
           ))}
         </div>

@@ -618,19 +618,23 @@ const DashboardServices = () => {
                       </div>
                     )}
 
+                    <h2 className="dcf-heading">Edit Service</h2>
+
                     <div className="flex flex-col space-y-2">
                       {/* Service Name */}
+                      <label className="dcf-label">Service Name</label>
                       <input
                         type="text"
                         name="serviceName"
                         value={editedData.serviceName}
                         onChange={handleChange}
                         placeholder="Service Name"
-                        className="w-full p-1 bg-[#fff] border border-[#001f3f] rounded-md"
+                        className="dcf-input"
                         disabled={isSaving}
                       />
 
                       {/* Locations */}
+                      <label className="dcf-label">Location</label>
                       <input
                         type="text"
                         name="locationOffered"
@@ -648,7 +652,7 @@ const DashboardServices = () => {
                           }))
                         }
                         placeholder="Locations (comma separated)"
-                        className="w-full p-1 bg-[#fff] border border-[#001f3f] rounded-md"
+                        className="dcf-input"
                         disabled={isSaving}
                       />
 
@@ -668,7 +672,7 @@ const DashboardServices = () => {
                               }))
                             }
                             placeholder="Per Plate Price"
-                            className="w-full p-1 bg-white border border-[#001f3f] rounded-md"
+                            className="dcf-input"
                             disabled={isSaving}
                           />
 
@@ -685,7 +689,7 @@ const DashboardServices = () => {
                                 }))
                               }
                               placeholder="Min Plates"
-                              className="w-1/2 p-1 bg-white border border-[#001f3f] rounded-md"
+                              className="dcf-input w-1/2"
                               disabled={isSaving}
                             />
 
@@ -700,21 +704,19 @@ const DashboardServices = () => {
                                 }))
                               }
                               placeholder="Max Plates"
-                              className="w-1/2 p-1 bg-white border border-[#001f3f] rounded-md"
+                              className="dcf-input w-1/2"
                               disabled={isSaving}
                             />
                           </div>
 
                           {/* Catering Packages */}
                           <div className="flex flex-col gap-2">
-                            <label className="font-semibold text-gray-700">
-                              Packages
-                            </label>
+                            <label className="dcf-label">Packages</label>
 
                             {editedData.packages?.map((pkg, index) => (
                               <div
                                 key={index}
-                                className="flex gap-2 items-center"
+                                className="flex flex-wrap gap-2 items-center"
                               >
                                 <input
                                   type="text"
@@ -728,7 +730,7 @@ const DashboardServices = () => {
                                       packages: updated,
                                     });
                                   }}
-                                  className="w-1/3 p-1 bg-white border border-[#001f3f] rounded-md"
+                                  className="dcf-input flex-[2] min-w-[110px]"
                                 />
 
                                 <input
@@ -744,7 +746,7 @@ const DashboardServices = () => {
                                       packages: updated,
                                     });
                                   }}
-                                  className="w-1/3 p-1 bg-white border border-[#001f3f] rounded-md"
+                                  className="dcf-input flex-1 min-w-[80px]"
                                 />
 
                                 <input
@@ -759,7 +761,7 @@ const DashboardServices = () => {
                                       packages: updated,
                                     });
                                   }}
-                                  className="w-1/6 p-1 bg-white border border-[#001f3f] rounded-md"
+                                  className="dcf-input flex-1 min-w-[70px]"
                                 />
 
                                 <input
@@ -774,7 +776,7 @@ const DashboardServices = () => {
                                       packages: updated,
                                     });
                                   }}
-                                  className="w-1/6 p-1 bg-white border border-[#001f3f] rounded-md"
+                                  className="dcf-input flex-1 min-w-[70px]"
                                 />
 
                                 <button
@@ -788,7 +790,7 @@ const DashboardServices = () => {
                                       packages: updated,
                                     });
                                   }}
-                                  className="text-red-500 font-bold"
+                                  className="text-red-500 font-bold shrink-0"
                                 >
                                   ✕
                                 </button>
@@ -812,7 +814,7 @@ const DashboardServices = () => {
                                   ],
                                 }))
                               }
-                              className="px-3 py-1 bg-[#001f3f] text-white rounded-md w-fit"
+                              className="dcf-btn dcf-btn-save w-fit !flex-none"
                             >
                               + Add Package
                             </button>
@@ -832,7 +834,7 @@ const DashboardServices = () => {
                               }))
                             }
                             placeholder="Min Price"
-                            className="w-1/2 p-1 bg-[#fff] border border-[#001f3f] rounded-md"
+                            className="dcf-input w-1/2"
                             disabled={isSaving}
                           />
                           <input
@@ -846,7 +848,7 @@ const DashboardServices = () => {
                               }))
                             }
                             placeholder="Max Price"
-                            className="w-1/2 p-1 bg-[#fff] border border-[#001f3f] rounded-md"
+                            className="dcf-input w-1/2"
                             disabled={isSaving}
                           />
                         </div>
@@ -854,18 +856,18 @@ const DashboardServices = () => {
 
                       {/* Subcategory Multi-Select Checkboxes */}
                       <div className="flex flex-col">
-                        <label className="font-semibold">Service Type</label>
+                        <label className="dcf-label">Service Type</label>
 
                         {availableSubcategories.length === 0 ? (
                           <p className="text-sm text-red-600">
                             No subcategories found
                           </p>
                         ) : (
-                          <div className="grid grid-cols-2 gap-2 mt-2 p-2 border border-[#001f3f] rounded-md bg-[#fff]">
+                          <div className="dcf-checkbox-panel">
                             {availableSubcategories.map((sub, i) => (
                               <label
                                 key={i}
-                                className="flex items-center gap-2"
+                                className="dcf-check-option"
                               >
                                 <input
                                   type="checkbox"
@@ -906,11 +908,12 @@ const DashboardServices = () => {
                       </div>
 
                       {/* Duration */}
-                      <div className="flex items-center justify-center gap-3">
-                        <div className="flex items-center gap-1">
+                      <label className="dcf-label">Duration</label>
+                      <div className="dcf-duration-row">
+                        <div className="dcf-duration-field">
                           <input
                             type="number"
-                            className="w-16 text-center p-1 bg-[#fff] border border-[#001f3f] rounded-md"
+                            className="dcf-input"
                             value={Math.floor(editedData.duration / (24 * 60))}
                             onChange={(e) =>
                               updateDuration(e.target.value, "days")
@@ -920,11 +923,11 @@ const DashboardServices = () => {
                           />
                           <span>D</span>
                         </div>
-                        <span>:</span>
-                        <div className="flex items-center gap-1">
+                        <span className="dcf-duration-sep">:</span>
+                        <div className="dcf-duration-field">
                           <input
                             type="number"
-                            className="w-16 text-center p-1 bg-[#fff] border border-[#001f3f] rounded-md"
+                            className="dcf-input"
                             value={Math.floor(
                               (editedData.duration % (24 * 60)) / 60
                             )}
@@ -936,11 +939,11 @@ const DashboardServices = () => {
                           />
                           <span>H</span>
                         </div>
-                        <span>:</span>
-                        <div className="flex items-center gap-1">
+                        <span className="dcf-duration-sep">:</span>
+                        <div className="dcf-duration-field">
                           <input
                             type="number"
-                            className="w-16 text-center p-1 bg-[#fff] border border-[#001f3f] rounded-md"
+                            className="dcf-input"
                             value={editedData.duration % 60}
                             onChange={(e) =>
                               updateDuration(e.target.value, "minutes")
@@ -953,26 +956,27 @@ const DashboardServices = () => {
                       </div>
 
                       {/* Description */}
+                      <label className="dcf-label">Description</label>
                       <textarea
                         name="serviceDes"
                         value={editedData.serviceDes}
                         onChange={handleChange}
                         placeholder="Description"
                         maxLength={500}
-                        className="w-full min-h-[90px] p-1 bg-[#fff] border border-[#001f3f] rounded-md"
+                        className="dcf-input dcf-textarea"
                         disabled={isSaving}
                       />
                     </div>
 
                     {/* Image upload info and file size error */}
-                    <div className="mt-2">
-                      <p className="text-xs text-gray-600 mb-1">
+                    <div>
+                      <p className="dcf-upload-info">
                         Maximum file size: 9MB per photo i.e image size must be
                         below 9MB. You can upload up to 10 photos or videos
                         combined in total.
                       </p>
                       {fileSizeError && (
-                        <div className="p-2 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded text-sm mb-2">
+                        <div className="mt-2 p-2 bg-white border border-red-400 text-red-700 rounded-lg text-sm">
                           {fileSizeError}
                         </div>
                       )}
@@ -1068,13 +1072,13 @@ const DashboardServices = () => {
                         newMediaPreviews.length <
                         10 && (
                         <label
-                          className={`w-14 h-14 border-2 border-dashed border-[#001f3f] rounded flex items-center justify-center shrink-0 ${
+                          className={`w-14 h-14 border-2 border-dashed border-[#d97706] bg-white/50 rounded-lg flex items-center justify-center shrink-0 transition-colors hover:bg-white/80 ${
                             isSaving
                               ? "cursor-not-allowed opacity-50"
                               : "cursor-pointer"
                           }`}
                         >
-                          <FaPlus className="text-gray-500 text-xs" />
+                          <FaPlus className="text-[#b08a45] text-xs" />
                           <input
                             type="file"
                             accept="image/*,video/*"
@@ -1087,23 +1091,23 @@ const DashboardServices = () => {
                       )}
                     </div>
 
-                    {/* Save and Cancel Buttons */}
-                    <div className="flex justify-center gap-4 pt-4">
-                      <button
-                        type="button"
-                        onClick={() => handleSave(index)}
-                        className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 shadow disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={isSaving}
-                      >
-                        {isSaving ? "Saving..." : "Save"}
-                      </button>
+                    {/* Cancel and Save Buttons */}
+                    <div className="dcf-actions">
                       <button
                         type="button"
                         onClick={() => handleCancel(index)}
-                        className="px-4 py-2 rounded bg-gray-500 text-white hover:bg-gray-600 shadow disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="dcf-btn dcf-btn-cancel"
                         disabled={isSaving}
                       >
                         Cancel
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleSave(index)}
+                        className="dcf-btn dcf-btn-save"
+                        disabled={isSaving}
+                      >
+                        {isSaving ? "Saving..." : "Save"}
                       </button>
                     </div>
                   </form>

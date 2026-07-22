@@ -130,7 +130,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px 22px 18px;
-  background: linear-gradient(135deg, #0f2644 0%, #1a3a5c 100%);
+  background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
   flex-shrink: 0;
 }
 
@@ -454,9 +454,9 @@
 
 .btn-apply {
   flex: 1;
-  background: linear-gradient(135deg, #0f2644 0%, #1a3a5c 100%);
+  background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
   color: #ffffff;
-  box-shadow: 0 4px 16px rgba(15, 38, 68, 0.3);
+  box-shadow: 0 4px 16px rgba(76, 29, 149, 0.3);
 }
 
 .btn-apply:hover {

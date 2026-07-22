@@ -181,8 +181,30 @@ const N = LOOPED_VENDORS.length;
     }, 2500);
     return () => clearInterval(timer);
   }, [goNext]);
-if (loading) {
-  return <div>Loading top verified vendors...</div>;
+if (!vendors.length) {
+  return (
+    <section className="tvv-section">
+      <div className="tvv-header">
+        <p className="tvv-eyebrow">HANDPICKED FOR YOU</p>
+        <h2 className="tvv-title">
+          Top Verified <span className="tvv-title-accent">Partners</span>
+        </h2>
+        <p className="tvv-loading-text">
+          <span className="tvv-loading-dots" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </span>
+          Loading top verified vendors
+          <span className="tvv-loading-ellipsis" aria-hidden="true">
+            <span>.</span>
+            <span>.</span>
+            <span>.</span>
+          </span>
+        </p>
+      </div>
+    </section>
+  );
 }
 
 if (!vendors.length) {
