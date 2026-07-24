@@ -575,23 +575,46 @@ function VendorService({ currentStep }) {
         formData.append("maxPrice", maxPrice);
       }
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/vendors/create-service`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
+      const uploadToastId = toast.loading(
+        "Uploading your service... Please don't press back or close the app.",
+        { closeButton: false, closeOnClick: false, draggable: false }
       );
 
-      console.log(response);
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/vendors/create-service`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            withCredentials: true,
+          }
+        );
 
-      navigate("/dashboard");
+        console.log(response);
+
+        toast.update(uploadToastId, {
+          render: "Service added successfully!",
+          type: "success",
+          isLoading: false,
+          autoClose: 2500,
+          closeButton: true,
+        });
+
+        navigate("/dashboard");
+      } catch (uploadError) {
+        toast.update(uploadToastId, {
+          render: "Upload failed. Please try again.",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+          closeButton: true,
+        });
+        throw uploadError;
+      }
     } catch (error) {
       console.error("Error submitting service:", error);
-      alert("Failed to submit service. Please try again.");
     }
     setIsLoading(false);
   };
@@ -1134,6 +1157,9 @@ function VendorService({ currentStep }) {
                 ref={fileInputRef}
                 required
               />
+              <p className="upload-hint-text">
+                Maximum 20 media files. Images up to 5MB each, videos up to 10MB each.
+              </p>
               {previewImages.length > 0 && (
                 <div className="preview-container">
                   <div className="main-preview">

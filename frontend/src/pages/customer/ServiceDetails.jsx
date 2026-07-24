@@ -272,7 +272,7 @@ const Service = ({ onSwitchToLogin }) => {
             onMouseLeave={() => {
               setHovered(false);
             }}
-            className={clsx('relative', 'w-full', 'h-[260px]', 'mb-5', 'sm:h-[400px]', 'lg:h-[430px]', 'overflow-hidden', 'rounded-lg', 'mt-3', 'sm:mt-0')}
+            className={clsx('relative', 'w-full', 'h-[338px]', 'mb-5', 'sm:h-[520px]', 'lg:h-[560px]', 'overflow-hidden', 'rounded-lg', 'mt-3', 'sm:mt-0')}
             onMouseEnter={() => setHovered(true)}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
@@ -303,7 +303,8 @@ const Service = ({ onSwitchToLogin }) => {
                         idx === currentIndex ? "opacity-100 z-10" : "opacity-0"
                       }`}
                     >
-                      {/* Main image covering full width */}
+                      {/* Main image — fills 100% of the box, cropping only
+                          whichever dimension doesn't match (smart fill) */}
                       <img
                         decoding="async"
                         loading="lazy"
@@ -432,14 +433,14 @@ const Service = ({ onSwitchToLogin }) => {
                 {isVendorAvailable ? (
                   <>
                     <button
-                      className={clsx('w-full', 'lg:w-auto', 'lg:min-w-[220px]', 'px-4', 'py-3', 'rounded-full', 'text-sm', 'font-bold', 'text-white', 'bg-gradient-to-r', 'from-[#fb923c]', 'to-[#ef4444]', 'hover:shadow-lg', 'hover:from-[#fca5a5]', 'hover:to-[#dc2626]', 'focus:outline-none', 'focus:ring-2', 'focus:ring-orange-300', 'shadow-md', 'transition-all', 'duration-300')}
+                      className={clsx('w-full', 'lg:w-auto', 'lg:min-w-[220px]', 'px-4', 'py-3', 'rounded-full', 'text-sm', 'font-bold', 'text-white', 'bg-gradient-to-r', 'from-[#6d28d9]', 'to-[#8b5cf6]', 'hover:shadow-lg', 'hover:from-[#5b21b6]', 'hover:to-[#7c3aed]', 'focus:outline-none', 'focus:ring-2', 'focus:ring-purple-300', 'shadow-md', 'transition-all', 'duration-300')}
                       onClick={handleAddToCart}
                     >
                       ADD TO CART
                     </button>
 
                     <button
-                      className={clsx('flex', 'w-full', 'cursor-pointer', 'items-center', 'justify-center', 'rounded-full', 'bg-gradient-to-r', 'from-[#6d28d9]', 'to-[#8b5cf6]', 'sm:px-[1rem]', 'lg:px-12', 'py-3', 'text-sm', 'font-bold', 'text-white', 'transition-colors', 'duration-300', 'ease-in-out', 'hover:from-[#5b21b6]', 'hover:to-[#7c3aed]', 'active:from-[#4c1d95]', 'active:to-[#6d28d9]', 'lg:w-auto', 'lg:min-w-[220px]')}
+                      className={clsx('flex', 'w-full', 'cursor-pointer', 'items-center', 'justify-center', 'rounded-full', 'bg-gradient-to-r', 'from-[#f59e0b]', 'to-[#facc15]', 'sm:px-[1rem]', 'lg:px-12', 'py-3', 'text-sm', 'font-bold', 'text-[#3a2a00]', 'transition-colors', 'duration-300', 'ease-in-out', 'hover:from-[#d97706]', 'hover:to-[#eab308]', 'active:from-[#b45309]', 'active:to-[#ca8a04]', 'lg:w-auto', 'lg:min-w-[220px]')}
                       onClick={handleBookNow}
                     >
                        CALL TO VENDOR

@@ -87,7 +87,7 @@ const DashboardServices = () => {
     if (!imgRef.current || !crop?.width || !crop?.height) return;
 
     const croppedBlob = await getCroppedImg(imgRef.current, crop);
-    const croppedFile = new File([croppedBlob], "cropped.webp", {
+    const croppedFile = new File([croppedBlob], "cropped.jpg", {
       type: "image/jpeg",
     });
 
@@ -264,6 +264,16 @@ const DashboardServices = () => {
 
       setServices(updatedList);
       setEditingIndex(null);
+
+      // The main preview was staying locked on whatever image was first
+      // loaded originally, ignoring anything added afterward. Point it at
+      // the newly uploaded photo (or the service's current first photo)
+      // so the save is actually visible right away.
+      setSelectedMedia((prev) => ({
+        ...prev,
+        [index]: uploadedUrls[0] || updatedService.serviceImage?.[0] || "",
+      }));
+
       setNewImages([]);
       setNewVideos([]);
       setNewMediaPreviews([]);
@@ -335,6 +345,8 @@ const DashboardServices = () => {
         imageFiles.push(file);
       } else if (file.type.startsWith("video/")) {
         videoFiles.push(file);
+      } else {
+        alert(`"${file.name}" isn't a supported image or video file.`);
       }
     }
 
@@ -345,6 +357,7 @@ const DashboardServices = () => {
       newVideos.length;
     if (currentMediaCount + imageFiles.length + videoFiles.length > 10) {
       alert(`You can only upload up to 10 media items in total.`);
+      e.target.value = "";
       return;
     }
 
@@ -377,6 +390,10 @@ const DashboardServices = () => {
       ...newImagePreviews,
       ...newVideoPreviews,
     ]);
+
+    // Reset the input so selecting the exact same file(s) again later
+    // (e.g. after deleting them from the preview) actually fires onChange.
+    e.target.value = "";
   };
 
   const handleToggleAvailability = async (index) => {
@@ -447,7 +464,7 @@ const DashboardServices = () => {
           return (
             <section
               key={index}
-              className="relative flex flex-col xl:flex-row gap-6 shadow-lg w-[90%] mx-auto mb-6 p-4 bg-white rounded-md border-l-4 border-[#00897b] cursor-pointer hover:shadow-xl transition"
+              className="relative flex flex-col xl:flex-row gap-6 shadow-md w-[90%] mx-auto mb-6 p-4 bg-white rounded-xl border border-gray-100 cursor-pointer hover:shadow-xl transition-shadow duration-300"
             >
               {/* Availability toggle */}
               <div className="absolute top-[0.5rem] right-3 flex items-center gap-2">
@@ -475,7 +492,8 @@ const DashboardServices = () => {
                 </span>
               </div>
               {/* Image Slider Section */}
-              <div className="relative w-full sm:w-[400px] sm:h-[190px] mt-5 mx-auto group">
+              <div className="w-full sm:w-[400px] mt-5 mx-auto">
+                <div className="relative w-full h-[170px] sm:h-[190px] group rounded-lg overflow-hidden">
                 <Link
                   to={`/service/${service.serviceCategory}/${service._id}`}
                   style={{ textDecoration: "none", color: "inherit" }}
@@ -499,7 +517,7 @@ const DashboardServices = () => {
                     <img
                       src={selectedMediaUrl}
                       alt="Service"
-                      className={`w-full h-full object-contain rounded-md transition-all duration-300 ${
+                      className={`w-full h-full object-cover rounded-md transition-all duration-300 ${
                         !service.available ? "grayscale brightness-75" : ""
                       }`}
                       onError={(e) => {
@@ -565,6 +583,7 @@ const DashboardServices = () => {
                       )}
                     </button>
                   ))}
+                </div>
                 </div>
 
                 {/* Buttons */}
@@ -1093,6 +1112,11 @@ const DashboardServices = () => {
 
                     {/* Cancel and Save Buttons */}
                     <div className="dcf-actions">
+                      {errorMessage && (
+                        <p className="text-sm font-medium text-red-600 w-full mb-1">
+                          {errorMessage}
+                        </p>
+                      )}
                       <button
                         type="button"
                         onClick={() => handleCancel(index)}
@@ -1115,12 +1139,12 @@ const DashboardServices = () => {
               ) : (
                 /* View Mode */
                 <div className="right-section xl:w-[600px] items-start xl:ml-3">
-                  <div className="details">
+                  <div className="details space-y-1.5">
                     <Link
                       to={`/service/${service.serviceCategory}/${service._id}`}
                       style={{ textDecoration: "none", color: "inherit" }}
                     >
-                      <h2 className="details-h2 mt-6">{service.serviceName}</h2>
+                      <h2 className="details-h2 mt-1 xl:mt-2">{service.serviceName}</h2>
                     </Link>
                     <div className="flex gap-2 flex-wrap">
                       <strong>Service Type: </strong>

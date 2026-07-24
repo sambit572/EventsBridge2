@@ -3,7 +3,7 @@ import { ApiError } from "../../utilities/ApiError.js";
 import { ApiResponse } from "../../utilities/ApiResponse.js";
 import fs from "fs/promises";
 import { isValidIndianPhone } from "../../utilities/validatePhone.js";
-import { uploadOnCloudinary } from "../../utilities/cloudinary.js";
+import { uploadOnCloudinary, deleteFromCloudinary } from "../../utilities/cloudinary.js";
 import { validateEmailDomain } from "../../utilities/verifyDNS.js";
 import { sendEmail } from "../../utilities/sendEmail.js";
 import jwt from "jsonwebtoken";
@@ -289,8 +289,7 @@ const updateVendor = async (req, res) => {
         vendor.profilePicture &&
         vendor.profilePicture.includes("cloudinary")
       ) {
-        const publicId = vendor.profilePicture.split("/").pop().split(".")[0];
-        await uploadOnCloudinary(null, publicId, true); // Custom delete method
+        await deleteFromCloudinary(vendor.profilePicture);
       }
       updateData.profilePicture = "";
     }
@@ -301,8 +300,7 @@ const updateVendor = async (req, res) => {
         vendor.profilePicture &&
         vendor.profilePicture.includes("cloudinary")
       ) {
-        const publicId = vendor.profilePicture.split("/").pop().split(".")[0];
-        await uploadOnCloudinary(null, publicId, true);
+        await deleteFromCloudinary(vendor.profilePicture);
       }
 
       const cloudinaryResult = await uploadOnCloudinary(file.path);
@@ -705,8 +703,7 @@ const updateVendorProfilePicture = async (req, res, next) => {
 
     // Delete old image from Cloudinary (if exists)
     if (vendor.profilePicture && vendor.profilePicture.includes("cloudinary")) {
-      const publicId = vendor.profilePicture.split("/").pop().split(".")[0];
-      await uploadOnCloudinary(null, publicId, true); // Delete old
+      await deleteFromCloudinary(vendor.profilePicture);
     }
 
     const cloudinaryResult = await uploadOnCloudinary(file.path);

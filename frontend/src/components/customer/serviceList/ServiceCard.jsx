@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 // ✅ NEW: Import FaYoutube for the UI
-import { FaChevronLeft, FaChevronRight, FaYoutube } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaYoutube, FaBan } from "react-icons/fa";
 import ServiceDescription from "./ServiceDescription";
 
 // ✅ NEW: Helper function to identify YouTube links and get the video ID
@@ -98,7 +98,7 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
                   key={currentIndex} // Add key to force re-render on change
                   src={`https://www.youtube.com/embed/${isVideo}?autoplay=1&mute=1&loop=1&playlist=${isVideo}&rel=0`}
                   className={`absolute top-0 left-0 w-full h-full object-contain object-center ${
-                    !isVendorAvailable ? "grayscale brightness-50" : ""
+                    !isVendorAvailable ? "grayscale brightness-75" : ""
                   }`}
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -122,7 +122,7 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
                     src={currentMediaUrl}
                     alt={`slide-${currentIndex}`}
                     className={`absolute inset-0 m-auto max-h-full max-w-full object-contain z-10 transition-opacity duration-500 ${
-                      !isVendorAvailable ? "grayscale brightness-50" : ""
+                      !isVendorAvailable ? "grayscale brightness-75" : ""
                     }`}
                   />
                 </div>
@@ -208,106 +208,28 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
 
               {/* Overlay if vendor not available */}
               {!isVendorAvailable && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
-                  <div className="rounded-lg bg-red-600 px-4 py-5 text-center shadow-lg">
-                    <p className="text-sm font-bold text-white">
+                <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/45 backdrop-blur-[1px]">
+                  <div className="flex flex-col items-center gap-1 rounded-xl border border-white/20 bg-[#721c24]/90 px-5 py-4 text-center shadow-lg">
+                    <span className="flex items-center gap-1.5 text-sm font-bold tracking-wide text-white">
+                      <FaBan className="text-xs" />
                       OUT OF SERVICE
-                    </p>
-                    <p className="text-xs text-red-100">
-                      Oops! We’re on a quick break, back soon.
+                    </span>
+                    <p className="text-[11px] text-red-100">
+                      We're on a quick break, back soon.
                     </p>
                   </div>
                 </div>
               )}
-
-              {/* ✅ Left Arrow */}
-              {media.length > 1 && (
-                <>
-                  {/* Mobile: always visible */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      prevSlide();
-                    }}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white sm:hidden"
-                  >
-                    <FaChevronLeft className="text-lg" />
-                  </button>
-
-                  {/* Desktop: visible only on hover */}
-                  {hovered && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        prevSlide();
-                      }}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 hidden sm:flex"
-                    >
-                      <FaChevronLeft />
-                    </button>
-                  )}
-                </>
-              )}
-
-              {/* ✅ Right Arrow */}
-              {media.length > 1 && (
-                <>
-                  {/* Mobile: always visible */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      nextSlide();
-                    }}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white sm:hidden"
-                  >
-                    <FaChevronRight className="text-lg" />
-                  </button>
-
-                  {/* Desktop: visible only on hover */}
-                  {hovered && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        nextSlide();
-                      }}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 hidden sm:flex"
-                    >
-                      <FaChevronRight />
-                    </button>
-                  )}
-                </>
-              )}
-
-              {/* ✅ MODIFIED: Dots now show YouTube icon for videos */}
-              {media.length > 1 && (
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
-                  {media.map((mediaUrl, idx) => (
-                    <button
-                      key={idx}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setCurrentIndex(idx);
-                      }}
-                      className={`h-2 w-2 rounded-full p-0 cursor-pointer flex items-center justify-center ${
-                        idx === currentIndex ? "bg-white" : "bg-gray-400"
-                      }`}
-                    >
-                      {getYouTubeID(mediaUrl) && (
-                        <FaYoutube className="text-red-500 text-xs" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
             </>
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gray-300 text-gray-500">
+            <div className="flex h-full w-full items-center justify-center bg-gray-200 text-gray-500">
               {!isVendorAvailable ? (
-                <div className="text-center">
-                  <p className="text-sm font-bold text-red-600">
+                <div className="flex flex-col items-center gap-1 rounded-xl border border-[#f5c6cb] bg-[#f8d7da] px-5 py-4 text-center">
+                  <span className="flex items-center gap-1.5 text-sm font-bold text-[#721c24]">
+                    <FaBan className="text-xs" />
                     OUT OF SERVICE
-                  </p>
-                  <p className="text-xs text-gray-600">No Image Available</p>
+                  </span>
+                  <p className="text-[11px] text-[#8a5359]">No image available</p>
                 </div>
               ) : (
                 "No Image Available"

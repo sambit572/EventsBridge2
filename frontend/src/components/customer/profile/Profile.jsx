@@ -293,7 +293,7 @@ setRating(0);
       </div>
 
       {/* ✅ Main Content */}
-      <div className={clsx('profile-scrollable-content', 'md:ml-[-200px]', 'ml-[-220px]', 'lg:ml-8', 'sm:ml-0', 'w-full', 'p-4')}>
+      <div className={clsx('profile-scrollable-content', 'md:ml-[-200px]', 'ml-0', 'lg:ml-8', 'sm:ml-0', 'w-full', 'p-4')}>
         <h2 className={clsx('text-3xl', 'font-bold', 'text-center', 'mb-6')}>My Bookings</h2>
 
         {/* ================= Filter + Sort UI ================= */}
