@@ -3,7 +3,7 @@ import { ApiError } from "../../utilities/ApiError.js";
 import { ApiResponse } from "../../utilities/ApiResponse.js";
 import fs from "fs/promises";
 import { isValidIndianPhone } from "../../utilities/validatePhone.js";
-import { uploadOnCloudinary,deleteFromCloudinary} from "../../utilities/cloudinary.js";
+import { uploadOnCloudinary, deleteFromCloudinary } from "../../utilities/cloudinary.js";
 import { validateEmailDomain } from "../../utilities/verifyDNS.js";
 import { sendEmail } from "../../utilities/sendEmail.js";
 import jwt from "jsonwebtoken";

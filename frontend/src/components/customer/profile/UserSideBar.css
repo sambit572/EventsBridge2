@@ -279,11 +279,21 @@
   border-radius: 5px;
   width: 100%;
   margin-left: 2px;
-  border: 1px solid black;
-  background: #001f3f;
-  color: rgba(0, 0, 0, 0.732);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
   font-weight: 550;
   transition: all 0.3s ease;
+}
+
+.custom-li::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.custom-li:focus {
+  outline: none;
+  border-color: #f3c12d;
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .custom-li:hover {
@@ -591,16 +601,16 @@
 
 @media (max-width: 768px) {
   .user-sidebar {
-    position: relative;
+    position: fixed;
+    top: 0;
     left: 0;
-    bottom: 0;
     width: 240px;
     background: #001f3f;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     transform: translateX(-100%);
     transition: transform 0.3s ease;
-    z-index: 20;
+    z-index: 1000;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
     height: 100vh;
   }
