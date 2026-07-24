@@ -346,8 +346,9 @@ const handleVerificationRequest = async () => {
               <button onClick={handleCancelEdit} className="sb-btn-cancel"><MdCancel size={14} /> Cancel</button>
             </div>
           ) : (
-            <button className="sb-action-btn" onClick={handleToggleEdit}>
-              <MdOutlineEdit size={15} /> Edit Profile
+            <button className="sb-action-btn"onClick={() => setActiveTab("profile")}>
+            <MdOutlineEdit size={15} />
+            Edit Profile
             </button>
           )}
 
