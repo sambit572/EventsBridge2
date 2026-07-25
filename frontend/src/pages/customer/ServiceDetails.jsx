@@ -18,14 +18,7 @@ import { incrementCartCount } from "../../redux/UserSlice.js";
 // ✅ NEW: Import FaYoutube
 import { FaChevronLeft, FaChevronRight, FaYoutube } from "react-icons/fa";
 import WhyChooseUs from "../../components/customer/ServiceDetails/WhyChooseUs.jsx";
-
-// ✅ NEW: Helper function to identify YouTube links
-const getYouTubeID = (url) => {
-  if (typeof url !== "string") return null;
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : null;
-};
+import { getYouTubeID } from "../../utils/helpers";
 import CateringPackagesDisplay from "../../components/customer/ServiceDetails/CateringPackagesDisplay.jsx";
 
 const Service = ({ onSwitchToLogin }) => {
@@ -204,10 +197,6 @@ const Service = ({ onSwitchToLogin }) => {
         navigate("/login");
       }
     }
-    // Navigate to user details (catering services won't show this button anyway)
-    navigate(`/userdetails/${serviceId}`, {
-      state: { from: location.pathname },
-    });
   };
 
   const handleAddToCart = async (e) => {
@@ -309,12 +298,12 @@ const Service = ({ onSwitchToLogin }) => {
                         loading="lazy"
                         src={media.src}
                         alt={`slide-${idx}`}
-                        className="absolute inset-0 w-full h-full object-cover"
+                        className={clsx('absolute', 'inset-0', 'w-full', 'h-full', 'object-cover')}
                       />
 
                       {service?.vendorVerificationStatus === "verified" && (
-                        <span className="absolute top-4 right-4 z-30 flex items-center gap-1 rounded-md bg-[#ffbf00] px-3 py-1.5 text-sm font-bold text-[#352500] shadow-md">
-                          <span className="text-[22px] leading-none text-[#fff8c7] drop-shadow-[0_1px_2px_rgba(92,64,0,0.65)]">
+                        <span className={clsx('absolute', 'top-4', 'right-4', 'z-30', 'flex', 'items-center', 'gap-1', 'rounded-md', 'bg-[#ffbf00]', 'px-3', 'py-1.5', 'text-sm', 'font-bold', 'text-[#352500]', 'shadow-md')}>
+                          <span className={clsx('text-[22px]', 'leading-none', 'text-[#fff8c7]', 'drop-shadow-[0_1px_2px_rgba(92,64,0,0.65)]')}>
                             ★
                           </span>
                           Verified

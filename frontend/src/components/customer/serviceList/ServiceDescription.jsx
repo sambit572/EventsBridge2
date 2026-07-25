@@ -12,6 +12,8 @@ import toast from "react-hot-toast";
 import { incrementCartCount } from "../../../redux/UserSlice.js";
 import { useDispatch } from "react-redux";
 import { getServicePriceDisplay } from "../../../utils/pricingHelpers";
+import { formatDuration } from "../../../utils/helpers";
+import clsx from "clsx";
 
 const ServiceDescription = ({ service, onSwitchToLogin }) => {
   const dispatch = useDispatch();
@@ -37,18 +39,6 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
   const rawDuration = service.duration || 0;
 
   const isVendorAvailable = service.available !== false;
-
-  const formatDuration = (durationInMinutes) => {
-    const totalMinutes = parseInt(durationInMinutes, 10) || 0;
-    const days = Math.floor(totalMinutes / (24 * 60));
-    const hours = Math.floor((totalMinutes % (24 * 60)) / 60);
-    const minutes = totalMinutes % 60;
-    let result = "";
-    if (days > 0) result += `${days}d`;
-    if (hours > 0) result += (result ? " : " : "") + `${hours}h`;
-    if (minutes > 0) result += (result ? " : " : "") + `${minutes}m`;
-    return result || "0m";
-  };
 
   const duration = formatDuration(rawDuration);
 
@@ -399,8 +389,8 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
   }, [service]);
 
   return (
-    <section className="relative flex h-full flex-col bg-[#ffffff] px-3 py-2 text-gray-800">
-      <div className="absolute top-2 right-2 z-20 flex flex-row items-center gap-1">
+    <section className={clsx('relative', 'flex', 'h-full', 'flex-col', 'bg-[#ffffff]', 'px-3', 'py-2', 'text-gray-800')}>
+      <div className={clsx('absolute', 'top-2', 'right-2', 'z-20', 'flex', 'flex-row', 'items-center', 'gap-1')}>
         <div
           className={`h-7 w-7 flex items-center justify-center rounded-full bg-gray-100 shadow-md cursor-pointer transition-all duration-300 ${
             isWishlisted
@@ -414,7 +404,7 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
 
         <div className="relative" ref={shareContainerRef}>
           <div
-            className="h-7 w-7 cursor-pointer overflow-hidden rounded-full shadow-md transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-lg"
+            className={clsx('h-7', 'w-7', 'cursor-pointer', 'overflow-hidden', 'rounded-full', 'shadow-md', 'transition-all', 'duration-300', 'ease-in-out', 'hover:scale-110', 'hover:shadow-lg')}
             onClick={handleShare}
           >
             <img
@@ -422,7 +412,7 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
               loading="lazy"
               src="/send.webp"
               alt="Share"
-              className="h-full w-full rounded-full object-cover"
+              className={clsx('h-full', 'w-full', 'rounded-full', 'object-cover')}
             />
           </div>
 
@@ -435,7 +425,7 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
           >
             <div className="py-2">
               <div
-                className="flex cursor-pointer items-center gap-3 px-4 py-3 text-sm text-gray-800 transition-colors duration-200 ease-in-out hover:bg-gray-50"
+                className={clsx('flex', 'cursor-pointer', 'items-center', 'gap-3', 'px-4', 'py-3', 'text-sm', 'text-gray-800', 'transition-colors', 'duration-200', 'ease-in-out', 'hover:bg-gray-50')}
                 onClick={(e) => {
                   e.stopPropagation();
                   shareService("facebook");
@@ -446,12 +436,12 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
                   loading="lazy"
                   src="/facebook.webp"
                   alt="Facebook"
-                  className="h-5 w-5 object-contain"
+                  className={clsx('h-5', 'w-5', 'object-contain')}
                 />{" "}
                 Facebook
               </div>
               <div
-                className="flex cursor-pointer items-center gap-3 px-4 py-3 text-sm text-gray-800 transition-colors duration-200 ease-in-out hover:bg-gray-50"
+                className={clsx('flex', 'cursor-pointer', 'items-center', 'gap-3', 'px-4', 'py-3', 'text-sm', 'text-gray-800', 'transition-colors', 'duration-200', 'ease-in-out', 'hover:bg-gray-50')}
                 onClick={(e) => {
                   e.stopPropagation();
                   shareService("twitter");
@@ -462,12 +452,12 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
                   loading="lazy"
                   src="/twitter 1.webp"
                   alt="X"
-                  className="h-5 w-5 object-contain"
+                  className={clsx('h-5', 'w-5', 'object-contain')}
                 />{" "}
                 X
               </div>
               <div
-                className="flex cursor-pointer items-center gap-3 px-4 py-3 text-sm text-gray-800 transition-colors duration-200 ease-in-out hover:bg-gray-50"
+                className={clsx('flex', 'cursor-pointer', 'items-center', 'gap-3', 'px-4', 'py-3', 'text-sm', 'text-gray-800', 'transition-colors', 'duration-200', 'ease-in-out', 'hover:bg-gray-50')}
                 onClick={(e) => {
                   e.stopPropagation();
                   shareService("whatsapp");
@@ -478,12 +468,12 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
                   loading="lazy"
                   src="/whatsapp.webp"
                   alt="WhatsApp"
-                  className="h-5 w-5 object-contain"
+                  className={clsx('h-5', 'w-5', 'object-contain')}
                 />{" "}
                 WhatsApp
               </div>
               <div
-                className="flex cursor-pointer items-center gap-3 px-4 py-3 text-sm text-gray-800 transition-colors duration-200 ease-in-out hover:bg-gray-50"
+                className={clsx('flex', 'cursor-pointer', 'items-center', 'gap-3', 'px-4', 'py-3', 'text-sm', 'text-gray-800', 'transition-colors', 'duration-200', 'ease-in-out', 'hover:bg-gray-50')}
                 onClick={(e) => {
                   e.stopPropagation();
                   shareService("instagram");
@@ -494,12 +484,12 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
                   loading="lazy"
                   src="/instagram.webp"
                   alt="Instagram"
-                  className="h-5 w-5 object-contain"
+                  className={clsx('h-5', 'w-5', 'object-contain')}
                 />{" "}
                 Instagram
               </div>
               <div
-                className="flex cursor-pointer items-center gap-3 px-4 py-3 text-sm text-gray-800 transition-colors duration-200 ease-in-out hover:bg-gray-50"
+                className={clsx('flex', 'cursor-pointer', 'items-center', 'gap-3', 'px-4', 'py-3', 'text-sm', 'text-gray-800', 'transition-colors', 'duration-200', 'ease-in-out', 'hover:bg-gray-50')}
                 onClick={(e) => {
                   e.stopPropagation();
                   shareService("telegram");
@@ -510,12 +500,12 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
                   loading="lazy"
                   src="/telegram.webp"
                   alt="Telegram"
-                  className="h-5 w-5 object-contain"
+                  className={clsx('h-5', 'w-5', 'object-contain')}
                 />{" "}
                 Telegram
               </div>
               <div
-                className="flex cursor-pointer items-center gap-3 px-4 py-3 text-sm text-gray-800 transition-colors duration-200 ease-in-out hover:bg-gray-50"
+                className={clsx('flex', 'cursor-pointer', 'items-center', 'gap-3', 'px-4', 'py-3', 'text-sm', 'text-gray-800', 'transition-colors', 'duration-200', 'ease-in-out', 'hover:bg-gray-50')}
                 onClick={(e) => {
                   e.stopPropagation();
                   shareService("copy");
@@ -526,7 +516,7 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
                   loading="lazy"
                   src="/connection.webp"
                   alt="Copy Link"
-                  className="h-5 w-5 object-contain"
+                  className={clsx('h-5', 'w-5', 'object-contain')}
                 />{" "}
                 Copy Link
               </div>
@@ -534,40 +524,40 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-grow flex-col">
+      <div className={clsx('flex', 'flex-grow', 'flex-col')}>
         <div>
           {/* This Link component also needs the categoryId to work correctly */}
           <Link
             to={`/service/${service.categoryId}/${serviceId}`}
-            className="text-inherit no-underline "
+            className={clsx('text-inherit', 'no-underline')}
           >
-            <h3 className="text-sm font-bold leading-tight text-[#2c3e50] truncate pr-8">
+            <h3 className={clsx('text-sm', 'font-bold', 'leading-tight', 'text-[#2c3e50]', 'truncate', 'pr-8')}>
               {title.toUpperCase()}
             </h3>
           </Link>
-          <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
+          <div className={clsx('flex', 'flex-wrap', 'items-center', 'gap-1.5', 'mt-0.5')}>
             {isVerified && (
-              <span className="inline-flex items-center justify-center w-5 h-5 bg-[#ffbf00] text-white text-sm font-bold rounded-full shadow-lg ring-2 ring-[#fff8c7]">★</span>
+              <span className={clsx('inline-flex', 'items-center', 'justify-center', 'w-5', 'h-5', 'bg-[#ffbf00]', 'text-white', 'text-sm', 'font-bold', 'rounded-full', 'shadow-lg', 'ring-2', 'ring-[#fff8c7]')}>★</span>
             )}
-            <span className="text-xs font-semibold text-[#3498db]">
+            <span className={clsx('text-xs', 'font-semibold', 'text-[#3498db]')}>
               {vendorName}
             </span>
-            <span className="text-xs text-gray-400">|</span>
-            <span className="flex items-center gap-1 rounded-full border border-[#ffeaa7] bg-[#fff3cd] px-2 py-0.5 text-[10px] font-medium text-[#856404]">
+            <span className={clsx('text-xs', 'text-gray-400')}>|</span>
+            <span className={clsx('flex', 'items-center', 'gap-1', 'rounded-full', 'border', 'border-[#ffeaa7]', 'bg-[#fff3cd]', 'px-2', 'py-0.5', 'text-[10px]', 'font-medium', 'text-[#856404]')}>
               <FaRegCalendarCheck className="text-xs" />
               Event Hosted: {service.eventsHosted || 0}
             </span>
             {!isVendorAvailable && (
-              <span className="flex items-center gap-1.5 rounded-full border border-[#f8d7da] bg-[#f8d7da] px-3 py-1 text-[11px] font-medium text-[#721c24] sm:text-xs">
+              <span className={clsx('flex', 'items-center', 'gap-1.5', 'rounded-full', 'border', 'border-[#f8d7da]', 'bg-[#f8d7da]', 'px-3', 'py-1', 'text-[11px]', 'font-medium', 'text-[#721c24]', 'sm:text-xs')}>
                 Service Unavailable
               </span>
             )}
           </div>
-          <p className="text-xs leading-snug text-gray-500">
+          <p className={clsx('text-xs', 'leading-snug', 'text-gray-500')}>
             {displayLocation}
             {shouldTruncateLocation && (
               <button
-                className="ml-1 inline cursor-pointer border-none bg-transparent p-0 text-sm font-semibold text-[#3498db] no-underline transition-colors duration-200 ease-in-out hover:text-[#2980b9] hover:underline"
+                className={clsx('ml-1', 'inline', 'cursor-pointer', 'border-none', 'bg-transparent', 'p-0', 'text-sm', 'font-semibold', 'text-[#3498db]', 'no-underline', 'transition-colors', 'duration-200', 'ease-in-out', 'hover:text-[#2980b9]', 'hover:underline')}
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsReadMoreLocation(!isReadMoreLocation);
@@ -578,31 +568,31 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
             )}
           </p>
 
-          <p className="text-xs leading-snug text-gray-500">
+          <p className={clsx('text-xs', 'leading-snug', 'text-gray-500')}>
             {stateLocation.toUpperCase()}
           </p>
           {ratingData ? (
-            <div className="flex items-center gap-2 mb-[0.3rem]">
-              <span className="bg-green-600 text-white px-2 py-0.5 rounded-full text-xs font-semibold">
+            <div className={clsx('flex', 'items-center', 'gap-2', 'mb-[0.3rem]')}>
+              <span className={clsx('bg-green-600', 'text-white', 'px-2', 'py-0.5', 'rounded-full', 'text-xs', 'font-semibold')}>
                 {ratingData.averageRating.toFixed(1)} ★
               </span>
-              <span className="text-gray-500 text-xs">
+              <span className={clsx('text-gray-500', 'text-xs')}>
                 ({ratingData.totalReviews} reviews)
               </span>
             </div>
           ) : (
-            <p className="text-gray-500 text-xs">Loading rating...</p>
+            <p className={clsx('text-gray-500', 'text-xs')}>Loading rating...</p>
           )}
-          <div className="flex flex-wrap items-center gap-1 mt-1">
-            <span className="text-sm font-bold text-[#2c3e50]">
+          <div className={clsx('flex', 'flex-wrap', 'items-center', 'gap-1', 'mt-1')}>
+            <span className={clsx('text-sm', 'font-bold', 'text-[#2c3e50]')}>
               {price}
             </span>
             {originalPrice && (
               <>
-                <span className="text-base font-medium text-gray-400 line-through">
+                <span className={clsx('text-base', 'font-medium', 'text-gray-400', 'line-through')}>
                   ₹{originalPrice}
                 </span>
-                <span className="text-base font-semibold text-[#27ae60]">
+                <span className={clsx('text-base', 'font-semibold', 'text-[#27ae60]')}>
                   {discountPercent}% off
                 </span>
               </>
@@ -610,18 +600,18 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
           </div>
           </div>
         <div className="flex-grow" />
-        <div className="flex flex-row gap-2 mt-2">
+        <div className={clsx('flex', 'flex-row', 'gap-2', 'mt-2')}>
           {isVendorAvailable ? (
             <>
               <button
-                className="flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-[#fb923c] to-[#ef4444] px-3 py-2 text-xs font-bold text-white shadow-md hover:shadow-lg"
+                className={clsx('flex', 'w-full', 'cursor-pointer', 'items-center', 'justify-center', 'rounded-full', 'bg-gradient-to-r', 'from-[#fb923c]', 'to-[#ef4444]', 'px-3', 'py-2', 'text-xs', 'font-bold', 'text-white', 'shadow-md', 'hover:shadow-lg')}
                 onClick={handleAddToCart}
               >
                 ADD TO CART
               </button>
 
               <button
-                className="flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-[#001f3f] to-[#004f9f] px-3 py-2 text-xs font-bold text-white shadow-md hover:shadow-lg"
+                className={clsx('flex', 'w-full', 'cursor-pointer', 'items-center', 'justify-center', 'rounded-full', 'bg-gradient-to-r', 'from-[#001f3f]', 'to-[#004f9f]', 'px-3', 'py-2', 'text-xs', 'font-bold', 'text-white', 'shadow-md', 'hover:shadow-lg')}
                 onClick={handleBookNow}
               >
                 CALL TO VENDER
@@ -629,7 +619,7 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
             </>
           ) : (
             <button
-              className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border-none bg-gradient-to-br from-[#6c757d] to-[#495057] px-12 py-3 text-sm font-semibold text-white normal-case shadow-[0_4px_15px_rgba(108,117,125,0.3)] transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:from-[#5a6268] hover:to-[#343a40] hover:shadow-[0_6px_20px_rgba(108,117,125,0.4)] lg:w-auto lg:min-w-[140px]"
+              className={clsx('flex', 'w-full', 'cursor-pointer', 'items-center', 'justify-center', 'gap-2', 'rounded-full', 'border-none', 'bg-gradient-to-br', 'from-[#6c757d]', 'to-[#495057]', 'px-12', 'py-3', 'text-sm', 'font-semibold', 'text-white', 'normal-case', 'shadow-[0_4px_15px_rgba(108,117,125,0.3)]', 'transition-all', 'duration-300', 'ease-in-out', 'hover:-translate-y-0.5', 'hover:from-[#5a6268]', 'hover:to-[#343a40]', 'hover:shadow-[0_6px_20px_rgba(108,117,125,0.4)]', 'lg:w-auto', 'lg:min-w-[140px]')}
               onClick={handleNotifyMe}
             >
               <FaBell className="text-sm" />

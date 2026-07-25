@@ -1,16 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-// ✅ NEW: Import FaYoutube for the UI
 import { FaChevronLeft, FaChevronRight, FaYoutube } from "react-icons/fa";
 import ServiceDescription from "./ServiceDescription";
-
-// ✅ NEW: Helper function to identify YouTube links and get the video ID
-const getYouTubeID = (url) => {
-  if (typeof url !== "string") return null;
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : null;
-};
+import { getYouTubeID } from "../../../utils/helpers";
+import clsx from "clsx";
 
 const ServiceCard = ({ service, onSwitchToLogin }) => {
   const navigate = useNavigate();
@@ -24,7 +17,6 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
 
   if (!service) return null;
 
-  // ✅ MODIFIED: Use a generic name `media` for the array of URLs
   const media = service.serviceImage || [];
   const serviceId = service._id || service.id;
   const isVendorAvailable = service.available !== false;
@@ -42,7 +34,6 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
   const nextSlide = () =>
     setCurrentIndex((i) => (media.length ? (i + 1) % media.length : 0));
 
-  // swipe handlers
   const onTouchStart = (e) => {
     setTouchEndX(0);
     setTouchStartX(e.targetTouches[0].clientX);
@@ -65,37 +56,36 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
 
   return (
     <div
-      className="flex cursor-pointer flex-col overflow-hidden rounded-lg bg-white transition-shadow duration-300 ease-in-out"
+      className={clsx('flex', 'cursor-pointer', 'flex-col', 'overflow-hidden', 'rounded-lg', 'bg-white', 'transition-shadow', 'duration-300', 'ease-in-out')}
       onClick={handleCardClick}
     >
       <div
-        className="relative overflow-hidden rounded-t-lg w-full h-[220px] bg-gray-100 flex-shrink-0"
+        className={clsx('relative', 'overflow-hidden', 'rounded-t-lg', 'w-full', 'h-[220px]', 'bg-gray-100', 'flex-shrink-0')}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        <span className="absolute top-[10px] left-[10px] z-[20] bg-black/50 px-2 py-1 rounded-md text-[11px] text-white font-bold">
+        <span className={clsx('absolute', 'top-[10px]', 'left-[10px]', 'z-[20]', 'bg-black/50', 'px-2', 'py-1', 'rounded-md', 'text-[11px]', 'text-white', 'font-bold')}>
           EventsBridge
         </span>
 
         {service.vendorVerificationStatus === "verified" && (
-          <span className="absolute top-[10px] right-[10px] z-[20] flex items-center gap-1 rounded-lg bg-[#ffbf00] px-2 py-1 text-[12px] font-bold text-[#352500] shadow-md">
-            <span className="text-[16px] leading-none text-[#fff8c7] drop-shadow-[0_1px_2px_rgba(92,64,0,0.65)]">
+          <span className={clsx('absolute', 'top-[10px]', 'right-[10px]', 'z-[20]', 'flex', 'items-center', 'gap-1', 'rounded-lg', 'bg-[#ffbf00]', 'px-2', 'py-1', 'text-[12px]', 'font-bold', 'text-[#352500]', 'shadow-md')}>
+            <span className={clsx('text-[16px]', 'leading-none', 'text-[#fff8c7]', 'drop-shadow-[0_1px_2px_rgba(92,64,0,0.65)]')}>
               ★
             </span>
             Verified
           </span>
         )}
 
-        <div className="relative w-full h-full">
+        <div className={clsx('relative', 'w-full', 'h-full')}>
           {Array.isArray(media) && media.length > 0 ? (
             <>
-              {/* ✅ MODIFIED: Conditional rendering for video or image */}
               {isVideo ? (
                 <iframe
-                  key={currentIndex} // Add key to force re-render on change
+                  key={currentIndex}
                   src={`https://www.youtube.com/embed/${isVideo}?autoplay=1&mute=1&loop=1&playlist=${isVideo}&rel=0`}
                   className={`absolute top-0 left-0 w-full h-full object-contain object-center ${
                     !isVendorAvailable ? "grayscale brightness-50" : ""
@@ -105,16 +95,13 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
                   allowFullScreen
                 ></iframe>
               ) : (
-                <div className="absolute inset-0">
-                  {/* 🔥 Blurred background */}
+                <div className={clsx('absolute', 'inset-0')}>
                   <img
                     decoding="async"
                     loading="lazy"
                     src={currentMediaUrl}
-                    className="absolute inset-0 w-full h-full object-cover blur-xl scale-110 opacity-40"
+                    className={clsx('absolute', 'inset-0', 'w-full', 'h-full', 'object-cover', 'blur-xl', 'scale-110', 'opacity-40')}
                   />
-
-                  {/* ⭐ Main non-blur, non-cropped image */}
                   <img
                     decoding="async"
                     loading="lazy"
@@ -127,28 +114,25 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
                   />
                 </div>
               )}
-              {/* ✅ Left Arrow */}
+
               {media.length > 1 && (
                 <>
-                  {/* Mobile: always visible */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       prevSlide();
                     }}
-                    className="absolute z-30 left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white sm:hidden"
+                    className={clsx('absolute', 'z-30', 'left-3', 'top-1/2', '-translate-y-1/2', 'rounded-full', 'bg-black/50', 'p-3', 'text-white', 'sm:hidden')}
                   >
                     <FaChevronLeft className="text-lg" />
                   </button>
-
-                  {/* Desktop: visible only on hover */}
                   {hovered && (
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         prevSlide();
                       }}
-                      className="absolute z-30 left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 hidden sm:flex"
+                      className={clsx('absolute', 'z-30', 'left-3', 'top-1/2', '-translate-y-1/2', 'rounded-full', 'bg-black/50', 'p-2', 'text-white', 'hover:bg-black/70', 'hidden', 'sm:flex')}
                     >
                       <FaChevronLeft />
                     </button>
@@ -156,37 +140,33 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
                 </>
               )}
 
-              {/* ✅ Right Arrow */}
               {media.length > 1 && (
                 <>
-                  {/* Mobile: always visible */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       nextSlide();
                     }}
-                    className="absolute z-30 right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white sm:hidden"
+                    className={clsx('absolute', 'z-30', 'right-3', 'top-1/2', '-translate-y-1/2', 'rounded-full', 'bg-black/50', 'p-3', 'text-white', 'sm:hidden')}
                   >
                     <FaChevronRight className="text-lg" />
                   </button>
-
-                  {/* Desktop: visible only on hover */}
                   {hovered && (
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         nextSlide();
                       }}
-                      className="absolute z-30 right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 hidden sm:flex"
+                      className={clsx('absolute', 'z-30', 'right-3', 'top-1/2', '-translate-y-1/2', 'rounded-full', 'bg-black/50', 'p-2', 'text-white', 'hover:bg-black/70', 'hidden', 'sm:flex')}
                     >
                       <FaChevronRight />
                     </button>
                   )}
                 </>
               )}
-              {/* ✅ MODIFIED: Dots now show YouTube icon for videos */}
+
               {media.length > 1 && (
-                <div className="absolute z-30 bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
+                <div className={clsx('absolute', 'z-30', 'bottom-2', 'left-1/2', '-translate-x-1/2', 'flex', 'gap-2')}>
                   {media.map((mediaUrl, idx) => (
                     <button
                       key={idx}
@@ -199,115 +179,34 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
                       }`}
                     >
                       {getYouTubeID(mediaUrl) && (
-                        <FaYoutube className="text-red-500 text-xs" />
+                        <FaYoutube className={clsx('text-red-500', 'text-xs')} />
                       )}
                     </button>
                   ))}
                 </div>
               )}
 
-              {/* Overlay if vendor not available */}
               {!isVendorAvailable && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
-                  <div className="rounded-lg bg-red-600 px-4 py-5 text-center shadow-lg">
-                    <p className="text-sm font-bold text-white">
+                <div className={clsx('absolute', 'inset-0', 'flex', 'items-center', 'justify-center', 'bg-black', 'bg-opacity-40')}>
+                  <div className={clsx('rounded-lg', 'bg-red-600', 'px-4', 'py-5', 'text-center', 'shadow-lg')}>
+                    <p className={clsx('text-sm', 'font-bold', 'text-white')}>
                       OUT OF SERVICE
                     </p>
-                    <p className="text-xs text-red-100">
-                      Oops! We’re on a quick break, back soon.
+                    <p className={clsx('text-xs', 'text-red-100')}>
+                      Oops! We're on a quick break, back soon.
                     </p>
                   </div>
                 </div>
               )}
-
-              {/* ✅ Left Arrow */}
-              {media.length > 1 && (
-                <>
-                  {/* Mobile: always visible */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      prevSlide();
-                    }}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white sm:hidden"
-                  >
-                    <FaChevronLeft className="text-lg" />
-                  </button>
-
-                  {/* Desktop: visible only on hover */}
-                  {hovered && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        prevSlide();
-                      }}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 hidden sm:flex"
-                    >
-                      <FaChevronLeft />
-                    </button>
-                  )}
-                </>
-              )}
-
-              {/* ✅ Right Arrow */}
-              {media.length > 1 && (
-                <>
-                  {/* Mobile: always visible */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      nextSlide();
-                    }}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white sm:hidden"
-                  >
-                    <FaChevronRight className="text-lg" />
-                  </button>
-
-                  {/* Desktop: visible only on hover */}
-                  {hovered && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        nextSlide();
-                      }}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 hidden sm:flex"
-                    >
-                      <FaChevronRight />
-                    </button>
-                  )}
-                </>
-              )}
-
-              {/* ✅ MODIFIED: Dots now show YouTube icon for videos */}
-              {media.length > 1 && (
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
-                  {media.map((mediaUrl, idx) => (
-                    <button
-                      key={idx}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setCurrentIndex(idx);
-                      }}
-                      className={`h-2 w-2 rounded-full p-0 cursor-pointer flex items-center justify-center ${
-                        idx === currentIndex ? "bg-white" : "bg-gray-400"
-                      }`}
-                    >
-                      {getYouTubeID(mediaUrl) && (
-                        <FaYoutube className="text-red-500 text-xs" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
             </>
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gray-300 text-gray-500">
+            <div className={clsx('flex', 'h-full', 'w-full', 'items-center', 'justify-center', 'bg-gray-300', 'text-gray-500')}>
               {!isVendorAvailable ? (
                 <div className="text-center">
-                  <p className="text-sm font-bold text-red-600">
+                  <p className={clsx('text-sm', 'font-bold', 'text-red-600')}>
                     OUT OF SERVICE
                   </p>
-                  <p className="text-xs text-gray-600">No Image Available</p>
+                  <p className={clsx('text-xs', 'text-gray-600')}>No Image Available</p>
                 </div>
               ) : (
                 "No Image Available"
@@ -315,11 +214,9 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
             </div>
           )}
         </div>
-
-
       </div>
 
-      <div className="flex-grow min-w-0">
+      <div className={clsx('flex-grow', 'min-w-0')}>
         <ServiceDescription
           service={{ ...service, categoryId: categoryId }}
           onSwitchToLogin={onSwitchToLogin}

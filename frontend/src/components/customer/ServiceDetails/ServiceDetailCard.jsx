@@ -6,6 +6,8 @@ import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { BACKEND_URL } from "../../../utils/constant";
 import { useParams } from "react-router-dom"; // 1. IMPORT useParams
 import { getServicePriceDisplay } from "../../../utils/pricingHelpers";
+import { formatDuration } from "../../../utils/helpers";
+import clsx from "clsx";
 
 const ServiceDetailCard = ({ service }) => {
   const { categoryId } = useParams(); // 2. GET categoryId FROM URL
@@ -39,19 +41,7 @@ const ServiceDetailCard = ({ service }) => {
   const title = serviceName || "Untitled Service";
   const isVendorAvailable = service.available !== false;
 
-  const formatDuration = (durationInMinutes) => {
-    const totalMinutes = parseInt(durationInMinutes, 10) || 0;
-    const days = Math.floor(totalMinutes / (24 * 60));
-    const hours = Math.floor((totalMinutes % (24 * 60)) / 60);
-    const minutes = totalMinutes % 60;
-    let result = "";
-    if (days > 0) result += `${days}d`;
-    if (hours > 0) result += (result ? " : " : "") + `${hours}h`;
-    if (minutes > 0) result += (result ? " : " : "") + `${minutes}m`;
-    return result || "0m";
-  };
-
-  const formattedDuration = formatDuration(duration);
+  const formattedDuration = formatDuration(duration || 0);
   const stateLocation = Array.isArray(service.stateLocationOffered)
     ? service.stateLocationOffered.join(", ")
     : service.stateLocationOffered ||
@@ -211,8 +201,8 @@ const ServiceDetailCard = ({ service }) => {
   };
 
   return (
-    <div className="relative w-full rounded-lg border border-gray-200 bg-red p-4 mt-5">
-      <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-3">
+    <div className={clsx('relative', 'w-full', 'rounded-lg', 'border', 'border-gray-200', 'bg-red', 'p-4', 'mt-5')}>
+      <div className={clsx('absolute', 'top-4', 'right-4', 'z-20', 'flex', 'flex-col', 'items-end', 'gap-3')}>
         <div
           className={`h-10 w-10 flex items-center justify-center rounded-full bg-gray-200 shadow-md cursor-pointer transition-all duration-300 ${
             isWishlisted
@@ -226,7 +216,7 @@ const ServiceDetailCard = ({ service }) => {
 
         <div className="relative" ref={shareContainerRef}>
           <div
-            className="h-10 w-10 cursor-pointer overflow-hidden rounded-full shadow-md transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-lg"
+            className={clsx('h-10', 'w-10', 'cursor-pointer', 'overflow-hidden', 'rounded-full', 'shadow-md', 'transition-all', 'duration-300', 'ease-in-out', 'hover:scale-110', 'hover:shadow-lg')}
             onClick={handleShare}
           >
             <img
@@ -234,7 +224,7 @@ const ServiceDetailCard = ({ service }) => {
               loading="lazy"
               src="/send.webp"
               alt="Share"
-              className="h-full w-full rounded-full object-cover"
+              className={clsx('h-full', 'w-full', 'rounded-full', 'object-cover')}
             />
           </div>
 
@@ -247,7 +237,7 @@ const ServiceDetailCard = ({ service }) => {
           >
             <div className="py-2">
               <div
-                className="flex cursor-pointer items-center gap-3 px-4 py-3 text-sm text-gray-800 transition-colors duration-200 ease-in-out hover:bg-gray-50"
+                className={clsx('flex', 'cursor-pointer', 'items-center', 'gap-3', 'px-4', 'py-3', 'text-sm', 'text-gray-800', 'transition-colors', 'duration-200', 'ease-in-out', 'hover:bg-gray-50')}
                 onClick={() => shareService("facebook")}
               >
                 <img
@@ -255,12 +245,12 @@ const ServiceDetailCard = ({ service }) => {
                   loading="lazy"
                   src="/facebook.webp"
                   alt="Facebook"
-                  className="h-5 w-5 object-contain"
+                  className={clsx('h-5', 'w-5', 'object-contain')}
                 />{" "}
                 Facebook
               </div>
               <div
-                className="flex cursor-pointer items-center gap-3 px-4 py-3 text-sm text-gray-800 transition-colors duration-200 ease-in-out hover:bg-gray-50"
+                className={clsx('flex', 'cursor-pointer', 'items-center', 'gap-3', 'px-4', 'py-3', 'text-sm', 'text-gray-800', 'transition-colors', 'duration-200', 'ease-in-out', 'hover:bg-gray-50')}
                 onClick={() => shareService("twitter")}
               >
                 <img
@@ -268,12 +258,12 @@ const ServiceDetailCard = ({ service }) => {
                   loading="lazy"
                   src="/twitter 1.webp"
                   alt="X"
-                  className="h-5 w-5 object-contain"
+                  className={clsx('h-5', 'w-5', 'object-contain')}
                 />{" "}
                 X
               </div>
               <div
-                className="flex cursor-pointer items-center gap-3 px-4 py-3 text-sm text-gray-800 transition-colors duration-200 ease-in-out hover:bg-gray-50"
+                className={clsx('flex', 'cursor-pointer', 'items-center', 'gap-3', 'px-4', 'py-3', 'text-sm', 'text-gray-800', 'transition-colors', 'duration-200', 'ease-in-out', 'hover:bg-gray-50')}
                 onClick={() => shareService("whatsapp")}
               >
                 <img
@@ -281,12 +271,12 @@ const ServiceDetailCard = ({ service }) => {
                   loading="lazy"
                   src="/whatsapp.webp"
                   alt="WhatsApp"
-                  className="h-5 w-5 object-contain"
+                  className={clsx('h-5', 'w-5', 'object-contain')}
                 />{" "}
                 WhatsApp
               </div>
               <div
-                className="flex cursor-pointer items-center gap-3 px-4 py-3 text-sm text-gray-800 transition-colors duration-200 ease-in-out hover:bg-gray-50"
+                className={clsx('flex', 'cursor-pointer', 'items-center', 'gap-3', 'px-4', 'py-3', 'text-sm', 'text-gray-800', 'transition-colors', 'duration-200', 'ease-in-out', 'hover:bg-gray-50')}
                 onClick={() => shareService("instagram")}
               >
                 <img
@@ -294,12 +284,12 @@ const ServiceDetailCard = ({ service }) => {
                   loading="lazy"
                   src="/instagram.webp"
                   alt="Instagram"
-                  className="h-5 w-5 object-contain"
+                  className={clsx('h-5', 'w-5', 'object-contain')}
                 />{" "}
                 Instagram
               </div>
               <div
-                className="flex cursor-pointer items-center gap-3 px-4 py-3 text-sm text-gray-800 transition-colors duration-200 ease-in-out hover:bg-gray-50"
+                className={clsx('flex', 'cursor-pointer', 'items-center', 'gap-3', 'px-4', 'py-3', 'text-sm', 'text-gray-800', 'transition-colors', 'duration-200', 'ease-in-out', 'hover:bg-gray-50')}
                 onClick={() => shareService("telegram")}
               >
                 <img
@@ -307,12 +297,12 @@ const ServiceDetailCard = ({ service }) => {
                   loading="lazy"
                   src="/telegram.webp"
                   alt="Telegram"
-                  className="h-5 w-5 object-contain"
+                  className={clsx('h-5', 'w-5', 'object-contain')}
                 />{" "}
                 Telegram
               </div>
               <div
-                className="flex cursor-pointer items-center gap-3 px-4 py-3 text-sm text-gray-800 transition-colors duration-200 ease-in-out hover:bg-gray-50"
+                className={clsx('flex', 'cursor-pointer', 'items-center', 'gap-3', 'px-4', 'py-3', 'text-sm', 'text-gray-800', 'transition-colors', 'duration-200', 'ease-in-out', 'hover:bg-gray-50')}
                 onClick={() => shareService("copy")}
               >
                 <img
@@ -320,7 +310,7 @@ const ServiceDetailCard = ({ service }) => {
                   loading="lazy"
                   src="/connection.webp"
                   alt="Copy Link"
-                  className="h-5 w-5 object-contain"
+                  className={clsx('h-5', 'w-5', 'object-contain')}
                 />{" "}
                 Copy Link
               </div>
@@ -329,54 +319,54 @@ const ServiceDetailCard = ({ service }) => {
         </div>
       </div>
 
-      <h2 className="text-xl font-semibold text-gray-800 mb-2 pr-12">
+      <h2 className={clsx('text-xl', 'font-semibold', 'text-gray-800', 'mb-2', 'pr-12')}>
         {title}
       </h2>
 
-      <div className="flex items-center gap-2 text-sm font-medium text-black mb-2 flex-wrap">
+      <div className={clsx('flex', 'items-center', 'gap-2', 'text-sm', 'font-medium', 'text-black', 'mb-2', 'flex-wrap')}>
         {service?.vendorVerificationStatus === "verified" && (
-          <span className="inline-flex items-center justify-center w-5 h-5 bg-[#ffbf00] text-white text-sm font-bold rounded-full shadow-lg ring-2 ring-[#fff8c7]">★</span>
+          <span className={clsx('inline-flex', 'items-center', 'justify-center', 'w-5', 'h-5', 'bg-[#ffbf00]', 'text-white', 'text-sm', 'font-bold', 'rounded-full', 'shadow-lg', 'ring-2', 'ring-[#fff8c7]')}>★</span>
         )}
-        <span className="font-semibold text-blue-600 text-base">
+        <span className={clsx('font-semibold', 'text-blue-600', 'text-base')}>
           {vendorName || "Unknown Vendor"}
         </span>
-        <span className="text-gray-400 text-xs">|</span>
-        <span className="flex items-center gap-1 bg-yellow-200 text-yellow-900 px-2 py-0.5 rounded-md text-xs">
+        <span className={clsx('text-gray-400', 'text-xs')}>|</span>
+        <span className={clsx('flex', 'items-center', 'gap-1', 'bg-yellow-200', 'text-yellow-900', 'px-2', 'py-0.5', 'rounded-md', 'text-xs')}>
           <FaRegCalendarCheck className="text-sm" />
           Event Hosted: 0
         </span>
         {!isVendorAvailable && (
-          <span className="flex items-center gap-1.5 rounded-full border border-red-200 bg-red-100 px-3 py-1 text-[11px] font-medium text-red-800 sm:text-xs">
+          <span className={clsx('flex', 'items-center', 'gap-1.5', 'rounded-full', 'border', 'border-red-200', 'bg-red-100', 'px-3', 'py-1', 'text-[11px]', 'font-medium', 'text-red-800', 'sm:text-xs')}>
             Service Unavailable
           </span>
         )}
       </div>
 
-      <p className="text-sm text-black mr-5 mb-2">{location}</p>
-      <p className="text-sm text-black mb-2 mt-0">
+      <p className={clsx('text-sm', 'text-black', 'mr-5', 'mb-2')}>{location}</p>
+      <p className={clsx('text-sm', 'text-black', 'mb-2', 'mt-0')}>
         {stateLocation.toUpperCase()}
       </p>
       {ratingData ? (
-        <div className="flex items-center gap-2 mb-3">
-          <span className="bg-green-600 text-white px-2 py-1 rounded-full text-sm font-semibold">
+        <div className={clsx('flex', 'items-center', 'gap-2', 'mb-3')}>
+          <span className={clsx('bg-green-600', 'text-white', 'px-2', 'py-1', 'rounded-full', 'text-sm', 'font-semibold')}>
             {ratingData.averageRating.toFixed(1)} ★
           </span>
-          <span className="text-gray-500 text-sm">
+          <span className={clsx('text-gray-500', 'text-sm')}>
             ({ratingData.totalReviews} reviews)
           </span>
         </div>
       ) : (
-        <p className="text-gray-500 text-sm mb-3">Loading rating...</p>
+        <p className={clsx('text-gray-500', 'text-sm', 'mb-3')}>Loading rating...</p>
       )}
 
-      <div className="flex flex-wrap gap-3 items-center mb-2 text-sm">
-        <span className="text-xl font-bold text-black">{price}</span>
+      <div className={clsx('flex', 'flex-wrap', 'gap-3', 'items-center', 'mb-2', 'text-sm')}>
+        <span className={clsx('text-xl', 'font-bold', 'text-black')}>{price}</span>
         {originalPrice && (
           <>
-            <span className="line-through text-gray-500 font-medium">
+            <span className={clsx('line-through', 'text-gray-500', 'font-medium')}>
               ₹{originalPrice}
             </span>
-            <span className="text-green-600 font-bold text-base">
+            <span className={clsx('text-green-600', 'font-bold', 'text-base')}>
               {discountPercent}% off
             </span>
           </>
@@ -389,13 +379,13 @@ const ServiceDetailCard = ({ service }) => {
       >
         {available ? null : "Out Of Service"}
       </p>
-      <p className="text-sm text-black mb-4">
+      <p className={clsx('text-sm', 'text-black', 'mb-4')}>
         <span className="font-bold">Prep Time: </span>
         {formattedDuration}
       </p>
 
       <div className="service-description">
-        <p className="text-black text-sm">{serviceDes}</p>
+        <p className={clsx('text-black', 'text-sm')}>{serviceDes}</p>
       </div>
     </div>
   );
