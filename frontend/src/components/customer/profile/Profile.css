@@ -5,15 +5,18 @@
 
 /* Hamburger Menu */
 .profile-hamburger {
-  font-size: 30px;
+  font-size: 20px;
   font-weight: bold;
-  border: none;
-  color: #000000;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #001f3f;
   cursor: pointer;
-  padding: 5px;
-  background: none;
+  padding: 8px 14px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
   position: absolute;
   top: 70px;
+  left: 16px;
   z-index: 100;
   display: none;
 }
@@ -92,7 +95,7 @@
 }
 
 /* ============================================================== */
-/* ✅ UPDATED BOOKING CARD SECTION */
+/* UPDATED BOOKING CARD SECTION */
 /* ============================================================== */
 
 .booking-card-container {
@@ -116,7 +119,7 @@
   border: 1px solid #d1d1d1;
   align-items: center;
   transition: 0.3s ease;
-  min-height: 180px; /* ✅ compact height */
+  min-height: 180px; /* compact height */
 }
 
 .modern-booking-card:hover {
@@ -125,14 +128,14 @@
 
 /* event image box */
 .image-section {
-  width: 220px; /* ✅ smaller like reference UI */
+  width: 220px; /* smaller like reference UI */
   height: 150px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.image-section <img decoding="async" {
+.image-section img {
   width: 100%;
   height: 100%;
   border-radius: 10px;
@@ -203,7 +206,7 @@
   margin: 20px 0;
   display: block;
   margin-left: auto;
-  appearance: none !important; /* ✅ hide arrow */
+  appearance: none !important; /* hide arrow */
 }
 
 .profile-sort-dropdown option {
@@ -267,6 +270,7 @@
 @media (max-width: 768px) {
   .profile-sidebar-fixed {
     position: relative;
+    width: 0;
   }
   .profile-scrollable-content {
     width: 100%;
@@ -274,6 +278,9 @@
   }
   .profile-hamburger {
     display: block !important;
-    top: 20px;
+    position: fixed;
+    top: 96px;
+    left: 16px;
+    z-index: 1001;
   }
 }

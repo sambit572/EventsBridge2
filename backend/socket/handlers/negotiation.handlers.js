@@ -124,6 +124,65 @@ try {
 } catch (emailError) {
   console.error("❌ Email sending failed:", emailError);
 }
+try {
+  await sendEmail({
+    to: "bookingsebridge@gmail.com",
+    subject: `New Booking Request - ${data.serviceName}`,
+    html: `
+      <h2>New Booking Request Received</h2>
+
+      <h3>User Details</h3>
+      <p><strong>Name:</strong> ${data.bookedByUser}</p>
+      
+
+      <hr>
+
+      <h3>Vendor Details</h3>
+      <p><strong>Name:</strong> ${data.vendorName}</p>
+      <p><strong>Email:</strong> ${data.vendorEmail}</p>
+      <p><strong>Phone:</strong> ${data.vendorPhoneNumber}</p>
+
+      <hr>
+
+      <h3>Booking Details</h3>
+      <p><strong>Service:</strong> ${data.serviceName}</p>
+      <p><strong>Venue:</strong> ${data.venueLocation}</p>
+      <p><strong>Start Date:</strong> ${new Date(
+        data.date.startDate
+      ).toLocaleDateString()}</p>
+      <p><strong>End Date:</strong> ${new Date(
+        data.date.endDate
+      ).toLocaleDateString()}</p>
+
+      <hr>
+
+      <h3>Negotiation Details</h3>
+      <p><strong>Original Price:</strong> ₹${data.originalPriceRange.min} - ₹${data.originalPriceRange.max}</p>
+      <p><strong>Customer Proposed Price:</strong> ₹${data.proposedPrice}</p>
+
+      ${
+        data.packageName
+          ? `
+      <hr>
+
+      <h3>Catering Package</h3>
+      <p><strong>Package:</strong> ${data.packageName}</p>
+      <p><strong>Plate Count:</strong> ${data.plateCount}</p>
+      <p><strong>Price Per Plate:</strong> ₹${data.pricePerPlate}</p>
+      <p><strong>Total Price:</strong> ₹${data.totalPrice}</p>
+      `
+          : ""
+      }
+
+      <hr>
+
+      <p>A new booking request has been submitted and is awaiting vendor approval.</p>
+    `,
+  });
+  console.log("✅ Admin email sent");
+} catch (err) {
+  console.error("❌ Failed to send admin email:", err);
+}
      
       // If vendor is online, send directly
       const vendorSocketId = vendorSocketMap.get(data.vendorId);

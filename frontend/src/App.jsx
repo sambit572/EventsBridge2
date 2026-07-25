@@ -5,7 +5,7 @@ import axios from "axios";
 // Core Components
 import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
-import Chatbot from "./components/common/Chatbot";
+
 
 // Auth Modals
 import Login from "./pages/common/Login.jsx";
@@ -393,7 +393,6 @@ const App = () => {
         toastClassName="custom-toast"
         bodyClassName="custom-toast-body"
       />
-      <Chatbot />
       {showLoginModal && (
         <Login
           onClose={handleCloseModals}

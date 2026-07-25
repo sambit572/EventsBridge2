@@ -3,12 +3,11 @@ import "./VendorChangePassword.css";
 import PasswordInput from "../../utils/PasswordInput";
 import axios from "axios";
 import { BACKEND_URL } from "../../utils/constant.js";
-const VendorChangePassword = () => {
+const VendorChangePassword = ({ onClose }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  const [VendorShowPasswordModal, setVendorShowPasswordModal] = useState(false);
   const handlePasswordChangeSubmit = async () => {
     setErrorMsg("");
 
@@ -54,7 +53,7 @@ const VendorChangePassword = () => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h3 className="text-lg font-semibold mb-4">Change Password</h3>
+        <h3 className="text-lg font-semibold mb-2">Change Password</h3>
         <PasswordInput
           name="oldPassword"
           type="password"
@@ -83,22 +82,22 @@ const VendorChangePassword = () => {
           }}
         />
         {errorMsg && <p className="text-red-500 mt-2 text-sm">{errorMsg}</p>}
-        <div className="mt-4 flex justify-center gap-4">
+        <div className="modal-buttons mt-4">
            <button
-            className="bg-purple-700 text-white px-3 py-1 rounded"
+            className="submit-btn"
             onClick={handlePasswordChangeSubmit}
           >
             Submit
           </button>
           <button
             onClick={() => {
-              setVendorShowPasswordModal(false);
+              onClose?.();
               setOldPassword("");
               setNewPassword("");
               setConfirmPassword("");
               setErrorMsg("");
             }}
-            className="bg-gray-300 px-4 py-2 rounded"
+            className="cancel-btn"
           >
             Cancel
           </button>

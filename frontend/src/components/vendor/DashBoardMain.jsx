@@ -13,6 +13,7 @@ import PasswordInput from "./../../utils/PasswordInput.jsx";
 import { BACKEND_URL } from "../../utils/constant.js";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { MdPeople, MdNotificationsNone } from "react-icons/md";
+import EditProfile from "./editVendorProfile.jsx";
 
 /* ─── Customers placeholder ─── */
 function CustomersTab() {
@@ -145,6 +146,7 @@ function DashBoardMain() {
   bookings: "My Bookings",
   analytics: "My Analytics",
   customers: "My Customers",
+  profile: "Edit Profile",
 };
 
   return (
@@ -226,6 +228,7 @@ function DashBoardMain() {
           {activeTab === "bookings"   && <DashBoardBooking />}
           {activeTab === "analytics"  && <MarketAnalytics />}
           {activeTab === "customers"  && <CustomersTab />}
+           {activeTab === "profile" && <EditProfile />}
           {/* Settings tab removed */}
         </div>
 

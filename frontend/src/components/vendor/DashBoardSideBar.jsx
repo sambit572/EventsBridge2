@@ -11,7 +11,7 @@ import { setVendor } from "../../redux/VendorSlice.js";
 import { IoKey } from "react-icons/io5";
 import { BsBank } from "react-icons/bs";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
-import { MdOutlineEdit } from "react-icons/md";
+import { MdOutlineEdit, MdSave, MdCancel } from "react-icons/md";
 import { BACKEND_URL } from "../../utils/constant.js";
 import {
   MdDashboard,
@@ -180,6 +180,22 @@ const handleVerificationRequest = async () => {
     if (closeSidebar) closeSidebar();
   };
 
+  /* On mobile, the sidebar is a drawer that overlays the page. Modals like
+     Change Password render on top of it (via App.jsx / portals) but the
+     drawer itself stays open behind them, which looks broken. Give the
+     user a couple seconds to see the drawer register the tap, then slide
+     it away automatically so only the modal is left on screen. */
+  const closeMobileSidebarSoon = () => {
+    if (typeof window !== "undefined" && window.innerWidth <= 768 && closeSidebar) {
+      setTimeout(() => closeSidebar(), 2000);
+    }
+  };
+
+  const handleChangePasswordClick = () => {
+    setVendorShowPasswordModal(true);
+    closeMobileSidebarSoon();
+  };
+
   return (
     <aside className={`dash-sidebar ${isOpen ? "open" : ""}`}>
       {/* Replaced Logo with Profile Card at the top */}
@@ -305,7 +321,7 @@ const handleVerificationRequest = async () => {
         {/* Account actions */}
         <div className="sb-section">
           <div className="sb-nav-label">Account</div>
-          <button className="sb-action-btn" onClick={() => setVendorShowPasswordModal(true)}>
+          <button className="sb-action-btn" onClick={handleChangePasswordClick}>
             <IoKey size={15} /> Change Password
           </button>
           <button className="sb-action-btn"
@@ -346,8 +362,9 @@ const handleVerificationRequest = async () => {
               <button onClick={handleCancelEdit} className="sb-btn-cancel"><MdCancel size={14} /> Cancel</button>
             </div>
           ) : (
-            <button className="sb-action-btn" onClick={handleToggleEdit}>
-              <MdOutlineEdit size={15} /> Edit Profile
+            <button className="sb-action-btn"onClick={() => setActiveTab("profile")}>
+            <MdOutlineEdit size={15} />
+            Edit Profile
             </button>
           )}
 
@@ -362,7 +379,7 @@ const handleVerificationRequest = async () => {
       </div>
 
       {/* Remove confirm modal */}
-      {showRemoveConfirm && (
+      {showRemoveConfirm && createPortal(
         <div className="sb-overlay">
           <div className="sb-confirm-box">
             <h3 style={{ fontWeight: 700, color: "#001f3f", marginBottom: 8 }}>Remove Profile Photo?</h3>
@@ -376,7 +393,8 @@ const handleVerificationRequest = async () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
       {/* Verify Intro modal — "Why verify" step with the lamp */}
       {showVerifyIntro && createPortal(

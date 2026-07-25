@@ -3,7 +3,7 @@ import { ApiError } from "../../utilities/ApiError.js";
 import { ApiResponse } from "../../utilities/ApiResponse.js";
 import fs from "fs/promises";
 import { isValidIndianPhone } from "../../utilities/validatePhone.js";
-import { uploadOnCloudinary } from "../../utilities/cloudinary.js";
+import { uploadOnCloudinary, deleteFromCloudinary } from "../../utilities/cloudinary.js";
 import { validateEmailDomain } from "../../utilities/verifyDNS.js";
 import { sendEmail } from "../../utilities/sendEmail.js";
 import jwt from "jsonwebtoken";
@@ -83,35 +83,13 @@ const sendAuthResponse = (
     );
 };
 
-const deleteCloudinaryImage = async (
-  imageUrl
-) => {
-  try {
-    if (
-      !imageUrl ||
-      !imageUrl.includes("cloudinary")
-    ) {
-      return;
+const deleteCloudinaryImage = async (imageUrl) => {
+    try {
+        await deleteFromCloudinary(imageUrl);
+    } catch (error) {
+        console.error("Cloudinary delete failed:", error);
     }
-
-    const publicId = imageUrl
-      .split("/")
-      .pop()
-      .split(".")[0];
-
-    await uploadOnCloudinary(
-      null,
-      publicId,
-      true
-    );
-  } catch (error) {
-    console.error(
-      "Cloudinary delete failed:",
-      error
-    );
-  }
 };
-
 
 
 // ======================================================
@@ -163,6 +141,9 @@ const registerVendor = async (req, res) => {
           )
         );
     }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedPhone = phoneNumber.trim();
 
     const existingVendor =
       await Vendor.findOne({
@@ -281,28 +262,27 @@ const updateVendor = async (req, res) => {
     }
 
     // Handle profile picture removal
-    if (updateData.removeProfilePicture === "true") {
-      if (
-        vendor.profilePicture &&
-        vendor.profilePicture.includes("cloudinary")
-      ) {
-        const publicId = vendor.profilePicture.split("/").pop().split(".")[0];
-        await uploadOnCloudinary(null, publicId, true); // Custom delete method
-      }
-      updateData.profilePicture = "";
-    }
+   if (updateData.removeProfilePicture === "true") {
+  if (
+    vendor.profilePicture &&
+    vendor.profilePicture.includes("cloudinary")
+  ) {
+    await deleteFromCloudinary(vendor.profilePicture);
+  }
+
+  updateData.profilePicture = "";
+}
 
     // Handle profile picture replacement
-    if (file) {
-      if (
-        vendor.profilePicture &&
-        vendor.profilePicture.includes("cloudinary")
-      ) {
-        const publicId = vendor.profilePicture.split("/").pop().split(".")[0];
-        await uploadOnCloudinary(null, publicId, true);
-      }
+   if (file) {
+  if (
+    vendor.profilePicture &&
+    vendor.profilePicture.includes("cloudinary")
+  ) {
+    await deleteFromCloudinary(vendor.profilePicture);
+  }
 
-      const cloudinaryResult = await uploadOnCloudinary(file.path);
+  const cloudinaryResult = await uploadOnCloudinary(file.path);
       if (!cloudinaryResult?.url) {
         return res
           .status(500)
@@ -701,10 +681,12 @@ const updateVendorProfilePicture = async (req, res, next) => {
     }
 
     // Delete old image from Cloudinary (if exists)
-    if (vendor.profilePicture && vendor.profilePicture.includes("cloudinary")) {
-      const publicId = vendor.profilePicture.split("/").pop().split(".")[0];
-      await uploadOnCloudinary(null, publicId, true); // Delete old
-    }
+   if (
+    vendor.profilePicture &&
+    vendor.profilePicture.includes("cloudinary")
+) {
+    await deleteFromCloudinary(vendor.profilePicture);
+}
 
     const cloudinaryResult = await uploadOnCloudinary(file.path);
     if (!cloudinaryResult?.url) {

@@ -1,0 +1,78 @@
+.edit-profile {
+  max-width: 450px;
+  margin: 30px auto;
+  background: #ffffff;
+  padding: 35px 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eef2f7;
+}
+
+.edit-profile h2 {
+  margin-bottom: 30px;
+  text-align: center;
+  color: #1f2937;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.form-group input {
+  width: 90%;
+  padding: 10px 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #1f2937;
+  background: #fafafa;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #6d28d9;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(109, 40, 217, 0.12);
+}
+
+.form-group input::placeholder {
+  color: #9ca3af;
+}
+
+/* Save Changes Button */
+.edit-profile button {
+  display: block;
+  width: 280px;
+  margin: 30px auto 0;
+  padding: 14px 20px;
+  background: linear-gradient(160deg, #1e2a78 0%, #3b2f8f 45%, #6d28d9 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-profile button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(109, 40, 217, 0.35);
+}
+
+.edit-profile button:active {
+  transform: translateY(0);
+}

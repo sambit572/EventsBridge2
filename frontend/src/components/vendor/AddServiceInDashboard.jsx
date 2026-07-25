@@ -339,13 +339,7 @@ function VendorService({ currentStep }) {
       const newFiles = Array.from(e.target.files);
       const totalFiles = selectedFiles.length + newFiles.length;
 
-      // ✅ Limit total uploads to 10
-      if (totalFiles > 10 || newFiles.length > 10) {
-        toast.error("You cannot upload more than 10 files.");
-        setImageError("You cannot upload more than 10 files.");
-        if (fileInputRef.current) fileInputRef.current.value = "";
-        return;
-      }
+     
       // File type validation
       const validImageTypes = [
         "image/jpeg",
@@ -364,9 +358,9 @@ function VendorService({ currentStep }) {
       const validTypes = [...validImageTypes, ...validVideoTypes];
 
       // Size limits
-      const IMAGE_SIZE_LIMIT = 5 * 1024 * 1024; // 5MB
+      const IMAGE_SIZE_LIMIT = 100 * 1024 * 1024; // 100MB
       const VIDEO_SIZE_LIMIT = 200 * 1024 * 1024; // 200MB
-      const MAX_FILE_COUNT = 10;
+      const MAX_FILE_COUNT = 20;
 
       // Check total file count
       const currentFileCount = selectedFiles.length;
@@ -395,7 +389,7 @@ function VendorService({ currentStep }) {
           continue;
         }
         if (f.type.startsWith("image/") && f.size > IMAGE_SIZE_LIMIT) {
-          toast.error(`${f.name} is too large. Max 5 MB allowed.`);
+          toast.error(`${f.name} is too large. Max 100 MB allowed.`);
           continue;
         }
 
@@ -411,7 +405,7 @@ function VendorService({ currentStep }) {
         if (isImage && f.size > IMAGE_SIZE_LIMIT) {
           const sizeMB = (f.size / (1024 * 1024)).toFixed(2);
           errors.push(
-            `"${f.name}" (${sizeMB}MB) - Image files must be 5MB or smaller.`
+            `"${f.name}" (${sizeMB}MB) - Image files must be 100MB or smaller.`
           );
           continue;
         }
@@ -581,23 +575,46 @@ function VendorService({ currentStep }) {
         formData.append("maxPrice", maxPrice);
       }
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/vendors/create-service`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
+      const uploadToastId = toast.loading(
+        "Uploading your service... Please don't press back or close the app.",
+        { closeButton: false, closeOnClick: false, draggable: false }
       );
 
-      console.log(response);
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/vendors/create-service`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            withCredentials: true,
+          }
+        );
 
-      navigate("/dashboard");
+        console.log(response);
+
+        toast.update(uploadToastId, {
+          render: "Service added successfully!",
+          type: "success",
+          isLoading: false,
+          autoClose: 2500,
+          closeButton: true,
+        });
+
+        navigate("/dashboard");
+      } catch (uploadError) {
+        toast.update(uploadToastId, {
+          render: "Upload failed. Please try again.",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+          closeButton: true,
+        });
+        throw uploadError;
+      }
     } catch (error) {
       console.error("Error submitting service:", error);
-      alert("Failed to submit service. Please try again.");
     }
     setIsLoading(false);
   };
@@ -1140,6 +1157,9 @@ function VendorService({ currentStep }) {
                 ref={fileInputRef}
                 required
               />
+              <p className="upload-hint-text">
+                Maximum 20 media files. Images up to 5MB each, videos up to 10MB each.
+              </p>
               {previewImages.length > 0 && (
                 <div className="preview-container">
                   <div className="main-preview">

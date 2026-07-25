@@ -22,7 +22,7 @@ const uploadOnCloudinary = async (localFilePath) => {
     });
 
     // Delete local file after upload
-    if (fs.existsSync(localFilePath)) {
+   if (localFilePath && fs.existsSync(localFilePath)) {
       fs.unlinkSync(localFilePath);
     }
 
@@ -30,7 +30,7 @@ const uploadOnCloudinary = async (localFilePath) => {
   } catch (error) {
     console.error("❌ Error during Cloudinary upload:", error);
 
-    if (fs.existsSync(localFilePath)) {
+    if (localFilePath && fs.existsSync(localFilePath)) {
       fs.unlinkSync(localFilePath); // cleanup temp file on error
     }
 

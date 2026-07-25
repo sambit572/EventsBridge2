@@ -67,6 +67,7 @@ import { getVendorBookings } from "../../controller/vendor/vendorBookingHistory.
 
 //Top-Verified-Vendors-Route
 import { getVerifiedVendors } from "../../controller/vendor/TopVerifiedVendors.js";
+import {updateVendorProfile} from "../../controller/vendor/updateVendorProfile.js";
 
 const vendor_router = express.Router();
 
@@ -107,9 +108,14 @@ vendor_router.put( "/verification-request",verifyVendorJwt,submitVerificationReq
 vendor_router.get("/category/:category", getServicesByCategory);
 vendor_router.get("/top-verified-vendors",getVerifiedVendors);
 
-
+vendor_router.put(
+  "/update-profile",
+  verifyVendorJwt,
+  updateVendorProfile
+);
 vendor_router.get("/service/:id", getServiceById); // --- PROFILE ROUTES --- //
 vendor_router.put("/:id", upload.single("profilePicture"), updateVendor);
+
 
 // --- SERVICE ROUTES --- //
 vendor_router.post(

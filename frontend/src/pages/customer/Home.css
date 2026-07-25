@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
-  /* margin-top: 70px; */
+  margin-top: -94px;
 }
 
 .home * {
@@ -91,7 +91,7 @@
   display: flex;
   justify-content: center;
   width: 200px;
-  background-color: #001f3f;
+  background-color: #6d28d9;
   color: #ffffff;
   font-size: 16px;
   font-weight: 700;

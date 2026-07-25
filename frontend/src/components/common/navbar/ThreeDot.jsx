@@ -1,7 +1,7 @@
 // src/components/common/ThreeDot.jsx
 import { useRef, useState, useEffect } from "react";
 import { FaBars, FaShoppingCart, FaTimes, FaChevronRight } from "react-icons/fa";
-import logoImg from "../../../assets/EventsBridgeOnlyLogo.png";
+import logoImg from "../../../assets/EventsBridgeOnlyLogo.webp";
 import { FcAbout, FcAssistant } from "react-icons/fc";
 import { MdStorefront } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -123,7 +123,7 @@ const ThreeDot = ({
 
         {/* Compact header */}
         <div style={{
-          background: "linear-gradient(135deg, #001f3f 0%, #003366 100%)",
+          background: "linear-gradient(135deg, #4b0082 0%, #800080 100%)",
           padding: "10px 14px",
           display: "flex", alignItems: "center", justifyContent: "space-between",
           flexShrink: 0,

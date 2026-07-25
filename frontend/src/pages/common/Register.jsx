@@ -1,5 +1,6 @@
 // Register.jsx
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -7,7 +8,7 @@ import { setUser } from "../../redux/UserSlice.js";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import SuccessBlock from "./SuccessBlock.jsx";
-import EventsBridgeLogo from "../../assets/EventsBridgeOnlyLogo.png";
+import EventsBridgeLogo from "../../assets/EventsBridgeOnlyLogo.webp";
 
 const Register = ({ onClose, onSwitchToLogin }) => {
   const dispatch = useDispatch();
@@ -386,7 +387,10 @@ const Register = ({ onClose, onSwitchToLogin }) => {
 
   const renderStep = () => {
     if (step === "success") {
-      return <SuccessBlock showIcon={showSuccessIcon} onClose={onClose} />;
+      return createPortal(
+        <SuccessBlock showIcon={showSuccessIcon} onClose={onClose} />,
+        document.body
+      );
     }
     return (
       <form onSubmit={handleRegister}>

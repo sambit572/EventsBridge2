@@ -88,7 +88,7 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
                   key={currentIndex}
                   src={`https://www.youtube.com/embed/${isVideo}?autoplay=1&mute=1&loop=1&playlist=${isVideo}&rel=0`}
                   className={`absolute top-0 left-0 w-full h-full object-contain object-center ${
-                    !isVendorAvailable ? "grayscale brightness-50" : ""
+                    !isVendorAvailable ? "grayscale brightness-75" : ""
                   }`}
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -109,7 +109,7 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
                     src={currentMediaUrl}
                     alt={`slide-${currentIndex}`}
                     className={`absolute inset-0 m-auto max-h-full max-w-full object-contain z-10 transition-opacity duration-500 ${
-                      !isVendorAvailable ? "grayscale brightness-50" : ""
+                      !isVendorAvailable ? "grayscale brightness-75" : ""
                     }`}
                   />
                 </div>
