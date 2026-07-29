@@ -73,37 +73,47 @@ const vendorSchema = new mongoose.Schema(
       default: false,
     },
     verification: {
-  status: {
-    type: String,
-    enum: ["not_verified", "pending", "verified", "rejected"],
-    default: "not_verified",
-  },
-
-  submittedAt: {
-    type: Date,
-    default: null,
-  },
-  plan: {
-    duration: {
-      type: String,
-      default: null,
+  requests: [
+    {
+      serviceId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Service",
+        required: true,
+      },
+      status: {
+        type: String,
+        enum: ["not_verified", "pending", "verified", "rejected"],
+        default: "pending",
+      },
+      submittedAt: {
+        type: Date,
+        default: Date.now,
+      },
+      verifiedAt: {
+        type: Date,
+        default: null,
+      },
+      subscriptionEndsAt: {
+        type: Date,
+        default: null,
+      },
+      plan: {
+        duration: {
+          type: String,
+          default: null,
+        },
+        amount: {
+          type: Number,
+          default: 0,
+        },
+        tier: {
+          type: String,
+          enum: ["premium", "basic"],
+          default: null,
+        },
+      },
     },
-
-    amount: {
-      type: Number,
-      default: 0,
-    },
-    tier:{
-      type:String,
-      enum:["premium","basic"],
-      default:null,
-    },
-    serviceIds: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "Service",
-      default: [],
-    },
-  },
+  ],
 },
  verifiedAt:{
     type:Date,

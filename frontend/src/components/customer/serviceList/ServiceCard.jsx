@@ -20,6 +20,12 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
   const media = service.serviceImage || [];
   const serviceId = service._id || service.id;
   const isVendorAvailable = service.available !== false;
+  const verificationTier = service.vendorTier?.toLowerCase();
+  const verificationLabel =
+    service.vendorVerificationStatus === "verified" &&
+    (verificationTier === "basic" || verificationTier === "premium")
+      ? `${verificationTier === "premium" ? "Premium" : "Basic"} Verified`
+      : "";
 
   const handleCardClick = () => {
     navigate(`/service/${categoryId}/${serviceId}`);
@@ -71,12 +77,12 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
           EventsBridge
         </span>
 
-        {service.vendorVerificationStatus === "verified" && (
+        {verificationLabel && (
           <span className={clsx('absolute', 'top-[10px]', 'right-[10px]', 'z-[20]', 'flex', 'items-center', 'gap-1', 'rounded-lg', 'bg-[#ffbf00]', 'px-2', 'py-1', 'text-[12px]', 'font-bold', 'text-[#352500]', 'shadow-md')}>
             <span className={clsx('text-[16px]', 'leading-none', 'text-[#fff8c7]', 'drop-shadow-[0_1px_2px_rgba(92,64,0,0.65)]')}>
               ★
             </span>
-            Verified
+            {verificationLabel}
           </span>
         )}
 

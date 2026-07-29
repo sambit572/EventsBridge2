@@ -181,6 +181,12 @@ const Service = ({ onSwitchToLogin }) => {
   };
 
   const isVendorAvailable = service?.available !== false;
+  const verificationTier = service?.vendorTier?.toLowerCase();
+  const verificationLabel =
+    service?.vendorVerificationStatus === "verified" &&
+    (verificationTier === "basic" || verificationTier === "premium")
+      ? `${verificationTier === "premium" ? "Premium" : "Basic"} Verified`
+      : "";
   const location = useLocation();
 
   const handleBookNow = () => {
@@ -302,12 +308,12 @@ const Service = ({ onSwitchToLogin }) => {
                         className={clsx('absolute', 'inset-0', 'w-full', 'h-full', 'object-cover')}
                       />
 
-                      {service?.vendorVerificationStatus === "verified" && (
+                      {verificationLabel && (
                         <span className={clsx('absolute', 'top-4', 'right-4', 'z-30', 'flex', 'items-center', 'gap-1', 'rounded-md', 'bg-[#ffbf00]', 'px-3', 'py-1.5', 'text-sm', 'font-bold', 'text-[#352500]', 'shadow-md')}>
                           <span className={clsx('text-[22px]', 'leading-none', 'text-[#fff8c7]', 'drop-shadow-[0_1px_2px_rgba(92,64,0,0.65)]')}>
                             ★
                           </span>
-                          Verified
+                          {verificationLabel}
                         </span>
                       )}
 

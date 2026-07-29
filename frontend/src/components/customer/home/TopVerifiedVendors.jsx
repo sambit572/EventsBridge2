@@ -53,7 +53,7 @@ const VendorCard = ({ vendor }) => {
           <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff8c7">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
           </svg>
-          Verified
+          Verified Premium
         </div>
         {hovered && total > 1 && <button className={clsx('tvv-arrow', 'tvv-arrow-left')} onClick={prev}>‹</button>}
         {hovered && total > 1 && <button className={clsx('tvv-arrow', 'tvv-arrow-right')} onClick={next}>›</button>}
@@ -90,10 +90,12 @@ export default function TopVerifiedVendors() {
        const data = await response.json();
 
        if (data.success) {
-         const formattedVendors = data.vendors.map((vendor, index) => ({
-           ...vendor,
-           rank: index + 1,
-         }));
+         const formattedVendors = data.vendors
+           .filter((vendor) => vendor.tier?.toLowerCase() === "premium")
+           .map((vendor, index) => ({
+             ...vendor,
+             rank: index + 1,
+           }));
 
          setVendors(formattedVendors);
        }
@@ -106,8 +108,8 @@ export default function TopVerifiedVendors() {
 
    fetchVerifiedVendors();
 }, []);
-const LOOPED_VENDORS = vendors;
-const N = LOOPED_VENDORS.length;
+const N = vendors.length;
+const LOOPED_VENDORS = N > 1 ? [...vendors, ...vendors, ...vendors] : vendors;
   const trackRef = useRef(null);
   const isPausedRef = useRef(false);
   const isAnimatingRef = useRef(false);
@@ -181,7 +183,7 @@ const N = LOOPED_VENDORS.length;
     }, 2500);
     return () => clearInterval(timer);
   }, [goNext]);
-if (!vendors.length) {
+if (loading) {
   return (
     <section className="tvv-section">
       <div className="tvv-header">
@@ -225,7 +227,9 @@ if (!vendors.length) {
         onMouseEnter={() => { isPausedRef.current = true; }}
         onMouseLeave={() => { isPausedRef.current = false; }}
       >
-        <button className={clsx('tvv-carousel-arrow', 'tvv-carousel-arrow-left')} onClick={goPrev} aria-label="Previous">‹</button>
+        {N > 1 && (
+          <button className={clsx('tvv-carousel-arrow', 'tvv-carousel-arrow-left')} onClick={goPrev} aria-label="Previous">&lsaquo;</button>
+        )}
 
         {/* overflow:hidden on the wrapper, not the track */}
         <div className="tvv-track-outer">
@@ -236,7 +240,9 @@ if (!vendors.length) {
           </div>
         </div>
 
-        <button className={clsx('tvv-carousel-arrow', 'tvv-carousel-arrow-right')} onClick={goNext} aria-label="Next">›</button>
+        {N > 1 && (
+          <button className={clsx('tvv-carousel-arrow', 'tvv-carousel-arrow-right')} onClick={goNext} aria-label="Next">&rsaquo;</button>
+        )}
       </div>
     </section>
   );

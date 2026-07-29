@@ -10,13 +10,25 @@ async function expireSubscriptions() {
 
     const result = await Vendor.updateMany(
       {
-        "verification.status": "verified",
-        subscriptionEndsAt: { $lte: today },
+        "verification.requests": {
+          $elemMatch: {
+            status: "verified",
+            subscriptionEndsAt: { $lte: today },
+          },
+        },
       },
       {
         $set: {
-          "verification.status": "not_verified",
+          "verification.requests.$[request].status": "not_verified",
         },
+      },
+      {
+        arrayFilters: [
+          {
+            "request.status": "verified",
+            "request.subscriptionEndsAt": { $lte: today },
+          },
+        ],
       }
     );
 

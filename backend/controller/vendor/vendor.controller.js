@@ -871,31 +871,70 @@ const submitVerificationRequest = async (req, res) => {
       return res.status(400).json(new ApiError(400,"Please select at least one service to verify"));
     }
 
-    const updatedServices = await Service.updateMany(
-      {
-        _id: { $in: serviceIds },
-        vendorId: vendor._id,
-        "verification.status": { $nin: ["pending", "verified"] },
+    const eligibleServices = await Service.find({
+      _id: { $in: serviceIds },
+      vendorId: vendor._id,
+    }).select("_id");
+
+    if (eligibleServices.length === 0) {
+      return res.status(400).json(new ApiError(400,"No eligible services found to verify"));
+    }
+
+    const submittedAt = new Date();
+    const eligibleServiceIds = eligibleServices.map((service) => service._id);
+    const requestEntries = eligibleServiceIds.map((serviceId) => ({
+      serviceId,
+      status: "pending",
+      submittedAt,
+      verifiedAt: null,
+      subscriptionEndsAt: null,
+      plan: {
+        tier,
+        duration,
+        amount,
       },
+    }));
+
+    await Vendor.updateOne(
+      { _id: vendor._id },
       {
-        $set: {
-          "verification.status": "pending",
-          "verification.submittedAt": new Date(),
-          "verification.plan.tier": tier,
-          "verification.plan.duration": duration,
-          "verification.plan.amount": amount,
+        $pull: {
+          "verification.requests": {
+            serviceId: { $in: eligibleServiceIds },
+            status: { $in: ["not_verified", "pending", "rejected"] },
+          },
         },
       }
     );
 
-    if (updatedServices.matchedCount === 0) {
-      return res.status(400).json(new ApiError(400,"No eligible services found to verify"));
+    await Vendor.findByIdAndUpdate(vendor._id, {
+      $push: {
+        "verification.requests": { $each: requestEntries },
+      },
+      $unset: {
+        "verification.status": "",
+        "verification.submittedAt": "",
+        "verification.plan": "",
+      },
+    });
+
+    try {
+      await client.del(`vendor:${vendor._id}:services`);
+      await client.del("services:all");
+      await client.del("all_services");
+      await Promise.all(
+        serviceIds.map((serviceId) => client.del(`services:id:${serviceId}`))
+      );
+    } catch (cacheErr) {
+      console.error("Redis cache clear failed after verification request:", cacheErr);
     }
 
     return res.status(200).json(
       new ApiResponse(
         200,
-        { matchedCount: updatedServices.matchedCount },
+        {
+          matchedCount: eligibleServices.length,
+        },
         "Verification request submitted successfully for selected services"
       )
     );

@@ -121,8 +121,42 @@ export const getServicesByCategory = async (req, res) => {
           vendorId: 1,
           vendorName: "$vendorDetails.fullName",
           vendorEmail: "$vendorDetails.email",
-         vendorVerificationStatus: "$vendorDetails.verification.status",
-         vendorTier: "$vendorDetails.verification.plan.tier",
+         vendorVerificationStatus: {
+           $let: {
+             vars: {
+               request: {
+                 $first: {
+                   $filter: {
+                     input: { $ifNull: ["$vendorDetails.verification.requests", []] },
+                     as: "request",
+                     cond: { $eq: ["$$request.serviceId", "$_id"] },
+                   },
+                 },
+               },
+             },
+             in: {
+               $ifNull: ["$$request.status", "not_verified"],
+             },
+           },
+         },
+         vendorTier: {
+           $let: {
+             vars: {
+               request: {
+                 $first: {
+                   $filter: {
+                     input: { $ifNull: ["$vendorDetails.verification.requests", []] },
+                     as: "request",
+                     cond: { $eq: ["$$request.serviceId", "$_id"] },
+                   },
+                 },
+               },
+             },
+             in: {
+               $ifNull: ["$$request.plan.tier", null],
+             },
+           },
+         },
           avgRating: 1, // Ensure avgRating is included
           totalReviews: 1,
           available: 1,
@@ -241,14 +275,19 @@ export const getServiceById = async (req, res) => {
     }
     // === END OF FIX ===
 
+    const vendorVerificationRequests = service.vendorId?.verification?.requests || [];
+    const serviceVerificationRequest = vendorVerificationRequests.find(
+      (request) => request.serviceId?.toString() === service._id.toString()
+    );
+
     const transformed = {
       ...service._doc,
       startingPrice,
       vendorName: service.vendorId?.fullName,
       vendorEmail: service.vendorId?.email,
       vendor: service.vendorId?._id,
-       vendorVerificationStatus: service.vendorId?.verification?.status,
-        vendorTier: service.vendorId?.verification?.plan?.tier,
+       vendorVerificationStatus: serviceVerificationRequest?.status || "not_verified",
+        vendorTier: serviceVerificationRequest?.plan?.tier || null,
       whyChooseUs: whyChooseUsPoints,
     };
 
