@@ -342,12 +342,15 @@ function VendorService({ currentStep }) {
       const totalFiles = selectedFiles.length + newFiles.length;
 
       // ✅ Limit total uploads to 10
-      if (totalFiles > 10 || newFiles.length > 10) {
-        toast.error("You cannot upload more than 10 files.");
-        setImageError("You cannot upload more than 10 files.");
-        if (fileInputRef.current) fileInputRef.current.value = "";
-        return;
-      }
+      // ✅ Limit total uploads to 20
+const MAX_FILES = 20;
+
+if (totalFiles > MAX_FILES || newFiles.length > MAX_FILES) {
+  toast.error(`You cannot upload more than ${MAX_FILES} files.`);
+  setImageError(`You cannot upload more than ${MAX_FILES} files.`);
+  if (fileInputRef.current) fileInputRef.current.value = "";
+  return;
+}
       // File type validation
       const validImageTypes = [
         "image/jpeg",
@@ -366,7 +369,7 @@ function VendorService({ currentStep }) {
       const validTypes = [...validImageTypes, ...validVideoTypes];
 
       // Size limits
-      const IMAGE_SIZE_LIMIT = 5 * 1024 * 1024; // 5MB
+      const IMAGE_SIZE_LIMIT = 100* 1024 * 1024; // 100
       const VIDEO_SIZE_LIMIT = 200 * 1024 * 1024; // 200MB
 
       const validatedFiles = [];
@@ -388,7 +391,7 @@ function VendorService({ currentStep }) {
         if (isImage && f.size > IMAGE_SIZE_LIMIT) {
           const sizeMB = (f.size / (1024 * 1024)).toFixed(2);
           errors.push(
-            `"${f.name}" (${sizeMB}MB) - Image files must be 5MB or smaller.`
+            `"${f.name}" (${sizeMB}MB) - Image files must be 100MB or smaller.`
           );
           continue;
         }
