@@ -20,7 +20,7 @@ import {
   MdPeople,
 } from "react-icons/md";
 import { MdVerified } from "react-icons/md";
-import { IoClose, IoShieldCheckmark, IoArrowBack } from "react-icons/io5";
+import { IoClose, IoShieldCheckmark, IoArrowBack, IoCheckmarkCircle } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
 
 const NAV_ITEMS = [
@@ -64,6 +64,12 @@ function DashBoardSideBar({
   const [showVerifyIntro, setShowVerifyIntro] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("6m");
+
+  // ✅ Service selection for verification
+  const [showServiceSelect, setShowServiceSelect] = useState(false);
+  const [vendorServices, setVendorServices] = useState([]);
+  const [selectedServiceId, setSelectedServiceId] = useState("");
+  const [loadingServices, setLoadingServices] = useState(false);
 
   const { form, updateField, updateVendor, updateBank, resetForm } = UseVendorProfile();
 
@@ -136,42 +142,75 @@ function DashBoardSideBar({
       setShowRemoveConfirm(false);
     }
   };
-const handleVerificationRequest = async () => {
-  try {
-    const plan = VERIFY_PLANS.find(
-      (p) => p.key === selectedPlan
-    );
+  const handleVerificationRequest = async () => {
+    try {
+      const plan = VERIFY_PLANS.find(
+        (p) => p.key === selectedPlan
+      );
 
-    if (!plan) {
-      alert("Please select a plan");
-      return;
-    }
-
-    const response = await axios.put(
-      `${BACKEND_URL}/vendors/verification-request`,
-      {
-        duration: plan.duration,
-        amount: plan.price,
-        tier:plan.tier,
-      },
-      {
-        withCredentials: true,
+      if (!plan) {
+        alert("Please select a plan");
+        return;
       }
-    );
 
-    setShowVerifyModal(false);
-    setShowThankYou(true);
+      if (!selectedServiceId) {
+        alert("Please select a service to verify");
+        return;
+      }
 
-    console.log(response.data);
-  } catch (error) {
-   const message =
-      error.response?.data?.message ||
-      error.response?.data?.error ||
-      "Failed to submit verification request";
-    alert(message);
-    setShowVerifyModal(false);
-  }
-};
+      const response = await axios.put(
+        `${BACKEND_URL}/vendors/verification-request`,
+        {
+          serviceId: selectedServiceId,
+          duration: plan.duration,
+          amount: plan.price,
+          tier: plan.tier,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      setShowVerifyModal(false);
+      setShowServiceSelect(false);
+      setSelectedServiceId("");
+      setShowThankYou(true);
+
+      console.log(response.data);
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Failed to submit verification request";
+      alert(message);
+      setShowVerifyModal(false);
+    }
+  };
+
+  // ✅ Fetch vendor services for verification selection
+  const fetchVendorServices = async () => {
+    setLoadingServices(true);
+    try {
+      const res = await axios.get(
+        `${BACKEND_URL}/vendors/my-services`,
+        { withCredentials: true }
+      );
+      if (res.data?.data?.length > 0) {
+        setVendorServices(res.data.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch services for verification", err);
+      alert("Failed to load your services. Please try again.");
+    } finally {
+      setLoadingServices(false);
+    }
+  };
+
+  // ✅ Handle Verify My Service button click
+  const handleVerifyMyServiceClick = async () => {
+    await fetchVendorServices();
+    setShowServiceSelect(true);
+  };
 
   /* Closes the pricing modal AND the mobile sidebar drawer, returning the
      user fully back to the dashboard (hamburger/3-line state). */
@@ -253,7 +292,7 @@ const handleVerificationRequest = async () => {
             </button>
           ))}
 
-          <button className="sb-verify-btn" onClick={() => setShowVerifyIntro(true)}>
+          <button className="sb-verify-btn" onClick={handleVerifyMyServiceClick}>
             <span className="sb-verify-shine" />
             <span className="sb-verify-icon"><IoShieldCheckmark size={17} /></span>
             <span className="sb-verify-text">Verify My Service</span>
@@ -369,7 +408,7 @@ const handleVerificationRequest = async () => {
           )}
 
           {vendor?.profilePicture && (
-            <button className="sb-action-btn sb-action-danger"
+            <button className={clsx('sb-action-btn', 'sb-action-danger')}
               onClick={() => setShowRemoveConfirm(true)} disabled={uploading || removing}>
               <FaTrash size={12} />
               {removing ? "Removing..." : "Remove Photo"}
@@ -405,6 +444,78 @@ const handleVerificationRequest = async () => {
             setShowVerifyModal(true);
           }}
         />,
+        document.body
+      )}
+
+      {/* ✅ Service Selection Modal — select which service to verify */}
+      {showServiceSelect && createPortal(
+        <div className="sb-overlay" onClick={() => setShowServiceSelect(false)}>
+          <div className="sb-verify-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="sb-verify-close" onClick={() => setShowServiceSelect(false)}>
+              <IoClose size={20} />
+            </button>
+
+            <div className="sb-verify-modal-icon">
+              <IoShieldCheckmark size={30} />
+            </div>
+            <h2 className="sb-verify-modal-title">Verify My Service</h2>
+            <p className="sb-verify-modal-sub">
+              Select the service you want to verify. You can choose only one service at a time.
+            </p>
+
+            {loadingServices ? (
+              <div style={{ textAlign: "center", padding: "20px", color: "#666" }}>
+                Loading your services...
+              </div>
+            ) : vendorServices.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "20px", color: "#666" }}>
+                You don't have any services yet. Please create a service first.
+              </div>
+            ) : (
+              <div className="sb-verify-plans" style={{ flexDirection: "column", gap: "10px", maxHeight: "300px", overflowY: "auto" }}>
+                {vendorServices.map((service) => (
+                  <button
+                    key={service._id}
+                    className={`sb-plan-card ${selectedServiceId === service._id ? "sb-plan-selected" : ""}`}
+                    onClick={() => setSelectedServiceId(service._id)}
+                    style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", textAlign: "left" }}
+                  >
+                    <div>
+                      <div style={{ fontWeight: 600, color: "#001f3f", fontSize: "14px" }}>
+                        {service.serviceName}
+                      </div>
+                      <div style={{ fontSize: "12px", color: "#6b7280", marginTop: "2px" }}>
+                        {service.serviceCategory}
+                      </div>
+                    </div>
+                    {selectedServiceId === service._id && (
+                      <span className="sb-plan-check" style={{ marginLeft: "10px", flexShrink: 0 }}>
+                        <IoCheckmarkCircle size={22} color="#22c55e" />
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <button
+              className="sb-verify-ok-btn"
+              onClick={() => {
+                if (!selectedServiceId) {
+                  alert("Please select a service to verify");
+                  return;
+                }
+                setShowServiceSelect(false);
+                setShowVerifyModal(true);
+              }}
+              disabled={!selectedServiceId || loadingServices}
+              style={{ opacity: (!selectedServiceId || loadingServices) ? 0.5 : 1, cursor: (!selectedServiceId || loadingServices) ? "not-allowed" : "pointer" }}
+            >
+              <span className="sb-verify-ok-shine" />
+              Continue
+            </button>
+          </div>
+        </div>,
         document.body
       )}
       {/* Verify My Service modal */}
