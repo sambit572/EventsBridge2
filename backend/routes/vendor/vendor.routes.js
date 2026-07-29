@@ -122,7 +122,7 @@ vendor_router.post(
   "/create-service",
   verifyVendorJwt,
   (req, res, next) => {
-    upload.array("images", 10)(req, res, function (err) {
+    upload.array("images", 20)(req, res, function (err) {
       if (err) {
         return res.status(400).json({ success: false, message: err.message });
       }
@@ -146,7 +146,7 @@ vendor_router.post(
   "/upload-service-media",
   verifyVendorJwt,
   (req, res, next) => {
-    upload.array("media", 10)(req, res, function (err) {
+    upload.array("media", 20)(req, res, function (err) {
       if (err) {
         return res.status(400).json({ success: false, message: err.message });
       }

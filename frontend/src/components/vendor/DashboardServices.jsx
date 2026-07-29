@@ -205,11 +205,11 @@ const DashboardServices = () => {
       const totalMedia =
         existingMedia.length + newImages.length + newVideos.length;
 
-      if (totalMedia > 10) {
+      if (totalMedia > 20) {
         setErrorMessage(
-          `You can upload a maximum of 10 media items. ` +
+          `You can upload a maximum of 20 media items. ` +
             `You already have ${existingMedia.length}. ` +
-            `Remove ${totalMedia - 10} item(s).`
+            `Remove ${totalMedia - 20} item(s).`
         );
         setIsSaving(false);
         return;
@@ -330,7 +330,7 @@ const DashboardServices = () => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
 
-    const MAX_IMAGE_SIZE_BYTES = 9 * 1024 * 1024; // 9MB
+    const MAX_IMAGE_SIZE_BYTES = 100 * 1024 * 1024; // 100MB
 
     // Step 1: Separate files and validate them first
     let imageFiles = [];
@@ -339,7 +339,7 @@ const DashboardServices = () => {
     for (const file of files) {
       if (file.type.startsWith("image/")) {
         if (file.size > MAX_IMAGE_SIZE_BYTES) {
-          alert(`Image "${file.name}" is too large. The limit is 9MB.`);
+          alert(`Image "${file.name}" is too large. The limit is 100MB.`);
           continue;
         }
         imageFiles.push(file);
@@ -355,8 +355,8 @@ const DashboardServices = () => {
       (editedData.serviceImage || []).length +
       newImages.length +
       newVideos.length;
-    if (currentMediaCount + imageFiles.length + videoFiles.length > 10) {
-      alert(`You can only upload up to 10 media items in total.`);
+    if (currentMediaCount + imageFiles.length + videoFiles.length > 20) {
+      alert(`You can only upload up to 20 media items in total.`);
       e.target.value = "";
       return;
     }
@@ -990,8 +990,8 @@ const DashboardServices = () => {
                     {/* Image upload info and file size error */}
                     <div>
                       <p className="dcf-upload-info">
-                        Maximum file size: 9MB per photo i.e image size must be
-                        below 9MB. You can upload up to 10 photos or videos
+                        Maximum file size: 100MB per photo i.e image size must be
+                        below 100MB. You can upload up to 20 photos or videos
                         combined in total.
                       </p>
                       {fileSizeError && (
@@ -1089,7 +1089,7 @@ const DashboardServices = () => {
 
                       {(editedData.serviceImage || []).length +
                         newMediaPreviews.length <
-                        10 && (
+                        20 && (
                         <label
                           className={`w-14 h-14 border-2 border-dashed border-[#d97706] bg-white/50 rounded-lg flex items-center justify-center shrink-0 transition-colors hover:bg-white/80 ${
                             isSaving

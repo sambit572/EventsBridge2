@@ -1158,7 +1158,7 @@ function VendorService({ currentStep }) {
                 required
               />
               <p className="upload-hint-text">
-                Maximum 20 media files. Images up to 5MB each, videos up to 10MB each.
+                Maximum 20 media files. Images up to 100MB each, videos up to 200MB each.
               </p>
               {previewImages.length > 0 && (
                 <div className="preview-container">

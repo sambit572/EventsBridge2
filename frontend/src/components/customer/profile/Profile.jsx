@@ -475,19 +475,29 @@ setRating(0);
 
   <div className={clsx('flex', 'gap-3')}>
 
-    {
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          setSelectedBooking(b);
-          setShowReviewModal(true);
-        }}
-        className={clsx('bg-[#001F3F]', 'hover:bg-[#003165]', 'text-white', 'px-4', 'py-2', 'rounded-md', 'flex', 'items-center', 'gap-2')}
-      >
-         Write Review
-      </button>
-    }
-
+    {b?.paymentStatus === "PAID" && (
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setSelectedBooking(b);
+      setShowReviewModal(true);
+    }}
+    className={clsx(
+      "bg-[#001F3F]",
+      "hover:bg-[#003165]",
+      "text-white",
+      "px-4",
+      "py-2",
+      "rounded-md",
+      "flex",
+      "items-center",
+      "gap-2"
+    )}
+  >
+    Write Review
+  </button>
+)}
+    
     <button
       onClick={(e) => {
         e.stopPropagation();

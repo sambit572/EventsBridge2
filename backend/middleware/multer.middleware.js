@@ -57,9 +57,12 @@ const fileFilter = function (req, file, cb) {
   }
 };
 
-// ✅ File size limit: 10MB (reasonable for videos)
+
 export const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 500 * 1024 * 1024 }, // 500mb limit
+ limits: {
+    fileSize: 200 * 1024 * 1024, // 200 MB max per file
+    files: 20,
+  },
 });
