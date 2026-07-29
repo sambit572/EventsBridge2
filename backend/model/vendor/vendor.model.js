@@ -98,10 +98,10 @@ const vendorSchema = new mongoose.Schema(
       enum:["premium","basic"],
       default:null,
     },
-    serviceId: {
-      type: mongoose.Schema.Types.ObjectId,
+    serviceIds: {
+      type: [mongoose.Schema.Types.ObjectId],
       ref: "Service",
-      default: null,
+      default: [],
     },
   },
 },

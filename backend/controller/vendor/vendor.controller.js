@@ -861,7 +861,7 @@ const getVendorDashboard =
 // For Verify my service
 const submitVerificationRequest = async (req, res) => {
   try {
-    const { duration, amount, tier, serviceId } = req.body;
+    const { duration, amount, tier, serviceIds } = req.body;
     const vendor = await Vendor.findById(req.vendor._id);
     if(!vendor){
       return res.status(404).json(new ApiError(404,"vendor not found"));
@@ -877,7 +877,7 @@ const submitVerificationRequest = async (req, res) => {
     vendor.verification.plan.duration = duration;
     vendor.verification.plan.amount = amount;
     vendor.verification.plan.tier = tier;
-    vendor.verification.plan.serviceId = serviceId;
+    vendor.verification.plan.serviceIds = serviceIds || [];
 
   await vendor.save();
    console.log(vendor)

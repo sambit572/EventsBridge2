@@ -68,7 +68,7 @@ function DashBoardSideBar({
   // ✅ Service selection for verification
   const [showServiceSelect, setShowServiceSelect] = useState(false);
   const [vendorServices, setVendorServices] = useState([]);
-  const [selectedServiceId, setSelectedServiceId] = useState("");
+  const [selectedServiceIds, setSelectedServiceIds] = useState([]);
   const [loadingServices, setLoadingServices] = useState(false);
 
   const { form, updateField, updateVendor, updateBank, resetForm } = UseVendorProfile();
@@ -153,15 +153,15 @@ function DashBoardSideBar({
         return;
       }
 
-      if (!selectedServiceId) {
-        alert("Please select a service to verify");
+      if (selectedServiceIds.length === 0) {
+        alert("Please select at least one service to verify");
         return;
       }
 
       const response = await axios.put(
         `${BACKEND_URL}/vendors/verification-request`,
         {
-          serviceId: selectedServiceId,
+          serviceIds: selectedServiceIds,
           duration: plan.duration,
           amount: plan.price,
           tier: plan.tier,
@@ -173,7 +173,7 @@ function DashBoardSideBar({
 
       setShowVerifyModal(false);
       setShowServiceSelect(false);
-      setSelectedServiceId("");
+      setSelectedServiceIds([]);
       setShowThankYou(true);
 
       console.log(response.data);
@@ -460,7 +460,7 @@ function DashBoardSideBar({
             </div>
             <h2 className="sb-verify-modal-title">Verify My Service</h2>
             <p className="sb-verify-modal-sub">
-              Select the service you want to verify. You can choose only one service at a time.
+              Select the services you want to verify. You can choose multiple services.
             </p>
 
             {loadingServices ? (
@@ -473,47 +473,56 @@ function DashBoardSideBar({
               </div>
             ) : (
               <div className="sb-verify-plans" style={{ flexDirection: "column", gap: "10px", maxHeight: "300px", overflowY: "auto" }}>
-                {vendorServices.map((service) => (
-                  <button
-                    key={service._id}
-                    className={`sb-plan-card ${selectedServiceId === service._id ? "sb-plan-selected" : ""}`}
-                    onClick={() => setSelectedServiceId(service._id)}
-                    style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", textAlign: "left" }}
-                  >
-                    <div>
-                      <div style={{ fontWeight: 600, color: "#001f3f", fontSize: "14px" }}>
-                        {service.serviceName}
+                {vendorServices.map((service) => {
+                  const isSelected = selectedServiceIds.includes(service._id);
+                  return (
+                    <button
+                      key={service._id}
+                      className={`sb-plan-card ${isSelected ? "sb-plan-selected" : ""}`}
+                      onClick={() => {
+                        setSelectedServiceIds((prev) =>
+                          prev.includes(service._id)
+                            ? prev.filter((id) => id !== service._id)
+                            : [...prev, service._id]
+                        );
+                      }}
+                      style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", textAlign: "left" }}
+                    >
+                      <div>
+                        <div style={{ fontWeight: 600, color: "#ffffff", fontSize: "14px" }}>
+                          {service.serviceName}
+                        </div>
+                        <div style={{ fontSize: "12px", color: "#cbd5e1", marginTop: "2px" }}>
+                          {service.serviceCategory}
+                        </div>
                       </div>
-                      <div style={{ fontSize: "12px", color: "#6b7280", marginTop: "2px" }}>
-                        {service.serviceCategory}
-                      </div>
-                    </div>
-                    {selectedServiceId === service._id && (
-                      <span className="sb-plan-check" style={{ marginLeft: "10px", flexShrink: 0 }}>
-                        <IoCheckmarkCircle size={22} color="#22c55e" />
-                      </span>
-                    )}
-                  </button>
-                ))}
+                      {isSelected && (
+                        <span className="sb-plan-check" style={{ marginLeft: "10px", flexShrink: 0 }}>
+                          <IoCheckmarkCircle size={22} color="#22c55e" />
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             )}
 
-            <button
-              className="sb-verify-ok-btn"
-              onClick={() => {
-                if (!selectedServiceId) {
-                  alert("Please select a service to verify");
-                  return;
-                }
-                setShowServiceSelect(false);
-                setShowVerifyModal(true);
-              }}
-              disabled={!selectedServiceId || loadingServices}
-              style={{ opacity: (!selectedServiceId || loadingServices) ? 0.5 : 1, cursor: (!selectedServiceId || loadingServices) ? "not-allowed" : "pointer" }}
-            >
-              <span className="sb-verify-ok-shine" />
-              Continue
-            </button>
+              <button
+                className="sb-verify-ok-btn"
+                onClick={() => {
+                  if (selectedServiceIds.length === 0) {
+                    alert("Please select at least one service to verify");
+                    return;
+                  }
+                  setShowServiceSelect(false);
+                  setShowVerifyModal(true);
+                }}
+                disabled={selectedServiceIds.length === 0 || loadingServices}
+                style={{ opacity: (selectedServiceIds.length === 0 || loadingServices) ? 0.5 : 1, cursor: (selectedServiceIds.length === 0 || loadingServices) ? "not-allowed" : "pointer" }}
+              >
+                <span className="sb-verify-ok-shine" />
+                Continue
+              </button>
           </div>
         </div>,
         document.body
