@@ -6,6 +6,7 @@ export const getVerifiedVendors = async (req, res) => {
       path: "vendorId",
       match: {
         "verification.status": "verified",
+        "verification.plan.tier": "premium",
         active: true,
       },
       select: "fullName verification",
