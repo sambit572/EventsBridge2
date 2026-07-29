@@ -866,26 +866,37 @@ const submitVerificationRequest = async (req, res) => {
     if(!vendor){
       return res.status(404).json(new ApiError(404,"vendor not found"));
     }
-    if(vendor.verification?.status==="verified"){
-      return res.status(400).json(new ApiError(400,"Vendor is already verified"));
-    }
-    if(vendor.verification?.status==="pending"){
-      return res.status(400).json(new ApiError(400,"Vendor verification is pending"));
-    }
-    vendor.verification.status = "pending";
-    vendor.verification.submittedAt = new Date();
-    vendor.verification.plan.duration = duration;
-    vendor.verification.plan.amount = amount;
-    vendor.verification.plan.tier = tier;
-    vendor.verification.plan.serviceIds = serviceIds || [];
 
-  await vendor.save();
-   console.log(vendor)
+    if (!Array.isArray(serviceIds) || serviceIds.length === 0) {
+      return res.status(400).json(new ApiError(400,"Please select at least one service to verify"));
+    }
+
+    const updatedServices = await Service.updateMany(
+      {
+        _id: { $in: serviceIds },
+        vendorId: vendor._id,
+        "verification.status": { $nin: ["pending", "verified"] },
+      },
+      {
+        $set: {
+          "verification.status": "pending",
+          "verification.submittedAt": new Date(),
+          "verification.plan.tier": tier,
+          "verification.plan.duration": duration,
+          "verification.plan.amount": amount,
+        },
+      }
+    );
+
+    if (updatedServices.matchedCount === 0) {
+      return res.status(400).json(new ApiError(400,"No eligible services found to verify"));
+    }
+
     return res.status(200).json(
       new ApiResponse(
         200,
-        vendor,
-        "Verification request submitted successfully"
+        { matchedCount: updatedServices.matchedCount },
+        "Verification request submitted successfully for selected services"
       )
     );
   } catch (error) {

@@ -122,6 +122,33 @@ const serviceSchema = new Schema(
       type: [PackageSchema],
       default: [],
     },
+
+    verification: {
+      status: {
+        type: String,
+        enum: ["not_verified", "pending", "verified", "rejected"],
+        default: "not_verified",
+      },
+      submittedAt: {
+        type: Date,
+        default: null,
+      },
+      plan: {
+        tier: {
+          type: String,
+          enum: ["premium", "basic"],
+          default: null,
+        },
+        duration: {
+          type: String,
+          default: null,
+        },
+        amount: {
+          type: Number,
+          default: 0,
+        },
+      },
+    },
   },
   { timestamps: true }
 );

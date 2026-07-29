@@ -458,9 +458,9 @@ function DashBoardSideBar({
             <div className="sb-verify-modal-icon">
               <IoShieldCheckmark size={30} />
             </div>
-            <h2 className="sb-verify-modal-title">Verify My Service</h2>
+            <h2 className="sb-verify-modal-title">Verify My Services</h2>
             <p className="sb-verify-modal-sub">
-              Select the services you want to verify. You can choose multiple services.
+              Select the services you want to get verified. You can choose multiple services.
             </p>
 
             {loadingServices ? (
@@ -543,7 +543,7 @@ function DashBoardSideBar({
             </div>
             <h2 className="sb-verify-modal-title">Verify My Service</h2>
             <p className="sb-verify-modal-sub">
-              Get a verified badge on your profile and win more customer trust. Choose a plan below.
+              Get a verified badge on your selected services and win more customer trust. Choose a plan below.
             </p>
 
             {VERIFY_TIERS.map((tier) => (
