@@ -11,30 +11,41 @@ const getCroppedImg = (image, crop) => {
   const canvas = document.createElement("canvas");
   const scaleX = image.naturalWidth / image.width;
   const scaleY = image.naturalHeight / image.height;
-  canvas.width = crop.width;
-  canvas.height = crop.height;
+  // Use the crop's true pixel size on the ORIGINAL image, not the
+  // shrunken on-screen display size — otherwise the exported image
+  // is only as big as the crop box shown in the browser, which then
+  // looks blurry/pixelated when it's later displayed larger (e.g. on
+  // the service details page).
+  const cropWidthOnImage = crop.width * scaleX;
+  const cropHeightOnImage = crop.height * scaleY;
+  canvas.width = cropWidthOnImage;
+  canvas.height = cropHeightOnImage;
   const ctx = canvas.getContext("2d");
 
   ctx.drawImage(
     image,
     crop.x * scaleX,
     crop.y * scaleY,
-    crop.width * scaleX,
-    crop.height * scaleY,
+    cropWidthOnImage,
+    cropHeightOnImage,
     0,
     0,
-    crop.width,
-    crop.height
+    cropWidthOnImage,
+    cropHeightOnImage
   );
 
   return new Promise((resolve) => {
-    canvas.toBlob((blob) => {
-      if (!blob) {
-        console.error("Canvas is empty");
-        return;
-      }
-      resolve(blob);
-    }, "image/jpeg");
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          console.error("Canvas is empty");
+          return;
+        }
+        resolve(blob);
+      },
+      "image/jpeg",
+      0.95
+    );
   });
 };
 // A unique ID generator for package keys
@@ -834,6 +845,8 @@ function VendorService({ currentStep }) {
 
   const handleSelectAllSubcategories = () => {
     setSelectedSubcategories(availableSubcategories);
+    setShowSubcategoryDropdown(false);
+    setSubcategorySearchTerm("");
   };
 
   const handleDeselectAllSubcategories = () => {

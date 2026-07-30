@@ -50,10 +50,11 @@ const VendorCard = ({ vendor }) => {
         </div>
         <span className="tvv-brand-label">EVENTSBRIDGE</span>
         <div className="tvv-verified-badge">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff8c7">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2.5l2.2 1.27 2.53-.2 1.05 2.32 2.32 1.05-.2 2.53L21.17 12l-1.27 2.2.2 2.53-2.32 1.05-1.05 2.32-2.53-.2L12 21.17l-2.2-1.27-2.53.2-1.05-2.32-2.32-1.05.2-2.53L2.83 12l1.27-2.2-.2-2.53 2.32-1.05 1.05-2.32 2.53.2L12 2.5z" fill="#fff" />
+            <path d="M8.5 12.3l2.3 2.3 4.7-4.9" stroke="#f7b500" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
           </svg>
-          Verified
+          Premium
         </div>
         {hovered && total > 1 && <button className={clsx('tvv-arrow', 'tvv-arrow-left')} onClick={prev}>‹</button>}
         {hovered && total > 1 && <button className={clsx('tvv-arrow', 'tvv-arrow-right')} onClick={next}>›</button>}
@@ -187,7 +188,7 @@ if (!vendors.length) {
       <div className="tvv-header">
         <p className="tvv-eyebrow">HANDPICKED FOR YOU</p>
         <h2 className="tvv-title">
-          Top Verified <span className="tvv-title-accent">Partners</span>
+          Top Verified <span className="tvv-title-accent">Services</span>
         </h2>
         <p className="tvv-loading-text">
           <span className="tvv-loading-dots" aria-hidden="true">
@@ -195,7 +196,7 @@ if (!vendors.length) {
             <span />
             <span />
           </span>
-          Loading top verified vendors
+          Loading top verified services
           <span className="tvv-loading-ellipsis" aria-hidden="true">
             <span>.</span>
             <span>.</span>
@@ -208,7 +209,7 @@ if (!vendors.length) {
 }
 
 if (!vendors.length) {
-  return <div className="text-center">No top verified vendors available at the moment.</div>;
+  return <div className="text-center">No top verified services available at the moment.</div>;
 }
   return (
     <section className="tvv-section">

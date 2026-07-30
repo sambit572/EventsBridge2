@@ -991,7 +991,7 @@ const DashboardServices = () => {
                     <div>
                       <p className="dcf-upload-info">
                         Maximum file size: 9MB per photo i.e image size must be
-                        below 9MB. You can upload up to 10 photos or videos
+                        below 9MB. You can upload up to 20 photos or videos
                         combined in total.
                       </p>
                       {fileSizeError && (

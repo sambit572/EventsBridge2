@@ -260,7 +260,7 @@ const OrderSummary = () => {
           {/* Left Side - Items List */}
           <div className="lg:col-span-2">
             <div className={clsx('bg-white', 'rounded-3xl', 'shadow-xl', 'border', 'border-gray-100', 'overflow-hidden')}>
-              <div className={clsx('bg-gradient-to-r', 'from-blue-600', 'to-teal-600', 'p-6')}>
+              <div className={clsx('bg-gradient-to-r', 'from-purple-600', 'to-violet-700', 'p-6')}>
                 <h2 className={clsx('text-2xl', 'font-bold', 'text-white', 'flex', 'items-center')}>
                   <div className={clsx('w-10', 'h-10', 'bg-white', 'bg-opacity-20', 'rounded-full', 'flex', 'items-center', 'justify-center', 'mr-4')}>
                     <svg
@@ -295,8 +295,8 @@ const OrderSummary = () => {
                         key={item._id || `item-${index}`}
                         className={clsx('group', 'relative')}
                       >
-                        <div className={clsx('absolute', 'left-0', 'top-0', 'bottom-0', 'w-1', 'bg-gradient-to-b', 'from-blue-500', 'to-purple-500', 'rounded-full', 'opacity-0', 'group-hover:opacity-100', 'transition-opacity', 'duration-200')}></div>
-                        <div className={clsx('flex', 'items-start', 'gap-6', 'p-6', 'border', 'border-gray-100', 'rounded-2xl', 'bg-gradient-to-r', 'from-gray-50', 'to-white', 'hover:shadow-lg', 'hover:border-blue-200', 'transition-all', 'duration-300', 'ml-2')}>
+                        <div className={clsx('absolute', 'left-0', 'top-0', 'bottom-0', 'w-1', 'bg-gradient-to-b', 'from-purple-500', 'to-violet-600', 'rounded-full', 'opacity-0', 'group-hover:opacity-100', 'transition-opacity', 'duration-200')}></div>
+                        <div className={clsx('flex', 'items-start', 'gap-6', 'p-6', 'border', 'border-gray-100', 'rounded-2xl', 'bg-gradient-to-r', 'from-gray-50', 'to-white', 'hover:shadow-lg', 'hover:border-purple-200', 'transition-all', 'duration-300', 'ml-2')}>
                           <div className="relative">
                             <div className={clsx('w-24', 'h-24', 'rounded-2xl', 'overflow-hidden', 'shadow-lg', 'border-2', 'border-white')}>
                               <img
@@ -307,21 +307,21 @@ const OrderSummary = () => {
                                 className={clsx('w-full', 'h-full', 'object-cover', 'group-hover:scale-105', 'transition-transform', 'duration-300')}
                               />
                             </div>
-                            <div className={clsx('absolute', '-top-2', '-right-2', 'w-6', 'h-6', 'bg-blue-600', 'text-white', 'rounded-full', 'flex', 'items-center', 'justify-center', 'text-xs', 'font-bold')}>
+                            <div className={clsx('absolute', '-top-2', '-right-2', 'w-6', 'h-6', 'bg-purple-600', 'text-white', 'rounded-full', 'flex', 'items-center', 'justify-center', 'text-xs', 'font-bold')}>
                               {index + 1}
                             </div>
                           </div>
 
                           <div className={clsx('flex-1', 'min-w-0')}>
                             <div className={clsx('flex', 'justify-between', 'items-start', 'mb-2')}>
-                              <h3 className={clsx('flex-1', 'text-xl', 'font-bold', 'text-gray-900', 'group-hover:text-blue-700', 'transition-colors')}>
+                              <h3 className={clsx('flex-1', 'text-xl', 'font-bold', 'text-gray-900', 'group-hover:text-purple-700', 'transition-colors')}>
                                 {detail.serviceName.toUpperCase()}
                               </h3>
 
                               <div className={clsx('relative', 'group', 'flex', 'flex-col', 'items-center', 'ml-4')}>
                                 <a
                                   href={`tel:"+911169320147`}
-                                  className={clsx('p-3', 'rounded-full', 'bg-emerald-500', 'hover:bg-emerald-600', 'shadow-md', 'hover:shadow-lg', 'transform', 'hover:-translate-y-0.5', 'transition-all', 'duration-200')}
+                                  className={clsx('p-3', 'rounded-full', 'bg-purple-600', 'hover:bg-purple-700', 'shadow-md', 'hover:shadow-lg', 'transform', 'hover:-translate-y-0.5', 'transition-all', 'duration-200')}
                                   aria-label="Contact Vendor"
                                 >
                                   <svg
@@ -380,12 +380,12 @@ const OrderSummary = () => {
                                 {detail.displayPrice > 0 ? (
                                   <>
                                     {isAccepted && item.finalPrice ? (
-                                      <div className={clsx('text-lg', 'font-bold', 'text-blue-600')}>
+                                      <div className={clsx('text-lg', 'font-bold', 'text-purple-600')}>
                                         Final Price (Vendor): ₹
                                         {item.finalPrice.toLocaleString()}
                                       </div>
                                     ) : (
-                                      <div className={clsx('text-lg', 'font-bold', 'text-green-600')}>
+                                      <div className={clsx('text-lg', 'font-bold', 'text-purple-600')}>
                                         Proposed: ₹
                                         {detail.displayPrice.toLocaleString()}
                                       </div>
@@ -447,11 +447,11 @@ const OrderSummary = () => {
           <div className="lg:col-span-1">
             <div className={clsx('sticky', 'top-24')}>
               <div className={clsx('bg-white', 'rounded-3xl', 'shadow-xl', 'border', 'border-gray-100', 'overflow-hidden')}>
-                <div className={clsx('bg-gradient-to-r', 'from-green-600', 'to-emerald-600', 'p-6')}>
-                  <h3 className={clsx('text-xl', 'font-bold', 'text-white', 'flex', 'items-center')}>
-                    <div className={clsx('w-8', 'h-8', 'bg-white', 'bg-opacity-20', 'rounded-full', 'flex', 'items-center', 'justify-center', 'mr-3')}>
+                <div className={clsx('bg-gradient-to-r', 'from-yellow-400', 'to-amber-500', 'p-6')}>
+                  <h3 className={clsx('text-xl', 'font-bold', 'text-yellow-950', 'flex', 'items-center')}>
+                    <div className={clsx('w-8', 'h-8', 'bg-black', 'bg-opacity-10', 'rounded-full', 'flex', 'items-center', 'justify-center', 'mr-3')}>
                       <svg
-                        className={clsx('w-4', 'h-4', 'text-white')}
+                        className={clsx('w-4', 'h-4', 'text-yellow-950')}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -502,7 +502,7 @@ const OrderSummary = () => {
                         <span className={clsx('text-xl', 'font-bold', 'text-gray-900')}>
                           Total Amount
                         </span>
-                        <span className={clsx('text-2xl', 'font-bold', 'text-green-600')}>
+                        <span className={clsx('text-2xl', 'font-bold', 'text-amber-600')}>
                           ₹{orderSummary.grandTotal.toLocaleString()}
                         </span>
                       </div>

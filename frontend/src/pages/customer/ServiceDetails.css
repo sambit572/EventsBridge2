@@ -22,7 +22,7 @@
 .left-fixed {
   position: sticky;
   top: 80px;
-  width: 50%;
+  width: 40%;
   height: fit-content;
   color: white;
   padding: 0;
@@ -31,7 +31,7 @@
   margin: 0;
 }
 .right-scrollable {
-  width: 50%;
+  width: 60%;
   display: flex;
   flex-direction: column;
   gap: 10px;
