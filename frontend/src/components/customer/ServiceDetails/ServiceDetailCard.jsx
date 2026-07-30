@@ -328,10 +328,24 @@ const ServiceDetailCard = ({ service }) => {
           {vendorName || "Unknown Vendor"}
         </span>
         <span className={clsx('text-gray-400', 'text-xs')}>|</span>
-        <span className={clsx('flex', 'items-center', 'gap-1', 'bg-yellow-200', 'text-yellow-900', 'px-2', 'py-0.5', 'rounded-md', 'text-xs')}>
-          <FaRegCalendarCheck className="text-sm" />
-          Event Hosted: 0
-        </span>
+        {Number(service.eventsHosted) > 0 && (
+  <span
+    className={clsx(
+      "flex",
+      "items-center",
+      "gap-1",
+      "bg-yellow-200",
+      "text-yellow-900",
+      "px-2",
+      "py-0.5",
+      "rounded-md",
+      "text-xs"
+    )}
+  >
+    <FaRegCalendarCheck className="text-sm" />
+    Event Hosted: {service.eventsHosted}
+  </span>
+)}
         {!isVendorAvailable && (
           <span className={clsx('flex', 'items-center', 'gap-1.5', 'rounded-full', 'border', 'border-red-200', 'bg-red-100', 'px-3', 'py-1', 'text-[11px]', 'font-medium', 'text-red-800', 'sm:text-xs')}>
             Service Unavailable

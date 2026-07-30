@@ -543,10 +543,26 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
               {vendorName}
             </span>
             <span className={clsx('text-xs', 'text-gray-400')}>|</span>
-            <span className={clsx('flex', 'items-center', 'gap-1', 'rounded-full', 'border', 'border-[#ffeaa7]', 'bg-[#fff3cd]', 'px-2', 'py-0.5', 'text-[10px]', 'font-medium', 'text-[#856404]')}>
-              <FaRegCalendarCheck className="text-xs" />
-              Event Hosted: {service.eventsHosted || 0}
-            </span>
+            {Number(service.eventsHosted) > 0 && (
+            <span className={clsx(
+          "flex",
+         "items-center",
+         "gap-1",
+      "rounded-full",
+      "border",
+      "border-[#ffeaa7]",
+      "bg-[#fff3cd]",
+      "px-2",
+      "py-0.5",
+      "text-[10px]",
+      "font-medium",
+      "text-[#856404]"
+    )}
+  >
+    <FaRegCalendarCheck className="text-xs" />
+    Event Hosted: {service.eventsHosted}
+  </span>
+)}
             {!isVendorAvailable && (
               <span className={clsx('flex', 'items-center', 'gap-1.5', 'rounded-full', 'border', 'border-[#f8d7da]', 'bg-[#f8d7da]', 'px-3', 'py-1', 'text-[11px]', 'font-medium', 'text-[#721c24]', 'sm:text-xs')}>
                 Service Unavailable

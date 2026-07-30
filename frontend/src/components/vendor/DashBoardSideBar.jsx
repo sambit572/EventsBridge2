@@ -22,6 +22,7 @@ import {
 import { MdVerified } from "react-icons/md";
 import { IoClose, IoShieldCheckmark, IoArrowBack, IoCheckmarkCircle } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
+import clsx from "clsx";
 
 const NAV_ITEMS = [
   { key: "services",  label: "My Services",  icon: MdDashboard },

@@ -40,6 +40,44 @@ const ServiceCardSkeleton = () => (
     <div className="textSkeleton short"></div>
   </div>
 );
+ const shuffle = (array) => {
+  const arr = [...array];
+
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+
+  return arr;
+};
+
+const arrangeServices = (services) => {
+  const premium = services.filter(
+    (s) =>
+      s.vendorVerificationStatus === "verified" &&
+      s.vendorTier === "premium"
+  );
+
+  const basic = services.filter(
+    (s) =>
+      s.vendorVerificationStatus === "verified" &&
+      s.vendorTier === "basic"
+  );
+
+  const others = services.filter(
+    (s) =>
+      !(
+        s.vendorVerificationStatus === "verified" &&
+        (s.vendorTier === "premium" || s.vendorTier === "basic")
+      )
+  );
+
+  return [
+    ...shuffle(premium), // Premium shuffled internally
+    ...shuffle(basic),   // Basic shuffled internally
+    ...shuffle(others),  // Others shuffled internally
+  ];
+};
 
 const ServiceList = ({ onSwitchToLogin }) => {
   const dispatch = useDispatch();
@@ -269,10 +307,12 @@ const ServiceList = ({ onSwitchToLogin }) => {
             }
           })
         );
+       
+       const arrangedServices = arrangeServices(servicesData);
 
-        dispatch(setCategoryServices(servicesData)); // save to redux
-        setServices(servicesData);
-        setFilteredServices(servicesData); // Initialize filtered services
+   dispatch(setCategoryServices(arrangedServices));
+   setServices(arrangedServices);
+   setFilteredServices(arrangedServices);
       } catch (error) {
         console.error("Error fetching services:", error);
       } finally {
@@ -392,14 +432,15 @@ const ServiceList = ({ onSwitchToLogin }) => {
         }
       });
     }
-    setFilteredServices(results);
+   const arrangedResults = arrangeServices(results);
+   setFilteredServices(arrangedResults);
     console.log("Filtered and sorted count:", results.length);
   };
 
   // Runs when Cancel is clicked in Filter
-  const handleCancelFilters = () => {
-    setFilteredServices(services);
-  };
+ const handleCancelFilters = () => {
+  setFilteredServices(arrangeServices(services));
+};
 
   console.log("categoryId:", categoryId);
 
