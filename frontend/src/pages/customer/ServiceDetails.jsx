@@ -267,7 +267,7 @@ const Service = ({ onSwitchToLogin }) => {
             onMouseLeave={() => {
               setHovered(false);
             }}
-            className={clsx('relative', 'w-full', 'h-[338px]', 'mb-5', 'sm:h-[520px]', 'lg:h-[560px]', 'overflow-hidden', 'rounded-lg', 'mt-3', 'sm:mt-0')}
+            className={clsx('relative', 'w-full', 'h-[243px]', 'mb-5', 'sm:h-[374px]', 'lg:h-[403px]', 'overflow-hidden', 'rounded-lg', 'mt-3', 'sm:mt-0')}
             onMouseEnter={() => setHovered(true)}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
@@ -298,8 +298,7 @@ const Service = ({ onSwitchToLogin }) => {
                         idx === currentIndex ? "opacity-100 z-10" : "opacity-0"
                       }`}
                     >
-                      {/* Main image — fills 100% of the box, cropping only
-                          whichever dimension doesn't match (smart fill) */}
+                      {/* Main image — fills 100% of the box, no blur or gaps */}
                       <img
                         decoding="async"
                         loading="lazy"

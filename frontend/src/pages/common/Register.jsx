@@ -110,12 +110,13 @@ const Register = ({ onClose, onSwitchToLogin }) => {
       position: fixed; inset: 0; z-index: 9999;
       display: flex; align-items: center; justify-content: center;
       background: rgba(15,10,40,0.55);
+      -webkit-backdrop-filter: blur(6px);
       backdrop-filter: blur(6px);
       padding: 16px;
     }
     .ur-modal {
       display: flex; width: 100%; max-width: 820px;
-      max-height: 90vh; border-radius: 20px; overflow: hidden;
+      max-height: 90vh; max-height: 90dvh; border-radius: 20px; overflow: hidden;
       box-shadow: 0 24px 80px rgba(180,83,9,0.25);
       animation: ur-pop 0.45s cubic-bezier(0.22,1,0.36,1) both;
       font-family: 'Poppins', sans-serif;
@@ -365,7 +366,7 @@ const Register = ({ onClose, onSwitchToLogin }) => {
 
     @media(max-width:640px){
       .ur-overlay { padding:10px; }
-      .ur-modal { flex-direction:column;max-height:94vh;overflow-y:auto; }
+      .ur-modal { flex-direction:column;max-height:94vh;max-height:94dvh;overflow-y:auto;-webkit-overflow-scrolling:touch; }
       .ur-left { padding:16px 20px 12px;flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap;min-height:unset; }
       .ur-monogram { width:38px;height:38px;font-size:14px;margin-bottom:0;flex-shrink:0; }
       .ur-left-headline { font-size:14px;margin-bottom:0; }

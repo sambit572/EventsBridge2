@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight, FaYoutube } from "react-icons/fa";
+import { MdVerified } from "react-icons/md";
 import ServiceDescription from "./ServiceDescription";
 import { getYouTubeID } from "../../../utils/helpers";
 import clsx from "clsx";
@@ -77,12 +78,10 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
           EventsBridge
         </span>
 
-        {verificationLabel && (
-          <span className={clsx('absolute', 'top-[10px]', 'right-[10px]', 'z-[20]', 'flex', 'items-center', 'gap-1', 'rounded-lg', 'bg-[#ffbf00]', 'px-2', 'py-1', 'text-[12px]', 'font-bold', 'text-[#352500]', 'shadow-md')}>
-            <span className={clsx('text-[16px]', 'leading-none', 'text-[#fff8c7]', 'drop-shadow-[0_1px_2px_rgba(92,64,0,0.65)]')}>
-              ★
-            </span>
-            {verificationLabel}
+        {service.vendorVerificationStatus === "verified" && (
+          <span className={clsx('absolute', 'top-[10px]', 'right-[10px]', 'z-[20]', 'flex', 'items-center', 'gap-1', 'rounded-full', 'bg-gradient-to-r', 'from-[#f5c518]', 'via-[#f7b500]', 'to-[#d99a00]', 'px-2.5', 'py-1', 'text-[12px]', 'font-bold', 'text-[#3a2a00]', 'shadow-[0_2px_10px_rgba(217,154,0,0.55)]', 'ring-1', 'ring-white/50', 'backdrop-blur-sm')}>
+            <MdVerified className={clsx('text-[15px]', 'text-white', 'drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)]')} />
+            <span className={clsx('tracking-wide')}>Verified</span>
           </span>
         )}
 

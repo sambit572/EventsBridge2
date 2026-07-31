@@ -1,17 +1,23 @@
 import "./CategoryCard.css";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../../common/Spinner.jsx";
 
 const CategoryCard = ({ category }) => {
   const navigate = useNavigate();
+  const [isNavigating, setIsNavigating] = useState(false);
+
   return (
     <div
       className="courseCard"
-     onClick={() => {
-  navigate(`/category/${encodeURIComponent(category.title)}`, {
-    state: { category },
-  });
-}}
+      onClick={() => {
+        setIsNavigating(true);
+        navigate(`/category/${encodeURIComponent(category.title)}`, {
+          state: { category },
+        });
+      }}
     >
+      {isNavigating && <Spinner />}
       <span className="brandLabel">EventsBridge</span>
 
       <div className="imageWrapper">

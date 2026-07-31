@@ -32,8 +32,8 @@ const NAV_ITEMS = [
 ];
 
 const VERIFY_PLANS = [
-  { key: "1m",  duration: "1 Month",  price: 399,  perMonth: 300, badge: null, tier: "basic" },
-  { key: "3m",  duration: "3 Months", price: 1099,  perMonth: 200, badge: "Save 33%", tier: "basic" },
+  { key: "1m",  duration: "1 Month",  price: 499,  perMonth: 300, badge: null, tier: "basic" },
+  { key: "3m",  duration: "3 Months", price: 1199,  perMonth: 200, badge: "Save 33%", tier: "basic" },
   { key: "6m",  duration: "1 Months", price: 999, perMonth: 200, badge: "Most Popular", tier: "premium" },
   { key: "12m", duration: "3 Months", price: 2399, perMonth: 200, badge: "Best Value", tier: "premium" },
 ];

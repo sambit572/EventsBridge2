@@ -620,14 +620,14 @@ const ServiceDescription = ({ service, onSwitchToLogin }) => {
           {isVendorAvailable ? (
             <>
               <button
-                className={clsx('flex', 'w-full', 'cursor-pointer', 'items-center', 'justify-center', 'rounded-full', 'bg-gradient-to-r', 'from-[#fb923c]', 'to-[#ef4444]', 'px-3', 'py-2', 'text-xs', 'font-bold', 'text-white', 'shadow-md', 'hover:shadow-lg')}
+                className={clsx('flex', 'w-full', 'cursor-pointer', 'items-center', 'justify-center', 'rounded-full', 'bg-gradient-to-r', 'from-[#7b2ff7]', 'to-[#a855f7]', 'px-3', 'py-2', 'text-xs', 'font-bold', 'text-white', 'shadow-md', 'hover:shadow-lg')}
                 onClick={handleAddToCart}
               >
                 ADD TO CART
               </button>
 
               <button
-                className={clsx('flex', 'w-full', 'cursor-pointer', 'items-center', 'justify-center', 'rounded-full', 'bg-gradient-to-r', 'from-[#001f3f]', 'to-[#004f9f]', 'px-3', 'py-2', 'text-xs', 'font-bold', 'text-white', 'shadow-md', 'hover:shadow-lg')}
+                className={clsx('flex', 'w-full', 'cursor-pointer', 'items-center', 'justify-center', 'rounded-full', 'bg-gradient-to-r', 'from-[#f5c518]', 'to-[#f59e0b]', 'px-3', 'py-2', 'text-xs', 'font-bold', 'text-[#3a2a00]', 'shadow-md', 'hover:shadow-lg')}
                 onClick={handleBookNow}
               >
                 CALL TO VENDER

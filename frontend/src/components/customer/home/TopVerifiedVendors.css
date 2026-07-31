@@ -204,20 +204,19 @@
   top: 10px;
   right: 10px;
   z-index: 4;
-  background: #ffbf00;
-  color: #352500;
-  font-size: 14px;
+  background: linear-gradient(90deg, #f5c518, #f7b500, #d99a00);
+  color: #3a2a00;
+  font-size: 13px;
   font-weight: 800;
   padding: 6px 12px;
-  border-radius: 12px;
+  border-radius: 999px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   letter-spacing: 0.3px;
   font-family: "Plus Jakarta Sans", sans-serif;
-  box-shadow: 0 4px 10px rgba(92, 64, 0, 0.28);
-  max-width: calc(100% - 20px);
-  white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(217, 154, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .tvv-verified-badge svg {
