@@ -109,8 +109,13 @@ export default function TopVerifiedVendors() {
 
    fetchVerifiedVendors();
 }, []);
-const N = vendors.length;
-const LOOPED_VENDORS = N > 1 ? [...vendors, ...vendors, ...vendors] : vendors;
+
+const shouldLoop = vendors.length > 2;
+const N = shouldLoop ? vendors.length : 0;
+const LOOPED_VENDORS = shouldLoop
+  ? [...vendors, ...vendors, ...vendors]
+  : vendors;
+
   const trackRef = useRef(null);
   const isPausedRef = useRef(false);
   const isAnimatingRef = useRef(false);
@@ -179,11 +184,14 @@ const LOOPED_VENDORS = N > 1 ? [...vendors, ...vendors, ...vendors] : vendors;
 
   // Auto-scroll: every 2.5s advance by 1 card
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (!isPausedRef.current) goNext();
-    }, 2500);
-    return () => clearInterval(timer);
-  }, [goNext]);
+  if (!shouldLoop) return;
+
+  const timer = setInterval(() => {
+    if (!isPausedRef.current) goNext();
+  }, 2500);
+
+  return () => clearInterval(timer);
+}, [goNext, shouldLoop]);
 if (loading) {
   return (
     <section className="tvv-section">

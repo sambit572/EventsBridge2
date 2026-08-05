@@ -273,7 +273,7 @@ const Service = ({ onSwitchToLogin }) => {
   const verificationLabel =
     service?.vendorVerificationStatus === "verified" &&
     (verificationTier === "basic" || verificationTier === "premium")
-      ? `${verificationTier === "premium" ? "Premium" : "Basic"} Verified`
+      ? `${verificationTier === "premium" ? "Premium" : "Verified"}` 
       : "";
   const location = useLocation();
 

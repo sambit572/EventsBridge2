@@ -21,12 +21,17 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
   const media = service.serviceImage || [];
   const serviceId = service._id || service.id;
   const isVendorAvailable = service.available !== false;
-  const verificationTier = service.vendorTier?.toLowerCase();
-  const verificationLabel =
-    service.vendorVerificationStatus === "verified" &&
-    (verificationTier === "basic" || verificationTier === "premium")
-      ? `${verificationTier === "premium" ? "Premium" : "Basic"} Verified`
-      : "";
+const verificationTier = service.vendorTier?.trim().toLowerCase();
+
+let verificationLabel = "";
+
+if (service.vendorVerificationStatus === "verified") {
+  if (verificationTier === "premium") {
+    verificationLabel = "Premium";
+  } else {
+    verificationLabel = "Verified";
+  }
+}
 
   const handleCardClick = () => {
     navigate(`/service/${categoryId}/${serviceId}`);
@@ -81,7 +86,7 @@ const ServiceCard = ({ service, onSwitchToLogin }) => {
         {service.vendorVerificationStatus === "verified" && (
           <span className={clsx('absolute', 'top-[10px]', 'right-[10px]', 'z-[20]', 'flex', 'items-center', 'gap-1', 'rounded-full', 'bg-gradient-to-r', 'from-[#f5c518]', 'via-[#f7b500]', 'to-[#d99a00]', 'px-2.5', 'py-1', 'text-[12px]', 'font-bold', 'text-[#3a2a00]', 'shadow-[0_2px_10px_rgba(217,154,0,0.55)]', 'ring-1', 'ring-white/50', 'backdrop-blur-sm')}>
             <MdVerified className={clsx('text-[15px]', 'text-white', 'drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)]')} />
-            <span className={clsx('tracking-wide')}>Verified</span>
+           <span className={clsx("tracking-wide")}>{verificationLabel} </span>
           </span>
         )}
 
