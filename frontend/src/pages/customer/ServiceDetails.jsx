@@ -21,6 +21,94 @@ import WhyChooseUs from "../../components/customer/ServiceDetails/WhyChooseUs.js
 import { getYouTubeID } from "../../utils/helpers";
 import CateringPackagesDisplay from "../../components/customer/ServiceDetails/CateringPackagesDisplay.jsx";
 
+// ✅ Modern animated skeleton shown while the service details are loading.
+// Mirrors the real layout (gallery + info on the left, content blocks on the
+// right) so the swap-in on load feels seamless instead of jarring.
+const ServiceDetailsSkeleton = () => {
+  return (
+    <div className="dj sd-skeleton">
+      <div className={clsx('flex', 'justify-center', 'sm:justify-start')}>
+        <div
+          className={clsx(
+            'sd-badge-loader',
+            'rounded-full',
+            'bg-white',
+            'shadow-md',
+            'px-4',
+            'py-2',
+            'text-sm',
+            'font-semibold',
+            'text-gray-600'
+          )}
+        >
+          <span className="sd-dot-ring" />
+          Fetching service details…
+        </div>
+      </div>
+
+      <div className="section_one">
+        {/* Left: image gallery + action buttons */}
+        <div className="left-fixed">
+          <div
+            className={clsx(
+              'sd-shimmer',
+              'relative',
+              'w-full',
+              'h-[243px]',
+              'mb-5',
+              'sm:h-[374px]',
+              'lg:h-[403px]',
+              'rounded-lg',
+              'mt-3',
+              'sm:mt-0'
+            )}
+          />
+
+          <div className={clsx('flex', 'flex-row', 'items-center', 'justify-center', 'gap-4')}>
+            <div className={clsx('sd-shimmer', 'w-full', 'h-12', 'rounded-full')} />
+            <div className={clsx('sd-shimmer', 'w-full', 'h-12', 'rounded-full')} />
+          </div>
+        </div>
+
+        {/* Right: title, description, ratings blocks */}
+        <div className="right-scrollable">
+          <div className={clsx('sd-shimmer', 'h-7', 'w-3/4', 'rounded-md')} />
+          <div className={clsx('sd-shimmer', 'h-4', 'w-1/2', 'rounded-md')} />
+          <div className={clsx('sd-shimmer', 'h-4', 'w-full', 'rounded-md')} />
+          <div className={clsx('sd-shimmer', 'h-4', 'w-5/6', 'rounded-md')} />
+          <div className={clsx('sd-shimmer', 'h-24', 'w-full', 'rounded-xl', 'mt-2')} />
+
+          <div className={clsx('flex', 'gap-3', 'mt-2')}>
+            <div className={clsx('sd-shimmer', 'h-6', 'w-20', 'rounded-full')} />
+            <div className={clsx('sd-shimmer', 'h-6', 'w-24', 'rounded-full')} />
+            <div className={clsx('sd-shimmer', 'h-6', 'w-16', 'rounded-full')} />
+          </div>
+
+          <div className="reviews">
+            <div className={clsx('sd-shimmer', 'h-5', 'w-40', 'rounded-md', 'mb-4')} />
+            <div className={clsx('sd-shimmer', 'h-16', 'w-full', 'rounded-xl', 'mb-2')} />
+            <div className={clsx('sd-shimmer', 'h-16', 'w-full', 'rounded-xl')} />
+          </div>
+        </div>
+      </div>
+
+      {/* People also booked strip */}
+      <div className="view-dj-section">
+        <div className={clsx('sd-shimmer', 'h-6', 'w-56', 'rounded-md', 'mb-4')} />
+        <div className={clsx('grid', 'grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-5', 'gap-6', 'mt-5', 'mb-5')}>
+          {Array.from({ length: 5 }).map((_, idx) => (
+            <div key={idx} className={clsx('flex', 'flex-col', 'gap-2')}>
+              <div className={clsx('sd-shimmer', 'h-[160px]', 'w-full', 'rounded-lg')} />
+              <div className={clsx('sd-shimmer', 'h-4', 'w-3/4', 'rounded-md')} />
+              <div className={clsx('sd-shimmer', 'h-4', 'w-1/2', 'rounded-md')} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Service = ({ onSwitchToLogin }) => {
   const navigate = useNavigate();
   const { serviceId, categoryId } = useParams();
@@ -256,7 +344,7 @@ const Service = ({ onSwitchToLogin }) => {
     }
   };
 
-  if (loading) return <p>Loading service details...</p>;
+  if (loading) return <ServiceDetailsSkeleton />;
   if (error || !service) return <p>{error || "Service not found."}</p>;
 
   return (

@@ -11,6 +11,87 @@
   padding: 0;
   margin: 0;
 }
+
+/* ===== Service Details – Animated Skeleton Loader ===== */
+@keyframes sd-shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+@keyframes sd-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sd-pulse-ring {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+  70% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+.sd-skeleton {
+  animation: sd-fade-in 0.4s ease-out;
+}
+
+.sd-shimmer {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    #eceff3 0%,
+    #eceff3 35%,
+    #f8fafc 50%,
+    #eceff3 65%,
+    #eceff3 100%
+  );
+  background-size: 800px 100%;
+  animation: sd-shimmer 1.6s ease-in-out infinite;
+}
+
+.sd-badge-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sd-badge-loader .sd-dot-ring {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.sd-badge-loader .sd-dot-ring::before,
+.sd-badge-loader .sd-dot-ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #6d28d9, #f59e0b);
+}
+
+.sd-badge-loader .sd-dot-ring::after {
+  animation: sd-pulse-ring 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
 .section_one {
   display: flex;
   width: 100%;
