@@ -132,8 +132,7 @@ export default function HeroSection() {
               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
             >
               Joined by{" "}
-              <span className="font-bold text-gray-900">2.4k+</span> happy
-              hosts this month
+              <span className="font-bold text-gray-900">20+</span> Categories
             </p>
           </motion.div>
         </motion.div>

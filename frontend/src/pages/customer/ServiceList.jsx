@@ -576,7 +576,32 @@ const ServiceList = ({ onSwitchToLogin }) => {
               </div>
             ))
           ) : (
-            <p>No services found matching filters.</p>
+            <div className="noResultsState">
+              <div className="noResultsIconWrap">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+                  <circle cx="10.5" cy="10.5" r="6.5" stroke="url(#nrs-grad)" strokeWidth="1.8"/>
+                  <line x1="15.3" y1="15.3" x2="20.5" y2="20.5" stroke="url(#nrs-grad)" strokeWidth="1.8" strokeLinecap="round"/>
+                  <line x1="7.5" y1="10.5" x2="13.5" y2="10.5" stroke="url(#nrs-grad)" strokeWidth="1.6" strokeLinecap="round"/>
+                  <defs>
+                    <linearGradient id="nrs-grad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                      <stop stopColor="#7b2ff7"/>
+                      <stop offset="1" stopColor="#f5c518"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+              <h3 className="noResultsTitle">No services found</h3>
+              <p className="noResultsSubtitle">
+                We couldn't find anything matching your filters. Try
+                adjusting or clearing them to see more options.
+              </p>
+              <button
+                className="noResultsClearBtn"
+                onClick={handleCancelFilters}
+              >
+                Clear Filters
+              </button>
+            </div>
           )}
         </div>
       </div>
