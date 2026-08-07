@@ -28,12 +28,19 @@ export const createBankDetails = async (req, res) => {
       !accountNumber ||
       !branchName ||
       !ifscCode ||
-      !panNumber
+      !panNumber||
+      !upiId
     ) {
       console.warn("⚠ [BankDetails] Missing required fields");
       return res.status(400).json(new ApiError(400, "Missing required fields"));
     }
+    const upiRegex = /^[a-zA-Z0-9._-]{2,}@[a-zA-Z]{2,}$/;
 
+if (!upiRegex.test(upiId)) {
+  return res
+    .status(400)
+    .json(new ApiError(400, "Invalid UPI ID format"));
+}
     // PAN Verification
     /* let verifyResp;
     try {
@@ -169,6 +176,12 @@ export const updateBankDetails = async (req, res) => {
       console.warn("⚠ [BankDetails] PAN number missing in update request");
       return res.status(400).json(new ApiError(400, "PAN number is required"));
     }
+    if ( !upiId) {
+    console.warn("UPI ID missing in update request");
+  return res.status(400).json(
+    new ApiError(400, " UPI ID is required")
+  );
+}
 
     // PAN Verification
     // let verifyResp;

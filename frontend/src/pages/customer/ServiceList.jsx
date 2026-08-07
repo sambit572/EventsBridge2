@@ -32,6 +32,7 @@ import resortBanner from "/categories/resortBanner.webp";
 import eventBanner from "/categories/event_company.webp";
 import balloonBanner from "../../assets/serviceListBanner/balloon banner.webp";
 import CategoryData from "../../utils/CatogoryData.jsx";
+import singhabaja from "../../assets/serviceListBanner/singhabaja-banner.webp";
 
 const ServiceCardSkeleton = () => (
   <div className="serviceCardSkeleton">
@@ -110,7 +111,7 @@ const ServiceList = ({ onSwitchToLogin }) => {
 
   const bannerMap = {
     "DJ & Musical Band": djBanner,
-    "Music Concert & Orchestra": musicBanner,
+    "Musical Concert & Band": musicBanner,
     "Decor & Tenthouse": decorBanner,
     "Photo & Videography": photoBanner,
     "Food & Catering": foodBanner,
@@ -129,7 +130,7 @@ const ServiceList = ({ onSwitchToLogin }) => {
     // "Stage Decor": stageBanner,
     "Event Management Company": eventBanner,
     "Balloon Decor": balloonBanner,
-    "Hotel & Resorts": resortBanner,
+    "Singhabaja": singhabaja,
   };
 
   // ✅ Define subcategories for each main category
@@ -140,7 +141,7 @@ const ServiceList = ({ onSwitchToLogin }) => {
       "Corporate Event DJ",
       "Private Party DJ",
     ],
-    "Music Concert & Orchestra": [
+    "Musical Concert & Band": [
       "All",
       "Live Band Performance",
       "Qawwali Night",
@@ -243,13 +244,12 @@ const ServiceList = ({ onSwitchToLogin }) => {
       "Theme-Based Balloon Decoration",
       "Baby Shower Balloon Decoration",
     ],
-    "Hotel & Resorts": [
-      "All",
-      "Luxury Hotels",
-      "Wedding Hotels & Resorts",
-      "Resorts",
-      "Beach Resorts",
-    ],
+    "Singhabaja": [
+  "Traditional Singhabaja Performance",
+  "Temple & Religious Events",
+  "Wedding Procession Performance",
+  "Cultural Festival Performance",
+],
   };
 
   // ✅ Show sticky header only after scrolling past banner

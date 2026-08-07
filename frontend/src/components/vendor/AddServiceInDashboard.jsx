@@ -140,7 +140,7 @@ function VendorService({ currentStep }) {
 
   const categories = [
     "DJ & Musical Band",
-    "Music Concert & Orchestra",
+    "Musical Concert & Band",
     "Decor & Tenthouse",
     "Photo & Videography",
     "Food & Catering",
@@ -158,7 +158,7 @@ function VendorService({ currentStep }) {
     "Mascot Artists",
     "Magic Shows",
     "Event Management Company",
-    "Hotel & Resorts",
+    "Singhabaja",
   ];
 
   const allLocations = {
@@ -218,7 +218,7 @@ function VendorService({ currentStep }) {
       "Corporate Event DJ",
       "Private Party DJ",
     ],
-    "Music Concert & Orchestra": [
+    "Musical Concert & Band": [
       "Live Band Performance",
       "Qawwali Night",
       "Celebrity Concert",
@@ -302,12 +302,12 @@ function VendorService({ currentStep }) {
       "Theme-Based Balloon Decoration",
       "Baby Shower Balloon Decoration",
     ],
-    "Hotel & Resorts": [
-      "Luxury Hotels",
-      "Wedding Hotels & Resorts",
-      "Resorts",
-      "Beach Resorts",
-    ],
+"Singhabaja": [
+  "Traditional Singhabaja Performance",
+  "Temple & Religious Events",
+  "Wedding Procession Performance",
+  "Cultural Festival Performance",
+],
   };
 
   const availableSubcategories = subcategories[categorySearchTerm] || [];
@@ -346,8 +346,30 @@ function VendorService({ currentStep }) {
 
       // Clear any previous error messages
       setImageError("");
-
+      // Size limits
+      const IMAGE_SIZE_LIMIT = 10 * 1024 * 1024; // 10MB per image
+      const VIDEO_SIZE_LIMIT = 200 * 1024 * 1024; // keep video limit or change if needed
+      const TOTAL_SIZE_LIMIT = 100 * 1024 * 1024; // 100MB total
+      const MAX_FILE_COUNT = 20;
       const newFiles = Array.from(e.target.files);
+      // Total upload size (already selected + newly selected)
+    const currentTotalSize = selectedFiles.reduce(
+  (sum, file) => sum + file.size,
+  0
+);
+
+const newTotalSize = newFiles.reduce(
+  (sum, file) => sum + file.size,
+  0
+);
+
+if (currentTotalSize + newTotalSize > TOTAL_SIZE_LIMIT) {
+  toast.error("Total upload size cannot exceed 100 MB.");
+  if (fileInputRef.current) {
+    fileInputRef.current.value = "";
+  }
+  return;
+}
       const totalFiles = selectedFiles.length + newFiles.length;
 
      
@@ -368,10 +390,7 @@ function VendorService({ currentStep }) {
       ];
       const validTypes = [...validImageTypes, ...validVideoTypes];
 
-      // Size limits
-      const IMAGE_SIZE_LIMIT = 100 * 1024 * 1024; // 100MB
-      const VIDEO_SIZE_LIMIT = 200 * 1024 * 1024; // 200MB
-      const MAX_FILE_COUNT = 20;
+
 
       // Check total file count
       const currentFileCount = selectedFiles.length;
@@ -399,10 +418,10 @@ function VendorService({ currentStep }) {
           );
           continue;
         }
-        if (f.type.startsWith("image/") && f.size > IMAGE_SIZE_LIMIT) {
-          toast.error(`${f.name} is too large. Max 100 MB allowed.`);
-          continue;
-        }
+       if (f.type.startsWith("image/") && f.size > IMAGE_SIZE_LIMIT) {
+  toast.error(`${f.name} is too large. Max 10 MB allowed.`);
+  continue;
+}
 
         if (f.type.startsWith("video/") && f.size > VIDEO_SIZE_LIMIT) {
           toast.error(`${f.name} is too large. Max 200 MB allowed.`);
@@ -416,7 +435,7 @@ function VendorService({ currentStep }) {
         if (isImage && f.size > IMAGE_SIZE_LIMIT) {
           const sizeMB = (f.size / (1024 * 1024)).toFixed(2);
           errors.push(
-            `"${f.name}" (${sizeMB}MB) - Image files must be 100MB or smaller.`
+            `"${f.name}" (${sizeMB}MB) - Image files must be 10MB or smaller.`
           );
           continue;
         }
@@ -1164,14 +1183,14 @@ function VendorService({ currentStep }) {
               <input
                 type="file"
                 id="service-images"
-                accept="image/,video/"
+                accept="image/*,video/*"
                 multiple
                 onChange={handleImageUpload}
                 ref={fileInputRef}
                 required
               />
               <p className="upload-hint-text">
-                Maximum 20 media files. Images up to 100MB each, videos up to 200MB each.
+                Maximum 20 files. Images up to 10MB each. Total upload size cannot exceed 100MB and  videos up to 200MB each.
               </p>
               {previewImages.length > 0 && (
                 <div className="preview-container">

@@ -329,8 +329,21 @@ const DashboardServices = () => {
   const handleMediaUpload = (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
+    // Calculate current upload size
+    const currentSize =
+  [...newImages, ...newVideos].reduce((sum, file) => sum + file.size, 0);
 
-    const MAX_IMAGE_SIZE_BYTES = 100 * 1024 * 1024; // 100MB
+// Calculate newly selected files size
+const newSize = files.reduce((sum, file) => sum + file.size, 0);
+
+if (currentSize + newSize > MAX_TOTAL_SIZE_BYTES) {
+  alert("Total upload size cannot exceed 100MB.");
+  e.target.value = "";
+  return;
+}
+
+  const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
+  const MAX_TOTAL_SIZE_BYTES = 100 * 1024 * 1024; // 100MB total
 
     // Step 1: Separate files and validate them first
     let imageFiles = [];
@@ -339,7 +352,7 @@ const DashboardServices = () => {
     for (const file of files) {
       if (file.type.startsWith("image/")) {
         if (file.size > MAX_IMAGE_SIZE_BYTES) {
-          alert(`Image "${file.name}" is too large. The limit is 100MB.`);
+          alert(`Image "${file.name}" is too large. The limit is 10MB.`);
           continue;
         }
         imageFiles.push(file);
@@ -990,9 +1003,8 @@ const DashboardServices = () => {
                     {/* Image upload info and file size error */}
                     <div>
                       <p className="dcf-upload-info">
-                        Maximum file size: 100MB per photo i.e image size must be
-                        below 100MB. You can upload up to 20 photos or videos
-                        combined in total.
+                        Maximum 20 media files. Each image can be up to 10MB.
+                        Total upload size cannot exceed 100MB.
                       </p>
                       {fileSizeError && (
                         <div className="mt-2 p-2 bg-white border border-red-400 text-red-700 rounded-lg text-sm">
