@@ -9,10 +9,10 @@ export const CategoryData = [
   },
   {
     id: "band",
-    title: "Music Concert & Orchestra",
+    title: "Musical Concert & Band",
     image: getCategoryImage("bass-brand"),
     tagline: "Brass Beats the Best",
-    keywords: ["music", "concert", "orchestra", "band", "musician", "live music"],
+    keywords: ["music", "concert", "band", "musician", "live music"],
   },
   {
     id: "tenthouse",
@@ -132,11 +132,11 @@ export const CategoryData = [
     keywords: ["event", "management", "planner", "organizer","birthday planner"],
   },
   {
-    id: "Hotel-Resorts",
-    title: "Hotel & Resorts",
-    image: getCategoryImage("hotel-resort"),
+    id: "Singhabaja",
+    title: "Singhabaja",
+    image: getCategoryImage("singhabaja-banner"),
     tagline: "Crafting Moments, Managing Memories",
-    keywords: ["hotel", "resort", "stay", "accommodation", "venue"],
+    keywords: ["baja"],
   },
 ];
 

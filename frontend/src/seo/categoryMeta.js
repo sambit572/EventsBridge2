@@ -9,7 +9,7 @@ const categoryMeta = {
     description:
       "Hire the best DJ and musical bands in Odisha for weddings, receptions, birthdays, corporate events and parties. Compare verified DJs, live bands, sound systems, pricing, reviews and book with EventsBridge.",
   },
-  "Music Concert & Orchestra": {
+  "Musical Concert & Band": {
     title:
       "Music Concert & Orchestra Services in Odisha | Live Singers, Bands & Stage Shows | EventsBridge",
     description:
@@ -116,12 +116,12 @@ const categoryMeta = {
     description:
       "Find trusted event management companies in Odisha for weddings, birthdays, corporate events, concerts, exhibitions, destination weddings and complete event planning solutions.",
   },
-  "Hotel & Resorts": {
-    title:
-      "Hotels & Resorts for Weddings and Events in Odisha | Luxury Venues | EventsBridge",
-    description:
-      "Discover the best hotels and resorts in Odisha for destination weddings, receptions, conferences, parties and corporate events. Compare venues, facilities, pricing and book online.",
-  },
+"Singhabaja": {
+  title:
+    "Singhabaja Artists for Weddings & Cultural Events in Odisha | Traditional Performers | EventsBridge",
+  description:
+    "Book experienced Singhabaja artists in Odisha for weddings, temple ceremonies, cultural festivals, processions, and traditional celebrations. Compare performers, pricing, reviews, and book trusted Singhabaja groups online.",
+},
 };
 
 export default categoryMeta;

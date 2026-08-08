@@ -202,6 +202,11 @@ export default function VendorPayment() {
       setIsLoading(false);
       return;
     }
+    if(!upiId){
+       toast.error("Please enter UPI_ID");
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const vendorId = localStorage.getItem("vendorId");
@@ -425,7 +430,7 @@ export default function VendorPayment() {
 
           <div className="upi-wrapper vp-field" style={{ animationDelay: "120ms", marginBottom: 0 }}>
             <label>
-              UPI Id (Optional)
+              UPI Id 
               <input
                 type="text"
                 name="upiId"

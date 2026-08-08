@@ -131,7 +131,7 @@ function VendorService({ currentStep }) {
 
   const categories = [
     "DJ & Musical Band",
-    "Music Concert & Orchestra",
+    "Musical Concert & Band",
     "Decor & Tenthouse",
     "Photo & Videography",
     "Food & Catering",
@@ -149,7 +149,7 @@ function VendorService({ currentStep }) {
     "Mascot Artists",
     "Magic Shows",
     "Event Management Company",
-    "Hotel & Resorts",
+    "Singhabaja",
   ];
 
   const allLocations = {
@@ -209,7 +209,7 @@ function VendorService({ currentStep }) {
       "Corporate Event DJ",
       "Private Party DJ",
     ],
-    "Music Concert & Orchestra": [
+    "Musical Concert & Band": [
       "Live Band Performance",
       "Qawwali Night",
       "Celebrity Concert",
@@ -293,12 +293,12 @@ function VendorService({ currentStep }) {
       "Theme-Based Balloon Decoration",
       "Baby Shower Balloon Decoration",
     ],
-    "Hotel & Resorts": [
-      "Luxury Hotels",
-      "Wedding Hotels & Resorts",
-      "Resorts",
-      "Beach Resorts",
-    ],
+   "Singhabaja": [
+  "Traditional Singhabaja Performance",
+  "Temple & Religious Events",
+  "Wedding Procession Performance",
+  "Cultural Festival Performance",
+],
   };
 
   const availableSubcategories = subcategories[categorySearchTerm] || [];
@@ -339,6 +339,25 @@ function VendorService({ currentStep }) {
       setImageError("");
 
       const newFiles = Array.from(e.target.files);
+      // Calculate total size of already selected files
+const currentTotalSize = selectedFiles.reduce(
+  (sum, file) => sum + file.size,
+  0
+);
+
+// Calculate size of newly selected files
+const newTotalSize = newFiles.reduce(
+  (sum, file) => sum + file.size,
+  0
+);
+
+// Total upload size validation
+if (currentTotalSize + newTotalSize > TOTAL_SIZE_LIMIT) {
+  toast.error("Total upload size cannot exceed 100 MB.");
+  setImageError("Total upload size cannot exceed 100 MB.");
+  if (fileInputRef.current) fileInputRef.current.value = "";
+  return;
+}
       const totalFiles = selectedFiles.length + newFiles.length;
 
       // ✅ Limit total uploads to 10
@@ -369,8 +388,9 @@ if (totalFiles > MAX_FILES || newFiles.length > MAX_FILES) {
       const validTypes = [...validImageTypes, ...validVideoTypes];
 
       // Size limits
-      const IMAGE_SIZE_LIMIT = 100* 1024 * 1024; // 100
-      const VIDEO_SIZE_LIMIT = 200 * 1024 * 1024; // 200MB
+      const IMAGE_SIZE_LIMIT = 10 * 1024 * 1024; // 10MB per image
+      const VIDEO_SIZE_LIMIT = 200 * 1024 * 1024; // keep as 200MB
+      const TOTAL_SIZE_LIMIT = 100 * 1024 * 1024; // 100MB total
 
       const validatedFiles = [];
       const errors = [];
@@ -391,7 +411,7 @@ if (totalFiles > MAX_FILES || newFiles.length > MAX_FILES) {
         if (isImage && f.size > IMAGE_SIZE_LIMIT) {
           const sizeMB = (f.size / (1024 * 1024)).toFixed(2);
           errors.push(
-            `"${f.name}" (${sizeMB}MB) - Image files must be 100MB or smaller.`
+            `"${f.name}" (${sizeMB}MB) - Image files must be 10MB or smaller.`
           );
           continue;
         }

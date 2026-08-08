@@ -18,7 +18,7 @@ const categories = [
     ],
   },
   {
-    name: "Music Concert & Orchestra",
+    name: "Musical Concert & Band",
     defaultWhyChooseUs: [
       "Professional orchestra members",
       "Wide repertoire of musical genres",
@@ -208,13 +208,13 @@ const categories = [
     ],
   },
   {
-  name: "Hotel & Resorts",
+  name: "Singhabaja",
   defaultWhyChooseUs: [
-    "Wide range of hotels & resorts to suit every budget",
-    "Premium locations with modern amenities",
-    "Comfortable rooms with exceptional hospitality",
-    "Ideal venues for weddings, events & business stays",
-    "Verified properties with reliable service standards",
+    "Authentic Odia traditional Singhabaja performances",
+    "Experienced artists preserving Odisha's rich cultural heritage",
+    "Perfect for festivals, temple events, weddings, and cultural programs",
+    "Traditional costumes, music, and energetic live performances",
+    "Reliable team committed to delivering memorable cultural experiences",
   ],
 },
 

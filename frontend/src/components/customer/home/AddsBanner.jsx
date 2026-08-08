@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { FaInfo } from "react-icons/fa";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import clsx from 'clsx'
@@ -15,9 +14,35 @@ const AddsBanner = () => {
 
   const API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8001/api";
 
+  const fetchActivePosters = useCallback(async () => {
+    try {
+      setLoading(true);
+      console.log("Fetching posters from:", `${API_URL}/posters/public/active`);
+      
+      const response = await axios.get(`${API_URL}/posters/public/active`, {
+        timeout: 5000,
+      });
+      
+      console.log("Posters response:", response.data);
+      
+      if (response.data && response.data.success && response.data.data && response.data.data.length > 0) {
+        setPosters(response.data.data);
+      } else {
+        console.log("No posters found");
+        setPosters([]);
+      }
+    } catch (err) {
+      console.error("Error fetching posters:", err);
+      console.error("Error details:", err.response?.status, err.response?.data);
+      setPosters([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [API_URL]);
+
   useEffect(() => {
     fetchActivePosters();
-  }, []);
+  }, [fetchActivePosters]);
 
   useEffect(() => {
     if (posters.length > 0) {
@@ -44,32 +69,6 @@ const AddsBanner = () => {
       return () => clearInterval(timer);
     }
   }, [posters]);
-
-  const fetchActivePosters = async () => {
-    try {
-      setLoading(true);
-      console.log("Fetching posters from:", `${API_URL}/posters/public/active`);
-      
-      const response = await axios.get(`${API_URL}/posters/public/active`, {
-        timeout: 5000,
-      });
-      
-      console.log("Posters response:", response.data);
-      
-      if (response.data && response.data.success && response.data.data && response.data.data.length > 0) {
-        setPosters(response.data.data);
-      } else {
-        console.log("No posters found");
-        setPosters([]);
-      }
-    } catch (err) {
-      console.error("Error fetching posters:", err);
-      console.error("Error details:", err.response?.status, err.response?.data);
-      setPosters([]);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return (
@@ -101,10 +100,10 @@ const AddsBanner = () => {
 
   return (
     <>
-      <div className={clsx('relative', 'w-full', 'mt-4', 'md:mt-8', 'overflow-hidden', 'rounded-lg')} style={{ padding: 0 }}>
+      <div className={clsx('relative', 'w-full', 'mt-2', 'sm:mt-4', 'md:mt-8', 'overflow-hidden', 'rounded-lg')} style={{ padding: 0 }}>
         <Slider {...sliderSettings}>
           {posters.map((banner) => (
-            <div key={banner._id} className={clsx('relative', 'w-full', 'h-[220px]', 'sm:h-[280px]', 'md:h-[320px]', 'lg:h-[380px]', 'overflow-hidden', 'rounded-lg')}>
+            <div key={banner._id} className={clsx('relative', 'w-full', 'aspect-[16/7]', 'sm:aspect-auto', 'sm:h-[400px]', 'md:h-[480px]', 'lg:h-[560px]', 'overflow-hidden', 'rounded-lg', 'bg-black')}>
               {/* Main Image covering full width */}
               <img
                 decoding="async"
@@ -116,41 +115,43 @@ const AddsBanner = () => {
 
               {/* Poster Overlay */}
               <div className={clsx('absolute', 'inset-0', 'bg-gradient-to-r', 'from-black/70', 'via-black/50', 'to-transparent', 'z-20', 'flex', 'items-center')}>
-                <div className={clsx('w-full', 'max-w-2xl', 'px-4', 'sm:px-6', 'md:px-10', 'py-4', 'sm:py-6')}>
-                  {/* Badge */}
-                  {banner.offerType && (
-                    <div className={clsx('inline-block', 'bg-orange-500', 'text-white', 'text-xs', 'font-bold', 'px-3', 'py-1', 'rounded-full', 'mb-3')}>
-                      {banner.offerType} Special
-                    </div>
-                  )}
+                <div className={clsx('w-full', 'max-w-7xl', 'mx-auto', 'px-2', 'pr-10', 'sm:px-6', 'md:px-10', 'py-2', 'sm:py-6', 'flex', 'flex-row', 'items-center', 'justify-between', 'gap-2', 'sm:gap-4')}>
+                  {/* Left Side - Text Content */}
+                  <div className={clsx('min-w-0', 'flex-1', 'text-left')}>
+                    {/* Badge */}
+                    {banner.offerType && (
+                      <div className={clsx('inline-block', 'bg-orange-500', 'text-white', 'text-[9px]', 'sm:text-xs', 'font-bold', 'px-1.5', 'sm:px-3', 'py-0.5', 'sm:py-1', 'rounded-full', 'mb-1', 'sm:mb-2')}>
+                        {banner.offerType} Special
+                      </div>
+                    )}
 
-                  {/* Main Heading */}
-                  <h2 className={clsx('text-2xl', 'sm:text-4xl', 'md:text-5xl', 'font-black', 'text-white', 'mb-2', 'leading-tight')}>
-                    {banner.offerTitle}
-                  </h2>
+                    {/* Main Heading */}
+                    <h2 className={clsx('text-sm', 'min-[420px]:text-base', 'sm:text-4xl', 'md:text-5xl', 'font-black', 'text-white', 'mb-0.5', 'sm:mb-2', 'leading-tight', 'line-clamp-2', 'sm:line-clamp-1')}>
+                      {banner.offerTitle}
+                    </h2>
 
-                  {/* Discount */}
-                  {banner.discountPercentage > 0 && (
-                    <div className={clsx('text-3xl', 'sm:text-5xl', 'md:text-6xl', 'font-black', 'text-orange-400', 'mb-3')}>
-                      {banner.discountPercentage}% OFF
-                    </div>
-                  )}
+                    {/* Discount */}
+                    {banner.discountPercentage > 0 && (
+                      <div className={clsx('text-base', 'min-[420px]:text-lg', 'sm:text-5xl', 'md:text-6xl', 'font-black', 'text-orange-400', 'mb-0.5', 'sm:mb-2', 'leading-tight')}>
+                        {banner.discountPercentage}% OFF
+                      </div>
+                    )}
 
-                  {/* Subtitle */}
-                  {banner.offerDescription && (
-                    <p className={clsx('text-sm', 'sm:text-base', 'md:text-lg', 'text-gray-200', 'mb-4', 'line-clamp-2')}>
-                      {banner.offerDescription}
-                    </p>
-                  )}
-                </div>
+                    {/* Subtitle */}
+                    {banner.offerDescription && (
+                      <p className={clsx('text-[10px]', 'sm:text-base', 'md:text-lg', 'text-gray-200', 'line-clamp-1', 'sm:line-clamp-2', 'hidden', 'sm:block')}>
+                        {banner.offerDescription}
+                      </p>
+                    )}
+                  </div>
 
-                {/* Right Side Timer */}
-                <div className={clsx('absolute', 'right-4', 'sm:right-6', 'md:right-10', 'top-1/2', '-translate-y-1/2', 'hidden', 'sm:block')}>
-                  {/* Timer Box */}
-                  <div className={clsx('bg-white/10', 'backdrop-blur-md', 'rounded-xl', 'p-2', 'sm:p-3', 'max-w-[280px]', 'sm:max-w-[320px]', 'border', 'border-white/20')}>
-                    <p className={clsx('text-[10px]', 'sm:text-xs', 'text-gray-800', 'text-center', 'mb-1', 'font-semibold')}>ENDS IN</p>
-                    <div className={clsx('text-2xl', 'sm:text-4xl', 'md:text-5xl', 'font-bold', 'text-black', 'text-center', 'tabular-nums', 'leading-tight')}>
-                      {timeLeft[banner._id] || "Loading..."}
+                  {/* Right Side - Timer */}
+                  <div className={clsx('flex-shrink-0', 'block')}>
+                    <div className={clsx('bg-white/10', 'backdrop-blur-md', 'rounded-lg', 'sm:rounded-xl', 'p-1.5', 'sm:p-3', 'w-[96px]', 'min-[420px]:w-[116px]', 'sm:w-auto', 'sm:max-w-[340px]', 'border', 'border-white/20')}>
+                      <p className={clsx('text-[8px]', 'sm:text-xs', 'text-white', 'text-center', 'mb-0.5', 'sm:mb-1', 'font-semibold')}>ENDS IN</p>
+                      <div className={clsx('text-[10px]', 'min-[420px]:text-xs', 'sm:text-4xl', 'md:text-5xl', 'font-bold', 'text-white', 'text-center', 'tabular-nums', 'leading-tight')}>
+                        {timeLeft[banner._id] || "Loading..."}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -158,10 +159,11 @@ const AddsBanner = () => {
                 {/* Info Icon - Top Right */}
                 <button
                   onClick={() => setSelectedPoster(banner)}
-                  className={clsx('absolute', 'top-3', 'right-3', 'w-8', 'h-8', 'bg-black/50', 'hover:bg-black/70', 'text-white', 'rounded-full', 'flex', 'items-center', 'justify-center', 'backdrop-blur-sm', 'transition-all', 'z-30')}
+                  className={clsx('absolute', 'top-3', 'right-3', '!w-7', '!h-7', 'sm:!w-8', 'sm:!h-8', '!min-w-0', '!p-0', 'bg-white', 'hover:bg-gray-100', 'text-gray-900', 'rounded-full', 'flex', 'items-center', 'justify-center', 'shadow-md', 'border', 'border-black/10', 'transition-all', 'z-[60]')}
+                  aria-label="View offer details"
                   title="View Details"
                 >
-                  <FaInfo className="text-sm" />
+                  <span className={clsx('block', 'text-sm', 'sm:text-base', 'font-black', 'leading-none')}>i</span>
                 </button>
               </div>
             </div>

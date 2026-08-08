@@ -94,9 +94,9 @@ function UserSideBar({ isOpen, setShowPasswordModal }) {
       return;
     }
 
-    // Checking file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      alert("File size should be less than 5MB");
+    // Checking file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      alert("File size should be less than 10MB");
       return;
     }
 

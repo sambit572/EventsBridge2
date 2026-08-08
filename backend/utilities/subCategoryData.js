@@ -5,7 +5,7 @@ export const SUBCATEGORY_MAP = {
     "Corporate Event DJ",
     "Private Party DJ",
   ],
-  "Music Concert & Orchestra": [
+  "Musical Concert & Band": [
     "Live Band Performance",
     "Qawwali Night",
     "Celebrity Concert",
@@ -89,10 +89,10 @@ export const SUBCATEGORY_MAP = {
     "Theme-Based Balloon Decoration",
     "Baby Shower Balloon Decoration",
   ],
-     "Hotel & Resorts": [
-      "Luxury Hotels",
-      "Wedding Hotels & Resorts",
-      "Resorts",
-      "Beach Resorts",
-    ],
+    "Singhabaja": [
+  "Traditional Singhabaja Performance",
+  "Temple & Religious Events",
+  "Wedding Procession Performance",
+  "Cultural Festival Performance",
+],
 };
